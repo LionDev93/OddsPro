@@ -2,10 +2,8 @@ import React from "react";
 import { View, ImageBackground, Image } from "react-native";
 import { Container, Content, Text, Button } from "native-base";
 import styles from "./style";
-import RaceCard from "./raceCard";
-import OpenRaceCard from "./openRaceCard";
 
-class FirstScreen extends React.Component {
+class OddsScreen extends React.Component {
   constructor(props) {
     super(props);
 
@@ -26,10 +24,7 @@ class FirstScreen extends React.Component {
       >
         <Container style={{backgroundColor: 'transparent'}}>
           <Content padder style={styles.container}>
-            <Text style={styles.date}>2019年3月10日,星期日, 沙田</Text>
-            <RaceCard/>
-            <RaceCard/>
-            <OpenRaceCard/>
+            <Text>2019年3月10日,星期日, 沙田</Text>
           </Content>
         </Container>
       </ImageBackground>

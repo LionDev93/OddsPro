@@ -1,0 +1,166 @@
+import React from "react";
+import { View, ImageBackground, Image } from "react-native";
+import { Container, Content, Text, Button, Grid, Col, Row } from "native-base";
+import styles from "./style";
+
+class OpenRaceCard extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      email: "",
+      password: ""
+    };
+  }
+
+  render() {
+    return (
+      <Grid style={styles.oc_container}>
+        <Row style={styles.header}>
+          <Col style={styles.h_middle}>
+            <Image
+              source={require("../../assets/percentage.png")}
+              style={styles.oc_icon}
+              resizeMode="contain"
+            />
+          </Col>
+          <Col style={styles.h_middle}>
+            <Text style={styles.headerText}>第 2 場</Text>
+          </Col>
+          <Col style={{ alignItems: "flex-end" }}>
+            <Image
+              source={require("../../assets/horse_1.png")}
+              style={styles.oc_horse_icon}
+              resizeMode="contain"
+            />
+          </Col>
+        </Row>
+
+        <Row
+          style={{
+            height: 300,
+            backgroundColor: "#ffffff",
+            borderBottomLeftRadius: 10,
+            borderBottomRightRadius: 10
+          }}
+        >
+          <Grid>
+            <Row style={{ height: 40, marginBottom: 10 }}>
+              <Col style={{ flex: 1.5 }}>
+                <Text style={styles.subHeaderText}>馬號/檔位</Text>
+              </Col>
+              <Col style={{ flex: 3 }}>
+                <Text style={styles.subHeaderText}>馬匹資料</Text>
+              </Col>
+              <Col style={{ flex: 4 }}>
+                <Text style={styles.subHeaderText}>臨場資料</Text>
+              </Col>
+              <Col style={{ flex: 1.5 }}>
+                <Text style={styles.subHeaderText}>獨贏</Text>
+              </Col>
+              <Col style={{ flex: 1.8 }}>
+                <Text style={styles.subHeaderText}>AI評分</Text>
+              </Col>
+            </Row>
+
+            <Row style={{ height: 40, marginBottom: 10 }}>
+              <Col style={{ flex: 1.5 }}>
+                <Text style={styles.oc_text}>1 / 6</Text>
+              </Col>
+              <Col style={{ flex: 3 }}>
+                <Text style={styles.oc_text}>放馬過來</Text>
+              </Col>
+              <Col style={{ flex: 4 }}>
+                <Row style={{ height: 20 }}>
+                  <Text style={styles.oc_text_sub}>利敬國</Text>
+                  <Text style={styles.oc_text_sub}>單邊眼罩</Text>
+                </Row>
+                <Row>
+                  <Text style={styles.oc_text_sub}>告東尼</Text>
+                  <Text style={styles.oc_text_sub}>133</Text>
+                </Row>
+              </Col>
+              <Col style={{ flex: 1.5 }}>
+                <Text
+                  style={[
+                    styles.oc_text,
+                    {
+                      backgroundColor: "#ff8585",
+                      color: "#fcfcfc",
+                      textAlign: "center"
+                    }
+                  ]}
+                >
+                  2.3
+                </Text>
+              </Col>
+              <Col style={{ flex: 1.8 }}>
+                <Text
+                  style={[
+                    styles.oc_text,
+                    {
+                      backgroundColor: "#ebebeb",
+                      color: "#dc9908",
+                      textAlign: "center"
+                    }
+                  ]}
+                >
+                  67
+                </Text>
+              </Col>
+            </Row>
+
+            <Row style={{ height: 40, marginBottom: 10 }}>
+              <Col style={{ flex: 1.5 }}>
+                <Text style={styles.oc_text}>2 / 5</Text>
+              </Col>
+              <Col style={{ flex: 3 }}>
+                <Text style={styles.oc_text}>放馬過來</Text>
+              </Col>
+              <Col style={{ flex: 4 }}>
+                <Row style={{ height: 20 }}>
+                  <Text style={styles.oc_text_sub}>利敬國</Text>
+                  <Text style={styles.oc_text_sub}>單邊眼罩</Text>
+                </Row>
+                <Row>
+                  <Text style={styles.oc_text_sub}>告東尼</Text>
+                  <Text style={styles.oc_text_sub}>133</Text>
+                </Row>
+              </Col>
+              <Col style={{ flex: 1.5 }}>
+                <Text
+                  style={[
+                    styles.oc_text,
+                    {
+                      backgroundColor: "#ff8585",
+                      color: "#fcfcfc",
+                      textAlign: "center"
+                    }
+                  ]}
+                >
+                  2.3
+                </Text>
+              </Col>
+              <Col style={{ flex: 1.8 }}>
+                <Text
+                  style={[
+                    styles.oc_text,
+                    {
+                      backgroundColor: "#ebebeb",
+                      color: "#dc9908",
+                      textAlign: "center"
+                    }
+                  ]}
+                >
+                  67
+                </Text>
+              </Col>
+            </Row>
+          </Grid>
+        </Row>
+      </Grid>
+    );
+  }
+}
+
+export default OpenRaceCard;
