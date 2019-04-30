@@ -1,0 +1,31 @@
+fastlane_version '2.53.1'
+
+platform :ios do
+  
+  desc 'Ship to Testflight.'
+  lane :beta do
+    
+    increment_build_number(xcodeproj: './ios/oddspro.xcodeproj')
+     
+    build_app(
+      scheme: "oddspro", workspace: './ios/oddspro.xcworkspace',
+      export_method: "app-store",
+      export_options: {
+        provisioningProfiles: { 
+          "com.dtdit.oddspro" => "oddspro appstore"
+        }
+      }
+    )
+    upload_to_testflight
+    
+  end
+
+  lane :up do
+upload_to_testflight
+  end
+
+end
+
+platform :android do
+  # Android Lanes
+end

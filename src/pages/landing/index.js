@@ -13,6 +13,10 @@ class LandingScreen extends React.Component {
     };
   }
 
+  loginHandler = () => {
+    this.props.navigation.navigate('app')
+  }
+
   render() {
     return (
       <ImageBackground
@@ -21,7 +25,7 @@ class LandingScreen extends React.Component {
         resizeMode="contain"
       >
         <View style={styles.container}>
-          <Button style={styles.wechat}>
+          <Button style={styles.wechat} onPress={this.loginHandler}>
             <Image
               source={require("../../assets/wechat_icon.png")}
               style={styles.icon}
@@ -30,13 +34,13 @@ class LandingScreen extends React.Component {
             <Text style={styles.text}>微信登錄</Text>
           </Button>
 
-          <Button style={styles.facebook}>
+          <Button style={styles.facebook} onPress={this.loginHandler}>
             <Image
               source={require("../../assets/fb_icon.png")}
               style={styles.icon}
               resizeMode="contain"
             />
-            <Text style={styles.text}>Facebook 登錄</Text>
+            <Text style={styles.text} >Facebook 登錄</Text>
           </Button>
         </View>
       </ImageBackground>

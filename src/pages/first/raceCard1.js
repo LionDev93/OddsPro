@@ -1,9 +1,10 @@
+
 import React from "react";
-import { View, ImageBackground, Image, ScrollView } from "react-native";
+import { View, ImageBackground, Image } from "react-native";
 import { Container, Content, Text, Button, Grid, Col, Row } from "native-base";
 import styles from "./style";
 
-class RaceCard extends React.Component {
+class RaceCard1 extends React.Component {
   constructor(props) {
     super(props);
 
@@ -15,10 +16,10 @@ class RaceCard extends React.Component {
 
   render() {
     return (
-      <Grid style={styles.cardContainer} >
-        <Col style={styles.left} >
-          <Text style={styles.fieldLabel}>第 1 場</Text>
-          <Text style={styles.fieldText}>草地</Text>
+      <Grid style={styles.cardContainer}>
+        <Col style={styles.left1}>
+          <Text style={styles.fieldLabel}>第 2 場</Text>
+          <Text style={styles.fieldText}>泥地</Text>
           <Image
             source={require("../../assets/bell.png")}
             style={styles.icon}
@@ -26,11 +27,11 @@ class RaceCard extends React.Component {
           />
           {/* <BellIcon width='40' active={true} animate={true} /> */}
 
-          <Text style={styles.time}>12:30 開跑</Text>
+          <Text style={styles.time}>13:00 開跑</Text>
         </Col>
         <Col style={styles.right}>
           <ImageBackground
-            source={require("../../assets/grass_bg.png")}
+            source={require("../../assets/sand_bg.png")}
             style={{
               width: "100%",
               height: "100%",
@@ -50,8 +51,8 @@ class RaceCard extends React.Component {
             >
               <Row style={{ height: 30, marginTop: 5 }}>
                 <Col style={{ flex: 8, flexDirection: "row", height: 30 }}>
-                  <Text style={styles.name}>紅掌花讓賽 - </Text>
-                  <Text style={styles.sub}>1200米</Text>
+                  <Text style={styles.name}>小蒼蘭讓賽 - </Text>
+                  <Text style={styles.sub}>1800米</Text>
                 </Col>
                 <Col style={{ flex: 4, height: 30, paddingBottom: 5 }}>
                   <ImageBackground
@@ -65,27 +66,23 @@ class RaceCard extends React.Component {
                     }}
                     resizeMode="cover"
                   >
-                    <Text style={{ color: "white", fontSize: 13, paddingTop: 10, paddingLeft: 30, }}>第一班</Text>
+                    <Text style={{ color: "white", fontSize: 13, paddingTop: 10, paddingLeft: 30, }}>第四班</Text>
                   </ImageBackground>
                 </Col>
               </Row>
 
               <Row style={{ height: 20, marginTop: 10 }}>
                 <Col>
-                  <Text style={styles.bonus}>獎金: $2,625,000</Text>
+                  <Text style={styles.bonus}>獎金: $920,000</Text>
                 </Col>
 
                 <Col>
-                  <Text style={styles.track}>C+3 賽道</Text>
+                  <Text style={styles.track}>全天候跑道</Text>
                 </Col>
               </Row>
-              <Row style={{ height: 20 }}>
-                <Col>
-                  <Text style={styles.bonus}>參加馬匹: 4</Text>
-                </Col>
-              </Row>
+              
 
-              <Text style={styles.total}>總投注: 30,430,304元</Text>
+             
             </View>
           </ImageBackground>
         </Col>
@@ -94,4 +91,4 @@ class RaceCard extends React.Component {
   }
 }
 
-export default RaceCard;
+export default RaceCard1;

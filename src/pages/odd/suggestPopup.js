@@ -3,7 +3,7 @@ import { View, ImageBackground, Image } from "react-native";
 import { Container, Content, Text, Button, Grid, Col, Row } from "native-base";
 import styles from "./style";
 
-class Card extends React.Component {
+class SuggestPopup extends React.Component {
   constructor(props) {
     super(props);
 

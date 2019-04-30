@@ -2,9 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:../../node_modules/react-native-gesture-handler/ios/RNGestureHandler.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "self:">
+      location = "container:oddspro.xcodeproj">
    </FileRef>
 </Workspace>
