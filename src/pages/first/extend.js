@@ -1,5 +1,5 @@
 import React from "react";
-import { View, ImageBackground, Image } from "react-native";
+import { View, ImageBackground, Image, Alert } from "react-native";
 import { Container, Content, Text, Button, Grid, Col, Row } from "native-base";
 import styles from "./style";
 
@@ -189,7 +189,7 @@ class HorseInfo extends React.Component {
                 justifyContent: "center"
               }}
             >
-              <Button transparent style={{ alignSelf: "center" }}>
+              <Button transparent style={{ alignSelf: "center" }} onPress={() => Alert.alert('BUY')}>
                 <Text style={{ color: "white" }}>升級成為VIP</Text>
               </Button>
             </Col>
@@ -200,7 +200,7 @@ class HorseInfo extends React.Component {
                 justifyContent: "center"
               }}
             >
-              <Button transparent style={{ alignSelf: "center" }}>
+              <Button transparent style={{ alignSelf: "center" }} onPress={() => Alert.alert('SHARE')}>
                 <Text style={{ color: "white" }}>分享給朋友</Text>
               </Button>
             </Col>

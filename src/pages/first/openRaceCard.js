@@ -10,6 +10,8 @@ import {
   Row,
   Thumbnail
 } from "native-base";
+import * as Animatable from "react-native-animatable";
+
 import styles from "./style";
 
 class OpenRaceCard extends React.Component {
@@ -27,12 +29,22 @@ class OpenRaceCard extends React.Component {
   };
 
   openHorseHandler = () => {
-    this.props.openHorseInfoHandler()
+    this.props.openHorseInfoHandler();
+  };
+
+  handleViewRef = ref => this.view = ref;
+  
+  componentDidMount(){
+    this.bounce()
   }
 
+  bounce = () => this.view.bounceInDown(1800).then(endState => console.log(endState.finished ? 'bounce finished' : 'bounce cancelled'));
+  
+
   render() {
+    const { number } = this.props;
     return (
-      <Grid style={styles.oc_container}>
+      <Animatable.View ref={this.handleViewRef} style={styles.oc_container}>
         <Row style={styles.header}>
           <Col style={styles.h_middle}>
             <Button transparent onPress={this.oddsPageHandler}>
@@ -44,7 +56,7 @@ class OpenRaceCard extends React.Component {
             </Button>
           </Col>
           <Col style={styles.h_middle}>
-            <Text style={styles.headerText}>第 2 場</Text>
+            <Text style={styles.headerText}>{`第 ${number} 場`}</Text>
           </Col>
           <Col style={{ alignItems: "flex-end" }}>
             <Image
@@ -86,7 +98,10 @@ class OpenRaceCard extends React.Component {
               <Col style={{ flex: 1.5 }}>
                 <Text style={styles.oc_text}>1 / 6</Text>
               </Col>
-              <Col style={{ flex: 5, flexDirection: "row" }} onTouchEndCapture={this.openHorseHandler}>
+              <Col
+                style={{ flex: 5, flexDirection: "row" }}
+                onTouchEndCapture={this.openHorseHandler}
+              >
                 <Image
                   source={require("../../assets/horse_avatar.png")}
                   style={styles.icon}
@@ -95,27 +110,27 @@ class OpenRaceCard extends React.Component {
               </Col>
               <Col style={{ flex: 5 }}>
                 <Row style={{ height: 20 }}>
-                <Image
-                  source={require("../../assets/rider_icon.png")}
-                  style={styles.smallIcon}
-                />
+                  <Image
+                    source={require("../../assets/rider_icon.png")}
+                    style={styles.smallIcon}
+                  />
                   <Text style={styles.oc_text_sub}>利敬國</Text>
                   <Image
-                  source={require("../../assets/match_icon.png")}
-                  style={styles.smallIcon}
-                />
+                    source={require("../../assets/match_icon.png")}
+                    style={styles.smallIcon}
+                  />
                   <Text style={styles.oc_text_sub}>單邊眼罩</Text>
                 </Row>
                 <Row>
-                <Image
-                  source={require("../../assets/train_icon.png")}
-                  style={styles.smallIcon}
-                />
+                  <Image
+                    source={require("../../assets/train_icon.png")}
+                    style={styles.smallIcon}
+                  />
                   <Text style={styles.oc_text_sub}>告東尼</Text>
                   <Image
-                  source={require("../../assets/weight_icon.png")}
-                  style={styles.smallIcon}
-                />
+                    source={require("../../assets/weight_icon.png")}
+                    style={styles.smallIcon}
+                  />
                   <Text style={styles.oc_text_sub}>133</Text>
                 </Row>
               </Col>
@@ -153,8 +168,8 @@ class OpenRaceCard extends React.Component {
               <Col style={{ flex: 1.5 }}>
                 <Text style={styles.oc_text}>2 / 5</Text>
               </Col>
-              <Col style={{ flex: 5, flexDirection: 'row' }}>
-              <Image
+              <Col style={{ flex: 5, flexDirection: "row" }}>
+                <Image
                   source={require("../../assets/horse_avatar.png")}
                   style={styles.icon}
                 />
@@ -162,27 +177,27 @@ class OpenRaceCard extends React.Component {
               </Col>
               <Col style={{ flex: 5 }}>
                 <Row style={{ height: 20 }}>
-                <Image
-                  source={require("../../assets/rider_icon.png")}
-                  style={styles.smallIcon}
-                />
+                  <Image
+                    source={require("../../assets/rider_icon.png")}
+                    style={styles.smallIcon}
+                  />
                   <Text style={styles.oc_text_sub}>利敬國</Text>
                   <Image
-                  source={require("../../assets/match_icon.png")}
-                  style={styles.smallIcon}
-                />
+                    source={require("../../assets/match_icon.png")}
+                    style={styles.smallIcon}
+                  />
                   <Text style={styles.oc_text_sub}>單邊眼罩</Text>
                 </Row>
                 <Row>
-                <Image
-                  source={require("../../assets/train_icon.png")}
-                  style={styles.smallIcon}
-                />
+                  <Image
+                    source={require("../../assets/train_icon.png")}
+                    style={styles.smallIcon}
+                  />
                   <Text style={styles.oc_text_sub}>告東尼</Text>
                   <Image
-                  source={require("../../assets/weight_icon.png")}
-                  style={styles.smallIcon}
-                />
+                    source={require("../../assets/weight_icon.png")}
+                    style={styles.smallIcon}
+                  />
                   <Text style={styles.oc_text_sub}>133</Text>
                 </Row>
               </Col>
@@ -217,7 +232,7 @@ class OpenRaceCard extends React.Component {
             </Row>
           </Grid>
         </Row>
-      </Grid>
+      </Animatable.View>
     );
   }
 }

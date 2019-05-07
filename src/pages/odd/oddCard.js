@@ -21,9 +21,11 @@ import {
   Icon,
   Item,
   Input,
-  Picker
+  Picker,
+  Form
 } from "native-base";
 import styles from "./style";
+import { DragContainer, Draggable, DropZone } from "../../index";
 
 class OddCard extends React.Component {
   constructor(props) {
@@ -31,53 +33,93 @@ class OddCard extends React.Component {
 
     this.state = {
       selected: "key1",
-      selectedType: 2,
+      selectedType: 1,
       betTypes: [
         {
           id: 1,
-          name: "獨贏/位置"
+          name: "獨贏/位置",
+          w1: '獨贏',
+          w2: '位置',
         },
         {
           id: 2,
-          name: "三重彩"
+          name: "連贏/位置Q",
+          w1: '膽',
+          w2: '腳',
         },
         {
           id: 3,
-          name: "三重彩"
+          name: "單T",
+          w1: '膽',
+          w2: '腳',
         },
         {
           id: 4,
-          name: "獨贏/位置"
+          name: "三重彩",
+          w1: '膽',
+          w2: '腳',
         },
         {
           id: 5,
-          name: "三重彩"
+          name: "四連環",
+          w1: '膽',
+          w2: '腳',
+        },
+        
+      ],
+      list1: [
+        {
+          id: 1,
+          name: "金剛仔"
+        },
+        {
+          id: 2,
+          name: "悅目星光"
+        },
+        {
+          id: 3,
+          name: "藍海策略"
+        },
+        {
+          id: 4,
+          name: "睡眠大學"
+        },
+        {
+          id: 5,
+          name: "一舖成名"
         },
         {
           id: 6,
-          name: "三重彩"
+          name: "二郎"
         },
         {
           id: 7,
-          name: "獨贏/位置"
+          name: "萬事醒"
         },
         {
           id: 8,
-          name: "三重彩"
+          name: "得意"
         },
         {
           id: 9,
-          name: "三重彩"
+          name: "事必獲利"
         },
         {
           id: 10,
-          name: "三重彩"
+          name: "暴風俠"
         },
         {
           id: 11,
-          name: "三重彩"
+          name: "神馬飛揚"
         }
-      ]
+        ,
+        {
+          id: 12,
+          name: "駿協精英"
+        }
+      ],
+      list2: [],
+      list3: [],
     };
   }
 
@@ -88,8 +130,43 @@ class OddCard extends React.Component {
   }
 
   showAllOdds = () => {
-    //this.props.showAllOddsHandler();
-    Alert.alert("All Odds comming soon");
+    this.props.navigation.navigate("all");
+  };
+
+  dropToList1 = e => {
+    const {id, type} = e
+    if(type == 'list2'){
+      this.setState({
+        list2: this.state.list2.filter(item => item.id != id)
+      });
+    }
+    
+    if(type == 'list3'){
+      this.setState({
+        list3: this.state.list3.filter(item => item.id != id)
+      });
+    }
+    
+  };
+
+  dropToList2 = e => {
+    const {id, type} = e
+    if(type != 'list1')
+      return
+
+    this.setState({
+      list2: [e, ...this.state.list2]
+    });
+  };
+
+  dropToList3 = e => {
+    const {id, type} = e
+    if(type != 'list1')
+      return
+
+    this.setState({
+      list3: [e, ...this.state.list3]
+    });
   };
 
   render() {
@@ -132,108 +209,95 @@ class OddCard extends React.Component {
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             {this.state.betTypes.map(item => {
               return (
-                <Col key={item.id} style={this.state.selectedType == item.id ? styles.row1ColBgActive : styles.row1ColBg}>
+                <Col
+                  key={item.id}
+                  style={
+                    this.state.selectedType == item.id
+                      ? styles.row1ColBgActive
+                      : styles.row1ColBg
+                  }
+                >
                   <TouchableOpacity
-                    onPress={() => this.setState({selectedType: item.id})}
+                    onPress={() => this.setState({ selectedType: item.id })}
                   >
-                    <Text style={this.state.selectedType == item.id ?styles.row1ColTextActive : styles.row1ColText}>{item.name}</Text>
+                    <Text
+                      style={
+                        this.state.selectedType == item.id
+                          ? styles.row1ColTextActive
+                          : styles.row1ColText
+                      }
+                    >
+                      {item.name}
+                    </Text>
                   </TouchableOpacity>
                 </Col>
               );
             })}
-
           </ScrollView>
         </View>
+        <DragContainer>
+          <Row style={styles.horsesBg}>
+            <Col style={[styles.row2ColTitleBg, { flex: 2 }]}>
+              <Text style={styles.textBlack48}>馬匹</Text>
+            </Col>
+            <Col style={{ flex: 8 }}>
+              <DropZone onDrop={e => this.dropToList1(e)}>
+                <ScrollView
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}
+                >
+                  {this.state.list1.map((item, i) => (
+                    <Draggy
+                      key={i}
+                      id={item.id}
+                      name={item.name}
+                      type="list1"
+                    />
+                  ))}
+                </ScrollView>
+              </DropZone>
+            </Col>
+          </Row>
 
-        <Row style={styles.horsesBg}>
-          <Col style={[styles.row2ColTitleBg, { flex: 2 }]}>
-            <Text style={styles.textBlack48}>馬匹</Text>
-          </Col>
-          <Col style={{ flex: 8 }}>
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-            >
-              <Col style={styles.row2ColBg}>
-                <View style={styles.circle}>
-                  <Text style={styles.rowText}>1</Text>
-                </View>
-                <Text style={styles.textWhite36}>牛精大哥</Text>
-              </Col>
+          <Row style={styles.horsesBg}>
+            <Col style={[styles.row2ColTitleBg, { flex: 2 }]}>
+              <Text style={styles.row2ColTitle}>{this.state.selectedType == 1 ? '獨贏' : '膽'}</Text>
+            </Col>
 
-              <Col style={styles.row2ColBg}>
-                <View style={styles.circle}>
-                  <Text style={styles.rowText}>2</Text>
-                </View>
-                <Text style={styles.rowText}>創意寶</Text>
-              </Col>
-              <Col style={styles.row2ColBg}>
-                <View style={styles.circle}>
-                  <Text style={styles.rowText}>4</Text>
-                </View>
-                <Text style={styles.rowText}>金剛秀</Text>
-              </Col>
-              <Col style={styles.row2ColBg}>
-                <View style={styles.circle}>
-                  <Text style={styles.rowText}>4</Text>
-                </View>
-                <Text style={styles.rowText}>金剛秀</Text>
-              </Col>
-              <Col style={styles.row2ColBg}>
-                <View style={styles.circle}>
-                  <Text style={styles.rowText}>4</Text>
-                </View>
-                <Text style={styles.rowText}>金剛秀</Text>
-              </Col>
-            </ScrollView>
-          </Col>
-        </Row>
+            <Col style={{ flex: 8 }}>
+              <DropZone onDrop={e => this.dropToList2(e)}>
+                <ScrollView
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}
+                  style={{ width: "100%", height: 95 }}
+                >
+                  {this.state.list2.map((item, i) => (
+                    <Draggy key={i} id={item.id} name={item.name} type="list2" />
+                  ))}
+                </ScrollView>
+              </DropZone>
+            </Col>
+          </Row>
 
-        <Row style={styles.horsesBg}>
-          <Col style={[styles.row2ColTitleBg, { flex: 2 }]}>
-            <Text style={styles.row2ColTitle}>膽</Text>
-          </Col>
-          <Col style={{ flex: 8 }}>
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-            >
-              <Col style={styles.row3ColBg}>
-                <View style={styles.circle}>
-                  <Text style={styles.rowText}>3</Text>
-                </View>
-                <Text style={styles.rowText}>永旺喜喜</Text>
-              </Col>
-
-              <Col style={styles.row3ColBg}>
-                <View style={styles.circle}>
-                  <Text style={styles.rowText}>9</Text>
-                </View>
-                <Text style={styles.rowText}>駕迅</Text>
-              </Col>
-            </ScrollView>
-          </Col>
-        </Row>
-
-        <Row style={styles.horsesBg}>
-          <Col style={[styles.row2ColTitleBg, { flex: 2 }]}>
-            <Text style={styles.row2ColTitle}>腳</Text>
-          </Col>
-          <Col style={{ flex: 8 }}>
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-            >
-              <Col style={styles.row4ColBg}>
-                <View style={styles.circle}>
-                  <Text style={styles.rowText}>6</Text>
-                </View>
-                <Text style={styles.rowText}>易勝相吸</Text>
-              </Col>
-            </ScrollView>
-          </Col>
-        </Row>
-
+          <Row style={styles.horsesBg}>
+            <Col style={[styles.row2ColTitleBg, { flex: 2 }]}>
+              <Text style={styles.row2ColTitle}>{this.state.selectedType == 1 ? '位置' : '腳'}</Text>
+            </Col>
+            <Col style={{ flex: 8 }}>
+              <DropZone onDrop={e => this.dropToList3(e)}>
+                <ScrollView
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}
+                  style={{ width: "100%", height: 95 }}
+                >
+                  {this.state.list3.map((item, i) => (
+                    <Draggy key={i} id={item.id} name={item.name} type="list3" />
+                  ))}
+                </ScrollView>
+              </DropZone>
+            </Col>
+          </Row>
+        </DragContainer>
         <Row style={styles.horsesBg}>
           <Col style={styles.row5Bg}>
             <Button
@@ -306,6 +370,7 @@ class OddCard extends React.Component {
         <Row style={styles.horsesBg}>
           <Col style={styles.row9Col1}>
             <Text style={styles.row9Col1Text}>總金額</Text>
+
             <Item regular style={styles.input}>
               <Input style={styles.row9Col1Text} />
             </Item>
@@ -442,6 +507,51 @@ class OddCard extends React.Component {
           </Text>
         </Row>
       </Grid>
+    );
+  }
+}
+
+export class Draggy extends React.Component {
+  render() {
+    const { name, id, type } = this.props;
+    const item = {
+      name,
+      id,
+      type
+    };
+    return (
+      <Draggable data={item} style={{ margin: 7.5 }}>
+        <DropZone>
+          <DraggyInner {...this.props} />
+        </DropZone>
+      </Draggable>
+    );
+  }
+}
+
+export class DraggyInner extends React.Component {
+  render() {
+    // if (this.props.dragOver && !this.props.ghost && !this.props.dragging) {
+    //   return (
+    //     <View style={{ height: 100, width: 100, backgroundColor: "green" }} />
+    //   );
+    // }
+    let shadows = {
+      shadowColor: "black",
+      shadowOffset: { width: 0, height: 20 },
+      shadowOpacity: 0.5,
+      shadowRadius: 20,
+      opacity: 0.5
+    };
+    const { id, name, type } = this.props;
+    const styleType = type == 'list1' ? styles.row2ColBg : type == 'list2' ? styles.row3ColBg : styles.row4ColBg
+    return (
+      <View style={[styleType, this.props.dragging ? shadows : null]}>
+        <View style={styles.circle}>
+          <Text style={styles.rowText}>{id}</Text>
+        </View>
+        <Text style={styles.textWhite36}>{name}</Text>
+      </View>
     );
   }
 }

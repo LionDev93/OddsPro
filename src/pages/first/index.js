@@ -12,6 +12,7 @@ import {
   Title,
   Icon
 } from "native-base";
+import Modal from "react-native-modal";
 import { Overlay } from "react-native-elements";
 import styles from "./style";
 import RaceCard from "./raceCard";
@@ -24,7 +25,60 @@ class FirstScreen extends React.Component {
     super(props);
 
     this.state = {
-      openHorseInfo: false
+      openHorseInfo: false,
+      openCard: 0,
+      races: [
+        {
+          id: 1,
+          type: "green",
+          isOpen: false
+        },
+        {
+          id: 2,
+          type: "green",
+          isOpen: false
+        },
+        {
+          id: 3,
+          type: "orange",
+          isOpen: false
+        },
+        {
+          id: 4,
+          type: "orange",
+          isOpen: false
+        },
+        {
+          id: 5,
+          type: "green",
+          isOpen: false
+        },
+        {
+          id: 6,
+          type: "green",
+          isOpen: false
+        },
+        {
+          id: 7,
+          type: "green",
+          isOpen: false
+        },
+        {
+          id: 8,
+          type: "orange",
+          isOpen: false
+        },
+        {
+          id: 9,
+          type: "orange",
+          isOpen: false
+        },
+        {
+          id: 10,
+          type: "green",
+          isOpen: false
+        }
+      ]
     };
   }
 
@@ -64,6 +118,7 @@ class FirstScreen extends React.Component {
           </Header>
 
           <Overlay
+          animationType='fade'
             isVisible={this.state.openHorseInfo}
             windowBackgroundColor="rgba(255, 255, 255, 0)"
             overlayBackgroundColor="#ffffff"
@@ -74,7 +129,7 @@ class FirstScreen extends React.Component {
               padding: 0,
               position: "absolute",
               right: 0,
-              top: 85
+              bottom: 0
             }}
             containerStyle={{
               justifyContent: "flex-end",
@@ -86,71 +141,28 @@ class FirstScreen extends React.Component {
 
           <Content padder style={styles.container}>
             <Text style={styles.date}>2019年3月10日,星期日, 沙田</Text>
-            <TouchableOpacity
-              onPress={() => {
-                this.setState({ open: 1 });
-              }}
-            >
-              <RaceCard />
-            </TouchableOpacity>
-            {this.state.open == 1 && (
-              <OpenRaceCard
-                navigation={this.props.navigation}
-                openHorseInfoHandler={this.openHorseInfoHandler}
-              />
-            )}
-            <TouchableOpacity
-              onPress={() => {
-                this.setState({ open: 2 });
-              }}
-            >
-              <RaceCard />
-            </TouchableOpacity>
-            {this.state.open == 2 && (
-              <OpenRaceCard
-                navigation={this.props.navigation}
-                openHorseInfoHandler={this.openHorseInfoHandler}
-              />
-            )}
-            <TouchableOpacity
-              onPress={() => {
-                this.setState({ open: 3 });
-              }}
-            >
-              <RaceCard />
-            </TouchableOpacity>
-            {this.state.open == 3 && (
-              <OpenRaceCard
-                navigation={this.props.navigation}
-                openHorseInfoHandler={this.openHorseInfoHandler}
-              />
-            )}
-            <TouchableOpacity
-              onPress={() => {
-                this.setState({ open: 4 });
-              }}
-            >
-              <RaceCard1 />
-            </TouchableOpacity>
-            {this.state.open == 4 && (
-              <OpenRaceCard
-                navigation={this.props.navigation}
-                openHorseInfoHandler={this.openHorseInfoHandler}
-              />
-            )}
-            <TouchableOpacity
-              onPress={() => {
-                this.setState({ open: 5 });
-              }}
-            >
-              <RaceCard1 />
-            </TouchableOpacity>
-            {this.state.open == 5 && (
-              <OpenRaceCard
-                navigation={this.props.navigation}
-                openHorseInfoHandler={this.openHorseInfoHandler}
-              />
-            )}
+            {this.state.races.map((item, i) => {
+              return (
+                <View  key={i}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.setState({ openCard: item.id });
+                    }}
+                  >
+                  {item.type == 'orange' ? <RaceCard1 number={item.id} /> : <RaceCard number={item.id} />}
+                    
+                  </TouchableOpacity>
+                  {this.state.openCard == item.id && (
+                    <OpenRaceCard
+                      number={item.id}
+                      navigation={this.props.navigation}
+                      openHorseInfoHandler={this.openHorseInfoHandler}
+                    />
+                  )}
+                </View>
+              );
+            })}
+
           </Content>
         </Container>
       </ImageBackground>

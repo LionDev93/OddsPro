@@ -14,6 +14,8 @@ import LandingScreen from './landing';
 import FirstScreen from './first';
 import OddsScreen from './odd'
 import ProfileScreen from './profile';
+import AllOddsScreen from './allOdds';
+import DragDropTest from '../example';
 
 const AuthNavigator = createStackNavigator(
   {
@@ -32,10 +34,12 @@ const MainStackNavigator = createStackNavigator(
   {
     first: FirstScreen,
     odd: OddsScreen,
-    profile: ProfileScreen
+    profile: ProfileScreen,
+    all: AllOddsScreen,
+    test: DragDropTest
   },
   {
-    initialRouteName: 'profile',
+    initialRouteName: 'first',
     headerMode: 'none'
   }
 );

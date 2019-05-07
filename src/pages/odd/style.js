@@ -160,7 +160,8 @@ export default StyleSheet.create({
     height: 36,
     borderRadius: 36 / 2,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    marginBottom: 5,
   },
   row5Bg: {
     width: "100%",

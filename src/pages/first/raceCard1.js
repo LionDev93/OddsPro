@@ -1,7 +1,7 @@
 
 import React from "react";
 import { View, ImageBackground, Image } from "react-native";
-import { Container, Content, Text, Button, Grid, Col, Row } from "native-base";
+import { Container, Content, Text, Button, Grid, Col, Row, Icon } from "native-base";
 import styles from "./style";
 
 class RaceCard1 extends React.Component {
@@ -15,16 +15,18 @@ class RaceCard1 extends React.Component {
   }
 
   render() {
+    const {number} = this.props
     return (
       <Grid style={styles.cardContainer}>
         <Col style={styles.left1}>
-          <Text style={styles.fieldLabel}>第 2 場</Text>
+          <Text style={styles.fieldLabel}>{`第 ${number} 場`}</Text>
           <Text style={styles.fieldText}>泥地</Text>
-          <Image
+          {/* <Image
             source={require("../../assets/bell.png")}
             style={styles.icon}
             resizeMode="contain"
-          />
+          /> */}
+          <Icon name='bell-o' type='FontAwesome' style={{width: 30, marginTop: 5, color: 'blue'}}></Icon>
           {/* <BellIcon width='40' active={true} animate={true} /> */}
 
           <Text style={styles.time}>13:00 開跑</Text>

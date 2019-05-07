@@ -8,6 +8,7 @@ import {
   Modal,
   ScrollView,
   Alert,
+  KeyboardAvoidingView
 } from "react-native";
 import {
   Container,
@@ -22,9 +23,14 @@ import {
   Title,
   Row,
   Col,
-  Grid
+  Grid,
+  Form,
+  Item,
+  Input
 } from "native-base";
 import { Overlay } from "react-native-elements";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
 import styles from "./style";
 import OddCard from "./oddCard";
 import SuggestBar from "./suggestBar";
@@ -33,7 +39,7 @@ const dm = Dimensions.get("screen");
 class OddsScreen extends React.Component {
   constructor(props) {
     super(props);
-
+    this.scroll = null
     this.state = {
       allOddsVisible: false,
       openSuggestBar: false
@@ -141,6 +147,10 @@ class OddsScreen extends React.Component {
     );
   };
 
+  componentDidMount(){
+    //this.scroll.scrollToEnd();
+  }
+
   showAllOdds = () => {
     this.setState({ allOddsVisible: true });
   };
@@ -244,8 +254,12 @@ class OddsScreen extends React.Component {
               </Button>
             </Right>
           </Header>
-          <Content padder style={styles.container}>
+          <ScrollView padder style={{flex: 1, padding: 10, marginBottom: 10}} behavior="padding" enabled 
+          ref={(scroll) => {this.scroll = scroll;}}
+          >
+          
             <Text style={styles.date}>2019年3月10日,星期日, 沙田</Text>
+             
             <OddCard
               navigation={this.props.navigation}
               showAllOddsHandler={this.showAllOdds}
@@ -255,7 +269,9 @@ class OddsScreen extends React.Component {
             ) : (
               <React.Fragment />
             )}
-          </Content>
+            
+           
+          </ScrollView>
         </Container>
       </ImageBackground>
     );
