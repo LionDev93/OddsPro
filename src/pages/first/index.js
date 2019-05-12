@@ -19,6 +19,7 @@ import RaceCard from "./raceCard";
 import RaceCard1 from "./raceCard1";
 import OpenRaceCard from "./openRaceCard";
 import HorseInfo from "./extend";
+import RaceCard2 from "./raceCard2";
 
 class FirstScreen extends React.Component {
   constructor(props) {
@@ -31,52 +32,54 @@ class FirstScreen extends React.Component {
         {
           id: 1,
           type: "green",
-          isOpen: false
+          numHorse: 7,
+          winAmount: 1000,
+          total: 3000,
         },
         {
           id: 2,
           type: "green",
-          isOpen: false
+
         },
         {
           id: 3,
           type: "orange",
-          isOpen: false
+
         },
         {
           id: 4,
           type: "orange",
-          isOpen: false
+
         },
         {
           id: 5,
           type: "green",
-          isOpen: false
+
         },
         {
           id: 6,
           type: "green",
-          isOpen: false
+
         },
         {
           id: 7,
           type: "green",
-          isOpen: false
+
         },
         {
           id: 8,
           type: "orange",
-          isOpen: false
+
         },
         {
           id: 9,
           type: "orange",
-          isOpen: false
+
         },
         {
           id: 10,
           type: "green",
-          isOpen: false
+
         }
       ]
     };
@@ -143,23 +146,13 @@ class FirstScreen extends React.Component {
             <Text style={styles.date}>2019年3月10日,星期日, 沙田</Text>
             {this.state.races.map((item, i) => {
               return (
-                <View  key={i}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      this.setState({ openCard: item.id });
-                    }}
-                  >
-                  {item.type == 'orange' ? <RaceCard1 number={item.id} /> : <RaceCard number={item.id} />}
-                    
-                  </TouchableOpacity>
-                  {this.state.openCard == item.id && (
-                    <OpenRaceCard
-                      number={item.id}
-                      navigation={this.props.navigation}
-                      openHorseInfoHandler={this.openHorseInfoHandler}
-                    />
-                  )}
-                </View>
+                <RaceCard2 key={i}
+                  number={item.id}
+                  type={item.type}
+                  numHorse={item.numHorse}
+                  winAmount={item.winAmount}
+                  total={item.total}
+                />
               );
             })}
 
