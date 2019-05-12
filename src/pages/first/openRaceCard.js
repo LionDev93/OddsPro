@@ -19,8 +19,7 @@ class OpenRaceCard extends React.Component {
     super(props);
 
     this.state = {
-      email: "",
-      password: ""
+      
     };
   }
 
@@ -42,10 +41,10 @@ class OpenRaceCard extends React.Component {
   
 
   render() {
-    const { number } = this.props;
+    const { number, type } = this.props;
     return (
       <Animatable.View ref={this.handleViewRef} style={styles.oc_container}>
-        <Row style={styles.header}>
+        <Row style={type == 'orange' ? styles.header1 : styles.header}>
           <Col style={styles.h_middle}>
             <Button transparent onPress={this.oddsPageHandler}>
               <Image
@@ -76,7 +75,7 @@ class OpenRaceCard extends React.Component {
           }}
         >
           <Grid>
-            <Row style={{ height: 40, marginBottom: 10 }}>
+            <Row style={{ height: 40, marginBottom: 10 }} >
               <Col style={{ flex: 1.5 }}>
                 <Text style={styles.subHeaderText}>馬號/檔位</Text>
               </Col>
@@ -94,13 +93,13 @@ class OpenRaceCard extends React.Component {
               </Col>
             </Row>
 
-            <Row style={{ height: 40, marginBottom: 10 }}>
+            <Row style={{ height: 40, marginBottom: 10 }} onTouchEndCapture={this.openHorseHandler}>
               <Col style={{ flex: 1.5 }}>
                 <Text style={styles.oc_text}>1 / 6</Text>
               </Col>
               <Col
                 style={{ flex: 5, flexDirection: "row" }}
-                onTouchEndCapture={this.openHorseHandler}
+                
               >
                 <Image
                   source={require("../../assets/horse_avatar.png")}

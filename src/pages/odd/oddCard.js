@@ -171,7 +171,7 @@ class OddCard extends React.Component {
 
   render() {
     return (
-      <Grid>
+      <Grid style={{paddingBottom: 90}}>
         <Row style={styles.headerBg}>
           <Col style={styles.headerLeft}>
             <TouchableOpacity

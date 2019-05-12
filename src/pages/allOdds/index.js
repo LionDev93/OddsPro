@@ -20,12 +20,12 @@ import {
   Right,
   Title,
   Thumbnail,
-
+  Grid
 } from "native-base";
 import { Overlay } from "react-native-elements";
 import Orientation from "react-native-orientation";
 
-import { Table, TableWrapper, Row } from "react-native-table-component";
+import { Table, TableWrapper, Row, Col } from "react-native-table-component";
 
 import styles from "./style";
 
@@ -48,21 +48,21 @@ class AllOddsScreen extends React.Component {
         "11",
         "12",
         "13",
-        "14",
-     
+        "14"
       ],
       widthArr: [60, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50]
     };
   }
 
-  backHandler = () => {
+  close = () => {
+    Orientation.lockToPortrait();
     this.props.navigation.goBack();
   };
 
   componentDidMount() {
     // this locks the view to Landscape Mode
     Orientation.lockToLandscape();
-    //Orientation.lockToPortrait();
+    
   }
 
   render() {
@@ -83,24 +83,28 @@ class AllOddsScreen extends React.Component {
       >
         <Container style={{ backgroundColor: "transparent" }}>
           <Content padder>
-            <View style={styles.container}>
+            <View style={styles.bar}>
               <Text style={styles.date}>2019年3月10日,星期日, 沙田</Text>
-              
-              <ScrollView horizontal={false} >
-                <View >
-                 
-                  <ScrollView style={styles.dataWrapper} horizontal={true}>
-                    <View >
+
+              <TouchableOpacity onPress={this.close} style={styles.closeBtn}>
+                <Icon name="closecircle" type="AntDesign" />
+              </TouchableOpacity>
+            </View>
+
+            <ScrollView horizontal={false}>
+              <View>
+                <ScrollView style={styles.dataWrapper} horizontal={true}>
+                  <View>
                     <Table borderStyle={{ borderColor: "#C1C0B9" }}>
-                    <Row
-                      data={state.tableHead}
-                      widthArr={state.widthArr}
-                      style={styles.header}
-                      textStyle={styles.text}
-                    />
+                      <Row
+                        data={state.tableHead}
+                        widthArr={state.widthArr}
+                        style={styles.header}
+                        textStyle={styles.text}
+                      />
                     </Table>
-                    
-                  <Table borderStyle={{ borderColor: "#C1C0B9" }}>
+
+                    <Table borderStyle={{ borderColor: "#C1C0B9" }}>
                       {tableData.map((rowData, index) => (
                         <Row
                           key={index}
@@ -115,12 +119,9 @@ class AllOddsScreen extends React.Component {
                       ))}
                     </Table>
                   </View>
-                    
-                    
-                  </ScrollView>
-                </View>
-              </ScrollView>
-            </View>
+                </ScrollView>
+              </View>
+            </ScrollView>
           </Content>
         </Container>
       </ImageBackground>

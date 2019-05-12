@@ -11,7 +11,7 @@ export default StyleSheet.create({
     justifyContent: "center"
   },
 
-  container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: "grey" },
+  container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: "transparent" },
   header: { height: 50, backgroundColor: "#537791" },
   text: { textAlign: "center", fontWeight: "100" },
   dataWrapper: { marginTop: -1, flex: 1 },
@@ -22,5 +22,13 @@ export default StyleSheet.create({
     fontSize: 20,
     fontWeight: "400",
     lineHeight: 48
+  },
+  bar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  closeBtn:{
+    marginRight: 44,
   }
 });

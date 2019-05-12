@@ -110,6 +110,12 @@ export default StyleSheet.create({
   },
   //Open card
   header: {
+    backgroundColor: "#48ff00",
+    padding: 15,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10
+  },
+  header1: {
     backgroundColor: "#ffc000",
     padding: 15,
     borderTopLeftRadius: 10,
@@ -246,5 +252,11 @@ export default StyleSheet.create({
   col3: {
     flex: 3,
     alignItems: 'flex-end',
+  },
+  bell: {
+    width: 30, marginTop: 5, color:'red'
+  },
+  bell1: {
+    width: 30, marginTop: 5, color:'blue'
   }
 });

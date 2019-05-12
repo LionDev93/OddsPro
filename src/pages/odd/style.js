@@ -279,11 +279,11 @@ export default StyleSheet.create({
   },
   // SUGGEST BAR
   suggestBg:{
-    marginVertical: 20,
+    //marginVertical: 20,
     borderRadius: 5,
     backgroundColor: '#111111',
     padding: 10,
-    height: 60
+    height: 80
   },
   suggestDate:{
     color: '#ffffff',

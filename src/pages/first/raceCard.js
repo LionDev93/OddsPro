@@ -40,7 +40,7 @@ class RaceCard extends React.Component {
               borderBottomRightRadius: 10,
               borderTopRightRadius: 10
             }}
-            resizeMode="stretch"
+            resizeMode='stretch'
           >
             <View
               style={{

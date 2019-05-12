@@ -25,7 +25,7 @@ class Draggable extends React.Component {
     }
 
     static defaultProps = {
-      dragOn: 'onLongPress'
+      dragOn: 'onPressIn'
     }
 
     render() {

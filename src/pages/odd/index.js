@@ -264,14 +264,15 @@ class OddsScreen extends React.Component {
               navigation={this.props.navigation}
               showAllOddsHandler={this.showAllOdds}
             />
-            {!openSuggestBar ? (
+            
+            
+           
+          </ScrollView>
+          {!openSuggestBar ? (
               <SuggestBar openSuggestBarHandler={this.openSuggestBar} />
             ) : (
               <React.Fragment />
             )}
-            
-           
-          </ScrollView>
         </Container>
       </ImageBackground>
     );

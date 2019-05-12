@@ -19,7 +19,7 @@ class SuggestBar extends React.Component {
 
   render() {
     return (
-      <Grid>
+      <Grid style={{position: 'absolute', bottom: 0,  width: '100%', paddingHorizontal: 10}}> 
         <Row style={styles.suggestBg}>
           <Col style={{ flex: 2 }}>
             <Text style={styles.suggestDate}>13:32:55</Text>
