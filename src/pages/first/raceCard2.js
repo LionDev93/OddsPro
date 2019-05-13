@@ -165,8 +165,21 @@ class RaceCard2 extends React.Component {
     );
   };
 
+  oddsPageHandler = () => {
+    this.props.navigation.navigate("odd");
+  };
+
+  openHorseHandler = () => {
+    this.props.openHorseInfoHandler();
+  };
+
   renderCardOpen = () => {
     const { number, type, numHorse, winAmount, total } = this.props;
+    const list = []
+    for (let i = 0; i < numHorse; i++) {
+      list.push(i)
+      
+    }
     return (
       <View style={styles.oc_container}>
         <Row style={type == "orange" ? styles.header1 : styles.header} onTouchEndCapture={this.cardPress}>
@@ -217,8 +230,23 @@ class RaceCard2 extends React.Component {
                 <Text style={styles.subHeaderText}>AI評分</Text>
               </Col>
             </Row>
+            <ScrollView>
+            {
+                list.map(i => this.renderHorseItem(1))
+              }
+            </ScrollView>
+              
+           
 
-            <Row
+            </Grid>
+        </Row>
+      </View>
+    );
+  };
+
+  renderHorseItem = (i) => {
+    return (
+       <Row 
               style={{ height: 40, marginBottom: 10 }}
               onTouchEndCapture={this.openHorseHandler}
             >
@@ -287,78 +315,8 @@ class RaceCard2 extends React.Component {
                 </Text>
               </Col>
             </Row>
-
-            <Row style={{ height: 40, marginBottom: 10 }}>
-              <Col style={{ flex: 1.5 }}>
-                <Text style={styles.oc_text}>2 / 5</Text>
-              </Col>
-              <Col style={{ flex: 5, flexDirection: "row" }}>
-                <Image
-                  source={require("../../assets/horse_avatar.png")}
-                  style={styles.icon}
-                />
-                <Text style={styles.oc_text}>放馬過來</Text>
-              </Col>
-              <Col style={{ flex: 5 }}>
-                <Row style={{ height: 20 }}>
-                  <Image
-                    source={require("../../assets/rider_icon.png")}
-                    style={styles.smallIcon}
-                  />
-                  <Text style={styles.oc_text_sub}>利敬國</Text>
-                  <Image
-                    source={require("../../assets/match_icon.png")}
-                    style={styles.smallIcon}
-                  />
-                  <Text style={styles.oc_text_sub}>單邊眼罩</Text>
-                </Row>
-                <Row>
-                  <Image
-                    source={require("../../assets/train_icon.png")}
-                    style={styles.smallIcon}
-                  />
-                  <Text style={styles.oc_text_sub}>告東尼</Text>
-                  <Image
-                    source={require("../../assets/weight_icon.png")}
-                    style={styles.smallIcon}
-                  />
-                  <Text style={styles.oc_text_sub}>133</Text>
-                </Row>
-              </Col>
-              <Col style={{ flex: 1.5 }}>
-                <Text
-                  style={[
-                    styles.oc_text,
-                    {
-                      backgroundColor: "#ff8585",
-                      color: "#fcfcfc",
-                      textAlign: "center"
-                    }
-                  ]}
-                >
-                  2.3
-                </Text>
-              </Col>
-              <Col style={{ flex: 1.8 }}>
-                <Text
-                  style={[
-                    styles.oc_text,
-                    {
-                      backgroundColor: "#ebebeb",
-                      color: "#dc9908",
-                      textAlign: "center"
-                    }
-                  ]}
-                >
-                  67
-                </Text>
-              </Col>
-            </Row>
-          </Grid>
-        </Row>
-      </View>
-    );
-  };
+    )
+  }
 
   render() {
     return (

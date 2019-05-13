@@ -20,6 +20,7 @@ import RaceCard1 from "./raceCard1";
 import OpenRaceCard from "./openRaceCard";
 import HorseInfo from "./extend";
 import RaceCard2 from "./raceCard2";
+import * as Animatable from "react-native-animatable";
 
 class FirstScreen extends React.Component {
   constructor(props) {
@@ -39,54 +40,81 @@ class FirstScreen extends React.Component {
         {
           id: 2,
           type: "green",
+          numHorse: 5,
+          winAmount: 5000,
+          total: 30000,
 
         },
         {
           id: 3,
           type: "orange",
-
+          numHorse: 9,
+          winAmount: 9000,
+          total: 27000,
         },
         {
           id: 4,
           type: "orange",
-
+          numHorse: 7,
+          winAmount: 7000,
+          total: 3000,
         },
         {
           id: 5,
           type: "green",
-
+          numHorse: 12,
+          winAmount: 12000,
+          total: 36000,
         },
         {
           id: 6,
           type: "green",
-
+          numHorse: 10,
+          winAmount: 10000,
+          total: 50000,
         },
         {
           id: 7,
           type: "green",
-
+          numHorse: 9,
+          winAmount: 13000,
+          total: 38000,
         },
         {
           id: 8,
           type: "orange",
-
+          numHorse: 7,
+          winAmount: 18000,
+          total: 3000,
         },
         {
           id: 9,
           type: "orange",
-
+          numHorse: 7,
+          winAmount: 19000,
+          total: 3000,
         },
         {
           id: 10,
           type: "green",
-
+          numHorse: 5,
+          winAmount: 17000,
+          total: 36000,
         }
       ]
     };
   }
 
+  handleViewRef = ref => this.view = ref;
+
+
   renderHorseInfo = () => {
-    return <HorseInfo />;
+    return (
+      
+      <HorseInfo />
+     
+    
+    );
   };
 
   openHorseInfoHandler = () => {
@@ -121,10 +149,11 @@ class FirstScreen extends React.Component {
           </Header>
 
           <Overlay
-          animationType='fade'
+            animationType='fade'
             isVisible={this.state.openHorseInfo}
             windowBackgroundColor="rgba(255, 255, 255, 0)"
-            overlayBackgroundColor="#ffffff"
+
+            overlayBackgroundColor="transparent"
             width="80%"
             height="80%"
             onBackdropPress={() => this.setState({ openHorseInfo: false })}
@@ -152,6 +181,8 @@ class FirstScreen extends React.Component {
                   numHorse={item.numHorse}
                   winAmount={item.winAmount}
                   total={item.total}
+                  openHorseInfoHandler={this.openHorseInfoHandler}
+                  navigation={this.props.navigation}
                 />
               );
             })}
