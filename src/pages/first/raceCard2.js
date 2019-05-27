@@ -181,8 +181,8 @@ class RaceCard2 extends React.Component {
       
     }
     return (
-      <View style={styles.oc_container}>
-        <Row style={type == "orange" ? styles.header1 : styles.header} onTouchEndCapture={this.cardPress}>
+      <TouchableOpacity style={styles.oc_container} onPress={this.cardPress}>
+        <Row style={type == "orange" ? styles.header1 : styles.header}>
           <Col style={styles.h_middle}>
             <Button transparent onPress={this.oddsPageHandler}>
               <Image
@@ -240,15 +240,16 @@ class RaceCard2 extends React.Component {
 
             </Grid>
         </Row>
-      </View>
+      </TouchableOpacity>
     );
   };
 
   renderHorseItem = (i) => {
     return (
-       <Row 
+      <TouchableOpacity onPress={this.openHorseHandler}>
+      <Row 
               style={{ height: 40, marginBottom: 10 }}
-              onTouchEndCapture={this.openHorseHandler}
+              
             >
               <Col style={{ flex: 1.5 }}>
                 <Text style={styles.oc_text}>1 / 6</Text>
@@ -315,6 +316,8 @@ class RaceCard2 extends React.Component {
                 </Text>
               </Col>
             </Row>
+      </TouchableOpacity>
+       
     )
   }
 

@@ -155,13 +155,13 @@ class FirstScreen extends React.Component {
 
             overlayBackgroundColor="transparent"
             width="80%"
-            height="80%"
+            height="90%"
             onBackdropPress={() => this.setState({ openHorseInfo: false })}
             overlayStyle={{
               padding: 0,
               position: "absolute",
               right: 0,
-              bottom: 0
+              top: 20
             }}
             containerStyle={{
               justifyContent: "flex-end",
