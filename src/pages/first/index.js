@@ -10,7 +10,8 @@ import {
   Right,
   Body,
   Title,
-  Icon
+  Icon,
+  Spinner
 } from "native-base";
 import Modal from "react-native-modal";
 import { Overlay } from "react-native-elements";
@@ -21,6 +22,8 @@ import OpenRaceCard from "./openRaceCard";
 import HorseInfo from "./extend";
 import RaceCard2 from "./raceCard2";
 import * as Animatable from "react-native-animatable";
+import { connect } from "react-redux";
+import * as Actions from "../../redux/action";
 
 class FirstScreen extends React.Component {
   constructor(props) {
@@ -121,7 +124,12 @@ class FirstScreen extends React.Component {
     this.setState({ openHorseInfo: true });
   };
 
+  componentDidMount(){
+    this.props.getCards()
+  }
+
   render() {
+    const {dateText, cards} = this.props
     return (
       <ImageBackground
         source={require("../../assets/firstpage_background.jpg")}
@@ -172,20 +180,27 @@ class FirstScreen extends React.Component {
           </Overlay>
 
           <Content padder style={styles.container}>
-            <Text style={styles.date}>2019年3月10日,星期日, 沙田</Text>
-            {this.state.races.map((item, i) => {
-              return (
-                <RaceCard2 key={i}
-                  number={item.id}
-                  type={item.type}
-                  numHorse={item.numHorse}
-                  winAmount={item.winAmount}
-                  total={item.total}
-                  openHorseInfoHandler={this.openHorseInfoHandler}
-                  navigation={this.props.navigation}
-                />
-              );
-            })}
+            <Text style={styles.date}>{dateText}</Text>
+            { 
+              cards ? (
+                cards.map((item, i) => {
+                  return (
+                    <RaceCard2 key={i}
+                      card={item}
+                      number={'item.id'}
+                      type={'item.type'}
+                      numHorse={0}
+                      winAmount={0}
+                      total={0}
+                      openHorseInfoHandler={this.openHorseInfoHandler}
+                      navigation={this.props.navigation}
+                    />
+                  )
+                })
+              ) : (
+                <Spinner></Spinner>
+              )
+              }
 
           </Content>
         </Container>
@@ -194,4 +209,19 @@ class FirstScreen extends React.Component {
   }
 }
 
-export default FirstScreen;
+const mapState = state => {
+  return {
+    cards: state.global.cards,
+    message: state.global.message,
+    dateText: state.global.dateText,
+  };
+};
+
+const actionCreator = {
+  getCards: Actions.getCards,
+};
+
+export default connect(
+  mapState,
+  actionCreator
+)(FirstScreen);

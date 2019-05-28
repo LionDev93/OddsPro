@@ -63,26 +63,27 @@ class RaceCard2 extends React.Component {
   };
 
   renderCardClosed = () => {
-    const { number, type, numHorse, winAmount, total } = this.props;
+    const { racenum, stakeprize, ctime, classcode, distance, racename, trackcode, coursecode, runnernum   } = this.props.card;
+    
     return (
       <TouchableOpacity style={styles.cardContainer} onPress={this.cardPress}>
         <Row>
-          <Col style={type == "orange" ? styles.left1 : styles.left}>
-            <Text style={styles.fieldLabel}>{`第 ${number} 場`}</Text>
-            <Text style={styles.fieldText}>草地</Text>
+          <Col style={trackcode != "草地" ? styles.left1 : styles.left}>
+            <Text style={styles.fieldLabel}>{`第 ${racenum} 場`}</Text>
+            <Text style={styles.fieldText}>{trackcode}</Text>
 
             <Icon
               name="bell-o"
               type="FontAwesome"
-              style={type == "orange" ? styles.bell1 : styles.bell}
+              style={trackcode != "草地" ? styles.bell1 : styles.bell}
             />
 
-            <Text style={styles.time}>12:30 開跑</Text>
+            <Text style={styles.time}>{12:30} 開跑</Text>
           </Col>
           <Col style={styles.right}>
             <ImageBackground
               source={
-                type == "orange"
+                trackcode != "草地"
                   ? require("../../assets/sand_bg.png")
                   : require("../../assets/grass_bg.png")
               }
@@ -105,8 +106,8 @@ class RaceCard2 extends React.Component {
               >
                 <Row style={{ height: 30, marginTop: 5 }}>
                   <Col style={{ flex: 8, flexDirection: "row", height: 30 }}>
-                    <Text style={styles.name}>紅掌花讓賽 - </Text>
-                    <Text style={styles.sub}>1200米</Text>
+                    <Text style={styles.name}>{racename.substring(0,5)}- </Text>
+                    <Text style={styles.sub}>{distance}米</Text>
                   </Col>
                   <Col style={{ flex: 4, height: 30, paddingBottom: 5 }}>
                     <ImageBackground
@@ -124,38 +125,38 @@ class RaceCard2 extends React.Component {
                         style={{
                           color: "white",
                           fontSize: 13,
-                          paddingTop: 10,
+                          paddingTop: 5,
                           paddingLeft: 30
                         }}
                       >
-                        第一班
+                        {classcode}
                       </Text>
                     </ImageBackground>
                   </Col>
                 </Row>
 
                 <Row style={{ height: 20, marginTop: 10 }}>
+                  {/* <Col>
+                    <Text style={styles.bonus}>獎金: ${stakeprize}</Text>
+                  </Col> */}
                   <Col>
-                    <Text style={styles.bonus}>獎金: ${winAmount}</Text>
-                  </Col>
-
+                      <Text style={styles.bonus}>參加馬匹: {runnernum}</Text>
+                    </Col>
                   <Col>
-                    <Text style={styles.track}>C+3 賽道</Text>
+                    <Text style={styles.track}>{coursecode}</Text>
                   </Col>
                 </Row>
-                {type == "orange" ? (
-                  <React.Fragment />
-                ) : (
-                  <Row style={{ height: 20 }}>
+                
+                  {/* <Row style={{ height: 20 }}>
                     <Col>
-                      <Text style={styles.bonus}>參加馬匹: {numHorse}</Text>
+                      <Text style={styles.bonus}>參加馬匹: {runnernum}</Text>
                     </Col>
-                  </Row>
-                )}
-                {type == "orange" ? (
+                  </Row> */}
+                
+                {stakeprize == null ? (
                   <React.Fragment />
                 ) : (
-                  <Text style={styles.total}>總投注: {total}元</Text>
+                  <Text style={styles.total}>總投注: {stakeprize}元</Text>
                 )}
               </View>
             </ImageBackground>

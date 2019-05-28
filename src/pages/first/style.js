@@ -60,7 +60,7 @@ export default StyleSheet.create({
   fieldText: {
     color: "#ffffff",
     fontSize: 13,
-    marginTop: 10,
+    marginTop: 5,
     fontWeight: "700"
   },
   time: {
