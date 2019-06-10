@@ -23,6 +23,30 @@ const globalReducer = (state = initState, action) => {
         ...state,
         message: message,
       };
+    case ActionType.GET_BASIC_INFO_OK:
+        const { cardInfo } = action.payload;
+        return {
+          ...state,
+          cardInfo: cardInfo,
+        };
+      case ActionType.GET_BASIC_INFO_NOK:
+
+        return {
+          ...state,
+          message: action.payload.message,
+        };
+    case ActionType.GET_RACE_ODDS_OK:
+
+      return {
+        ...state,
+
+      };
+    case ActionType.GET_RACE_ODDS_NOK:
+
+      return {
+        ...state,
+        message: action.payload.message,
+      };
     default:
       return state;
   }

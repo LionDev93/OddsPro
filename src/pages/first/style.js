@@ -141,7 +141,7 @@ export default StyleSheet.create({
   oc_text: {
     color: "#777777",
     fontWeight: "400",
-    fontSize: 16,
+    fontSize: 13,
     padding: 5
   },
   oc_text_sub: {

@@ -170,6 +170,10 @@ class OddsScreen extends React.Component {
 
   render() {
     const { openSuggestBar } = this.state;
+    const racenum = this.props.navigation.getParam('racenum', '');
+    const dateText = this.props.navigation.getParam('dateText', '');
+
+    //console.error(racenum)
     return (
       <ImageBackground
         source={require("../../assets/firstpage_background.jpg")}
@@ -258,9 +262,10 @@ class OddsScreen extends React.Component {
           ref={(scroll) => {this.scroll = scroll;}}
           >
           
-            <Text style={styles.date}>2019年3月10日,星期日, 沙田</Text>
+            <Text style={styles.date}>{dateText}</Text>
              
             <OddCard
+              racenum={racenum}
               navigation={this.props.navigation}
               showAllOddsHandler={this.showAllOdds}
             />

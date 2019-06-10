@@ -1,5 +1,5 @@
 import React from "react";
-import { View, ImageBackground, Image, TouchableOpacity } from "react-native";
+import { View, ImageBackground, Image, TouchableOpacity, Dimensions } from "react-native";
 import {
   Container,
   Content,
@@ -24,6 +24,9 @@ import RaceCard2 from "./raceCard2";
 import * as Animatable from "react-native-animatable";
 import { connect } from "react-redux";
 import * as Actions from "../../redux/action";
+
+const {height} = Dimensions.get('window')
+
 
 class FirstScreen extends React.Component {
   constructor(props) {
@@ -130,6 +133,7 @@ class FirstScreen extends React.Component {
 
   render() {
     const {dateText, cards} = this.props
+    // cards != null ? console.error(JSON.stringify(cards)) : ''
     return (
       <ImageBackground
         source={require("../../assets/firstpage_background.jpg")}
@@ -149,7 +153,12 @@ class FirstScreen extends React.Component {
                 style={styles.icon}
                 resizeMode="contain"
               />
+            
               <Title style={{ color: "white" }}>AI 賠率王</Title>
+              
+              
+
+              
             </Body>
             <Right>
               <React.Fragment />
@@ -163,13 +172,13 @@ class FirstScreen extends React.Component {
 
             overlayBackgroundColor="transparent"
             width="80%"
-            height="90%"
+            height={height - 65} //"90%" //DDT
             onBackdropPress={() => this.setState({ openHorseInfo: false })}
             overlayStyle={{
               padding: 0,
               position: "absolute",
               right: 0,
-              top: 20
+              top: 65
             }}
             containerStyle={{
               justifyContent: "flex-end",
@@ -180,23 +189,16 @@ class FirstScreen extends React.Component {
           </Overlay>
 
           <Content padder style={styles.container}>
-            <Text style={styles.date}>{dateText}</Text>
+            
+            {Array.isArray(cards) ? (
+              <Text style={styles.date}>{dateText}</Text>
+              ) : (
+               <React.Fragment/>
+              )}
             { 
-              cards ? (
-                cards.map((item, i) => {
-                  return (
-                    <RaceCard2 key={i}
-                      card={item}
-                      number={'item.id'}
-                      type={'item.type'}
-                      numHorse={0}
-                      winAmount={0}
-                      total={0}
-                      openHorseInfoHandler={this.openHorseInfoHandler}
-                      navigation={this.props.navigation}
-                    />
-                  )
-                })
+              
+                cards != null  ? (
+                  this.showCards(cards, dateText)
               ) : (
                 <Spinner></Spinner>
               )
@@ -207,7 +209,92 @@ class FirstScreen extends React.Component {
       </ImageBackground>
     );
   }
+
+  showCards = (cards, dateText) => {
+    const fake = [
+      {
+        "raceid": "RACE_20190529_0005",
+        "racenum": 1,
+        "stakeprize": 920000,
+        "ctime": 1559006457446,
+        "classcode": "第4班",
+        "distance": "1200",
+        "runnernum": 12,
+        "racename": "FAKE FAKE",
+        "trackcode": "草地",
+        "coursecode": "\"C\" 賽道 - 向後移欄"
+
+
+
+      },
+      {
+        "raceid": "RACE_20190529_0005",
+        "racenum": 2,
+        "stakeprize": 920000,
+        "ctime": 1559006457446,
+        "classcode": "第4班",
+        "distance": "1200",
+        "runnernum": 12,
+        "racename": "FAKE FAKE",
+        "trackcode": "草地",
+        "coursecode": "\"C\" 賽道 - 向後移欄"
+
+
+
+      },
+      {
+        "raceid": "RACE_20190529_0005",
+        "racenum": 3,
+        "stakeprize": 920000,
+        "ctime": 1559006457446,
+        "classcode": "第4班",
+        "distance": "1200",
+        "runnernum": 12,
+        "racename": "FAKE FAKE",
+        "trackcode": "草地",
+        "coursecode": "\"C\" 賽道 - 向後移欄"
+
+
+
+      }
+    ]
+    return(
+      <View>
+      {
+            Array.isArray(cards) ? (
+              cards.map((item, i) => {
+                return (
+                  <RaceCard2 key={i}
+                    card={item}
+                    dateText={dateText}
+                    openHorseInfoHandler={this.openHorseInfoHandler}
+                    navigation={this.props.navigation}
+                  />
+                )
+              })
+            ) : (
+              
+              fake.map((item, i) => {
+                return (
+                  <RaceCard2 key={i}
+                    card={item}
+                    dateText={dateText}
+                    openHorseInfoHandler={this.openHorseInfoHandler}
+                    navigation={this.props.navigation}
+                  />
+                )
+              })
+            )
+
+          } 
+      </View>
+          
+                
+    )
+  }
 }
+
+/* <Title style={{ color: "white" }}>Waiting for upcoming race</Title> */
 
 const mapState = state => {
   return {

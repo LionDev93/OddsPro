@@ -54,4 +54,46 @@ export const getBasicInfo = async (raceNum) => {
   }
 };
 
+export const getCardInfo = async (raceNum) => {
+  const res = await API.get_upcoming_raceinfo_horsedetail_api(raceNum);
 
+  console.log(res)
+
+  if(res.status)
+    return {
+      type: ActionType.GET_BASIC_INFO_OK,
+      payload: {
+        cardInfo: res.data
+      }
+    };
+  else{
+    return {
+      type: ActionType.GET_BASIC_INFO_NOK,
+      payload: {
+        message: res.message,
+      }
+    };
+  }
+};
+
+export const getRaceOdds = async (raceNum, raceType) => {
+  const res = await API.get_raceodds_api(raceNum, raceType);
+
+  console.log(res)
+
+  if(res.status)
+    return {
+      type: ActionType.GET_RACE_ODDS_OK,
+      payload: {
+        cardInfo: res.data
+      }
+    };
+  else{
+    return {
+      type: ActionType.GET_RACE_ODDS_NOK,
+      payload: {
+        message: res.message,
+      }
+    };
+  }
+};

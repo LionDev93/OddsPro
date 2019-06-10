@@ -69,3 +69,63 @@ export const get_basic_info_api = async (race_num) => {
   }
 };
 
+
+export const get_upcoming_raceinfo_horsedetail_api = async (race_num) => {
+  try {
+      const config = {
+        method: "GET",
+        url: API_URL + `oddspro_api/get_upcoming_raceinfo_horsedetail.php?r=${race_num}`,
+        
+      }
+
+
+      console.log(config)
+    const res = await axios(config);
+    console.log(res)
+    let ret = res.status == StatusCode.SUCCESS
+    return  {
+      status: ret,
+      data: res.data,
+      message: '',
+    };;
+  } catch (error) {
+    console.log(error);
+    // throw error.message;
+    return {
+      status: false,
+      data: null,
+      message: error.message,
+    };
+  }
+};
+
+
+
+export const get_raceodds_api = async (race_num, race_type) => {
+  try {
+      const config = {
+        method: "GET",
+        url: API_URL + `oddspro_api/get_raceodds.php?r=${race_num}&t=${race_type}`,
+        
+      }
+
+
+    console.log(config)
+    const res = await axios(config);
+    console.log(res)
+    let ret = res.status == StatusCode.SUCCESS
+    return  {
+      status: ret,
+      data: res.data,
+      message: '',
+    };;
+  } catch (error) {
+    console.log(error);
+    // throw error.message;
+    return {
+      status: false,
+      data: null,
+      message: error.message,
+    };
+  }
+};

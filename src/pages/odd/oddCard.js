@@ -26,97 +26,168 @@ import {
 } from "native-base";
 import styles from "./style";
 import { DragContainer, Draggable, DropZone } from "../../index";
+import { connect } from "react-redux";
+import * as Actions from "../../redux/action";
+import * as API from '../../services/api'
+import timer from "react-native-timer";
+
 
 class OddCard extends React.Component {
   constructor(props) {
     super(props);
 
+    /**
+     * 
+     * 	
+    独赢,位置
+    win,pla,
+    连赢,位置Q
+    qin, qpl,
+    三重彩
+    tcetopn,tcebanker,
+    单T
+    tritopn,tribanker,trifull,
+    四连环
+    fftopn,ffbanker,fffull,
+    四重彩
+    qtttopn,qttbanker,
+    马宝
+    dbl,cwa,cwb,cwc
+     */
+
     this.state = {
+      racenum: 0,
       selected: "key1",
       selectedType: 1,
+      OddsResult: [],
+      betType: {
+        id: 1,
+        name: "獨贏/位置",
+        w1: '獨贏',
+
+        w2: '位置',
+        oddsName: [
+          '獨贏',
+          '位置'
+        ],
+        odds: [
+          'win', 
+          'pla'
+        ]
+      },
       betTypes: [
         {
           id: 1,
           name: "獨贏/位置",
           w1: '獨贏',
+
           w2: '位置',
+          oddsName: [
+            '獨贏',
+            '位置'
+          ],
+          odds: [
+            'win', 
+            'pla'
+          ]
         },
         {
           id: 2,
           name: "連贏/位置Q",
           w1: '膽',
+
           w2: '腳',
+
+          oddsName: [
+            '膽',
+            '腳'
+          ],
+          odds: [
+            'qin', 
+            'qpl'
+          ]
         },
         {
           id: 3,
-          name: "單T",
-          w1: '膽',
-          w2: '腳',
-        },
-        {
-          id: 4,
           name: "三重彩",
           w1: '膽',
           w2: '腳',
         },
         {
-          id: 5,
-          name: "四連環",
+          id: 4,
+          name: "单T",
           w1: '膽',
           w2: '腳',
         },
-        
-      ],
-      list1: [
-        {
-          id: 1,
-          name: "金剛仔"
-        },
-        {
-          id: 2,
-          name: "悅目星光"
-        },
-        {
-          id: 3,
-          name: "藍海策略"
-        },
-        {
-          id: 4,
-          name: "睡眠大學"
-        },
         {
           id: 5,
-          name: "一舖成名"
+          name: "四连环",
+          w1: '膽',
+          w2: '腳',
         },
         {
           id: 6,
-          name: "二郎"
+          name: "四重彩",
+          w1: '膽',
+          w2: '腳',
         },
         {
           id: 7,
-          name: "萬事醒"
+          name: "马宝",
+          w1: '膽',
+          w2: '腳',
         },
-        {
-          id: 8,
-          name: "得意"
-        },
-        {
-          id: 9,
-          name: "事必獲利"
-        },
-        {
-          id: 10,
-          name: "暴風俠"
-        },
-        {
-          id: 11,
-          name: "神馬飛揚"
-        }
-        ,
-        {
-          id: 12,
-          name: "駿協精英"
-        }
+      ],
+      list1: [
+        // {
+        //   id: 1,
+        //   name: "金剛仔"
+        // },
+        // {
+        //   id: 2,
+        //   name: "悅目星光"
+        // },
+        // {
+        //   id: 3,
+        //   name: "藍海策略"
+        // },
+        // {
+        //   id: 4,
+        //   name: "睡眠大學"
+        // },
+        // {
+        //   id: 5,
+        //   name: "一舖成名"
+        // },
+        // {
+        //   id: 6,
+        //   name: "二郎"
+        // },
+        // {
+        //   id: 7,
+        //   name: "萬事醒"
+        // },
+        // {
+        //   id: 8,
+        //   name: "得意"
+        // },
+        // {
+        //   id: 9,
+        //   name: "事必獲利"
+        // },
+        // {
+        //   id: 10,
+        //   name: "暴風俠"
+        // },
+        // {
+        //   id: 11,
+        //   name: "神馬飛揚"
+        // }
+        // ,
+        // {
+        //   id: 12,
+        //   name: "駿協精英"
+        // }
       ],
       list2: [],
       list3: [],
@@ -124,14 +195,15 @@ class OddCard extends React.Component {
   }
 
   onValueChange(value: string) {
+
     this.setState({
       selected: value
     });
   }
 
-  showAllOdds = () => {
-    this.props.navigation.navigate("all");
-  };
+  // showAllOdds = () => {
+  //   this.props.navigation.navigate("all");
+  // };
 
   dropToList1 = e => {
     const {id, type} = e
@@ -169,14 +241,115 @@ class OddCard extends React.Component {
     });
   };
 
+  static getDerivedStateFromProps(props, state) {
+    let s = {}
+    if (state.racenum == 0) {
+       s =  {
+        
+          racenum: props.racenum
+  
+      };
+    }
+
+
+    if(props.cardInfo){
+      // console.error('hey')
+      const list = props.cardInfo.horseViewList
+
+      const list1 = list && list.map(item => {
+        return {
+          id: item.runnerno,
+          name: item.horsenamechs,
+        }
+      })
+
+      s = {
+        ...s,
+        list1: list1
+      }
+    }
+    
+    return s;
+  }
+
+  updateOdds = async () => {
+    //get race oodd
+    
+      const list = []
+      let type1 = this.state.betType.odds[0]
+      let type2 = this.state.betType.odds[1]
+      const racenum = this.state.racenum
+      
+      const res1 = await API.get_raceodds_api(racenum, type1)
+      list.push(res1.data)
+      
+      const res2 = await API.get_raceodds_api(racenum, type2)
+      list.push(res2.data)
+
+     
+
+
+    this.setState({
+      OddsResult: list,
+    })
+    
+    // console.error(racenum, type, data)
+
+    
+
+  }
+
+  onUpdRaceNum = async () => {
+    await this.updateOdds()
+    await this.props.getCardInfo(this.state.racenum)
+  }
+
+  componentWillUnmount(){
+    timer.clearInterval(this);
+
+  }
+
+  async componentDidMount() {
+    this.updateOdds()
+
+    timer.setInterval(
+      this,
+      "timer",
+      () => {
+        this.updateOdds()
+      },
+      5000
+    );
+
+  }
+
+  changeBetType = async (betType) =>{
+    if(betType.id >= 3) {
+      Alert.alert('only support win, pla, qin, qpl for demo')
+      return
+  }
+
+    this.setState({ 
+      selectedType: betType.id,
+      betType: betType,
+     }, () => this.updateOdds())
+     
+
+     //await this.props.getCardInfo(this.state.racenum)
+
+  }
+
   render() {
+    // // const { racenum } = this.props
+    // this.state.OddsResult.length > 0 ? console.error(
+    //   this.state.OddsResult[0].data) : ''
     return (
       <Grid style={{paddingBottom: 90}}>
         <Row style={styles.headerBg}>
           <Col style={styles.headerLeft}>
             <TouchableOpacity
               style={styles.headerLeft}
-              onPress={() => Alert.alert("Previous Race")}
+              onPress={() => this.state.racenum > 1 ? this.setState({racenum: this.state.racenum - 1}, () => this.onUpdRaceNum()) : ''}
             >
               <Icon
                 name="chevron-left"
@@ -187,13 +360,13 @@ class OddCard extends React.Component {
             </TouchableOpacity>
           </Col>
           <Col style={styles.headerMiddle}>
-            <Text style={styles.headerText}>第 2 場</Text>
+            <Text style={styles.headerText}>第 {this.state.racenum} 場</Text>
           </Col>
 
           <Col style={styles.headerRight}>
             <TouchableOpacity
               style={styles.headerRight}
-              onPress={() => Alert.alert("Next Race")}
+              onPress={() => this.state.racenum < 3 ? this.setState({racenum: this.state.racenum + 1}, () => this.onUpdRaceNum()) : ''}
             >
               <Text style={styles.headerTextRight}>下一場 </Text>
               <Icon
@@ -218,7 +391,7 @@ class OddCard extends React.Component {
                   }
                 >
                   <TouchableOpacity
-                    onPress={() => this.setState({ selectedType: item.id })}
+                    onPress={this.changeBetType.bind(this, item)}
                   >
                     <Text
                       style={
@@ -314,47 +487,45 @@ class OddCard extends React.Component {
           <Col style={styles.row6col1}>
             <Text style={styles.row6Text}>實時賠率 共3注</Text>
           </Col>
-          <Col style={styles.row6col2}>
-            <Text style={styles.row6Text1}>連贏 </Text>
+          {this.state.betType.oddsName.map((item, i) => {
+            return(
+              <Col style={styles.row6col2} key={i}>
+                <Text style={styles.row6Text1}>{item}</Text>
+              </Col>
+            )
+          })}
+          {/* <Col style={styles.row6col2}>
+            <Text style={styles.row6Text1}> </Text>
           </Col>
           <Col style={styles.row6col2}>
             <Text style={styles.row6Text1}>位置Q</Text>
-          </Col>
+          </Col> */}
         </Row>
+        {this.state.OddsResult.length > 0 ? (
+          this.state.OddsResult[0].data.map((item, i) => {
+            var splits = item.split('=');    
 
-        <Row style={styles.horsesBg}>
-          <Col style={styles.row6col1}>
-            <Text style={styles.row7Text}>連贏 3 - 6</Text>
-          </Col>
-          <Col style={styles.row7col2}>
-            <Text style={styles.row7Text1}>33.2 </Text>
-          </Col>
-          <Col style={styles.row7col3}>
-            <Text style={styles.row7Text1}>22</Text>
-          </Col>
-        </Row>
-        <Row style={styles.horsesBg}>
-          <Col style={styles.row6col1}>
-            <Text style={styles.row7Text}>連贏 3 - 9</Text>
-          </Col>
-          <Col style={styles.row7col2}>
-            <Text style={styles.row7Text1}>45</Text>
-          </Col>
-          <Col style={styles.row7col3}>
-            <Text style={styles.row7Text1}>33.8</Text>
-          </Col>
-        </Row>
-        <Row style={styles.horsesBg}>
-          <Col style={styles.row6col1}>
-            <Text style={styles.row7Text}>連贏 6 - 9</Text>
-          </Col>
-          <Col style={styles.row7col2}>
-            <Text style={styles.row7Text1}>68</Text>
-          </Col>
-          <Col style={styles.row7col3}>
-            <Text style={styles.row7Text1}>43.1</Text>
-          </Col>
-        </Row>
+            const item2 = this.state.OddsResult[1].data[i]
+            var splits2 = item2.split('=');  
+            return(
+              <Row style={styles.horsesBg} key={i}>
+                <Col style={styles.row6col1}>
+                  <Text style={styles.row7Text}>連贏 {splits[0]}</Text>
+                </Col>
+                <Col style={styles.row7col2}>
+                  <Text style={styles.row7Text1}>{splits[1]} </Text>
+                </Col>
+                <Col style={styles.row7col3}>
+                  <Text style={styles.row7Text1}>{splits2[1]}</Text>
+                </Col>
+              </Row>
+            )
+          })
+          
+        ): (
+          <React.Fragment/>
+        )}
+        
 
         <Row style={styles.horsesBg}>
           <Col style={styles.row8Col1}>
@@ -556,4 +727,20 @@ export class DraggyInner extends React.Component {
   }
 }
 
-export default OddCard;
+// export default OddCard;
+
+const mapState = state => {
+  return {
+    cardInfo: state.global.cardInfo,
+  };
+};
+
+const actionCreator = {
+  getRaceOdds: Actions.getRaceOdds,
+  getCardInfo: Actions.getCardInfo,
+};
+
+export default connect(
+  mapState,
+  actionCreator
+)(OddCard);
