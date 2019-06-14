@@ -54,19 +54,23 @@ export const getBasicInfo = async (raceNum) => {
   }
 };
 
-export const getCardInfo = async (raceNum) => {
+export const getCardInfo = async (raceId, raceNum) => {
   const res = await API.get_upcoming_raceinfo_horsedetail_api(raceNum);
 
   console.log(res)
 
-  if(res.status)
+  if(res.status) {
+    res.data.horseViewList.sort( (a, b) => {
+      return a.runnerno - b.runnerno;
+    });
     return {
       type: ActionType.GET_BASIC_INFO_OK,
       payload: {
+        raceId: raceId,
         cardInfo: res.data
       }
     };
-  else{
+  } else{
     return {
       type: ActionType.GET_BASIC_INFO_NOK,
       payload: {

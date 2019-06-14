@@ -30,13 +30,13 @@ class RaceCard2 extends React.Component {
   handleViewRef = ref => (this.view = ref);
 
   cardPress = async () => {
-    const {getCardInfo, card, cardInfo} = this.props
-    
-      
-      await getCardInfo(card.racenum)
+    const {getCardInfo, getRaceOdds, card, cardInfo} = this.props
 
-    
-    
+
+      await getCardInfo(card.raceid, card.racenum)
+      //await getRaceOdds(card.racenum, "win")
+
+
 
       this.view
         .flipOutX(500)
@@ -70,15 +70,15 @@ class RaceCard2 extends React.Component {
       //       //this.view.fad(1000)
       //     }
       //   );
-     
+
   };
 
   renderCardClosed = () => {
-    const { racenum, stakeprize, ctime, classcode, distance, racename, trackcode, coursecode, runnernum,   } = this.props.card;
+    const { racenum, stakeprize, posttime, classcode, distance, racename, trackcode, coursecode, runnernum,   } = this.props.card;
 
-    const time = moment(ctime).format('HH:MM')
+    const time = moment(posttime).format('HH:mm')
 
-    
+
     return (
       <TouchableOpacity style={styles.cardContainer} onPress={this.cardPress}>
         <Row>
@@ -160,13 +160,13 @@ class RaceCard2 extends React.Component {
                     <Text style={styles.track}>{coursecode}</Text>
                   </Col>
                 </Row>
-                
+
                   {/* <Row style={{ height: 20 }}>
                     <Col>
                       <Text style={styles.bonus}>參加馬匹: {runnernum}</Text>
                     </Col>
                   </Row> */}
-                
+
                 {stakeprize == null ? (
                   <React.Fragment />
                 ) : (
@@ -180,17 +180,17 @@ class RaceCard2 extends React.Component {
     );
   };
 
-  oddsPageHandler = (racenum, dateText) => {
-    this.props.navigation.navigate("odd", {racenum, dateText});
+  oddsPageHandler = (raceid, racenum, dateText) => {
+    this.props.navigation.navigate("odd", {raceid, racenum, dateText});
   };
 
   openHorseHandler = () => {
     this.props.openHorseInfoHandler();
   };
 
-  renderOpenOddsButton = (racenum, dateText) => {
+  renderOpenOddsButton = (raceid, racenum, dateText) => {
     return(
- <TouchableOpacity onPress={this.oddsPageHandler.bind(this, racenum, dateText)}>
+ <TouchableOpacity onPress={this.oddsPageHandler.bind(this, raceid, racenum, dateText)}>
     <Image
                 source={require("../../assets/percentage.png")}
                 style={styles.oc_icon}
@@ -198,14 +198,14 @@ class RaceCard2 extends React.Component {
               />
     </TouchableOpacity>
     )
-   
+
   }
 
   renderCardOpen = () => {
-    const { racenum, stakeprize, ctime, classcode, distance, racename, trackcode, coursecode, runnernum,   } = this.props.card;
+    const { raceid, racenum, stakeprize, ctime, classcode, distance, racename, trackcode, coursecode, runnernum,   } = this.props.card;
     const { dateText } = this.props
-    const list = this.props.cardInfo.horseViewList
-    
+    const list = this.props.cardInfo[raceid].horseViewList
+
     return (
       <TouchableOpacity style={styles.oc_container} onPress={this.cardPress}>
         <Row style={this.props.card.trackcode != "草地" ? styles.header1 : styles.header}>
@@ -217,7 +217,7 @@ class RaceCard2 extends React.Component {
                 resizeMode="contain"
               />
             </Button> */}
-            {this.renderOpenOddsButton(racenum, dateText)}
+            {this.renderOpenOddsButton(raceid, racenum, dateText)}
           </Col>
           <Col style={styles.h_middle}>
             <Text style={styles.headerText}>{`第 ${this.props.card.racenum} 場`}</Text>
@@ -262,8 +262,8 @@ class RaceCard2 extends React.Component {
                 list.map(i => this.renderHorseItem(i))
               }
             </ScrollView>
-              
-           
+
+
 
             </Grid>
         </Row>
@@ -272,20 +272,20 @@ class RaceCard2 extends React.Component {
   };
 
   renderHorseItem = (item) => {
-    const { runnerno, barrierdrawno, horsenamechs, handicapweight, jockynamechs, trainernamechs, currentrating,    } = item
+    const { runnerno, barrierdrawno, horsenamechs, handicapweight, jockynamechs, trainernamechs, currentrating,  gearinfoc, horseImg  } = item
 
     return (
       <TouchableOpacity onPress={this.openHorseHandler} key={runnerno}>
-      <Row 
+      <Row
               style={{ height: 40, marginBottom: 10 }}
-              
+
             >
               <Col style={{ flex: 1.8 }}>
                 <Text style={styles.oc_text}>{runnerno} / {barrierdrawno}</Text>
               </Col>
               <Col style={{ flex: 5, flexDirection: "row" }}>
                 <Image
-                  source={require("../../assets/horse_avatar.png")}
+                  source={{uri: horseImg}}
                   style={styles.icon}
                 />
                 <Text style={styles.oc_text}>{horsenamechs}</Text>
@@ -301,7 +301,7 @@ class RaceCard2 extends React.Component {
                     source={require("../../assets/match_icon.png")}
                     style={styles.smallIcon}
                   />
-                  <Text style={styles.oc_text_sub}>???</Text>
+                  <Text style={styles.oc_text_sub}>{gearinfoc}</Text>
                 </Row>
                 <Row>
                   <Image
@@ -327,7 +327,7 @@ class RaceCard2 extends React.Component {
                     }
                   ]}
                 >
-                  {currentrating / 100}
+                  ???
                 </Text>
               </Col>
               <Col style={{ flex: 1.8 }}>
@@ -346,7 +346,7 @@ class RaceCard2 extends React.Component {
               </Col>
             </Row>
       </TouchableOpacity>
-       
+
     )
   }
 
@@ -370,6 +370,7 @@ const mapState = state => {
 
 const actionCreator = {
   getCardInfo: Actions.getCardInfo,
+  getRaceOdds: Actions.getRaceOdds,
 };
 
 export default connect(

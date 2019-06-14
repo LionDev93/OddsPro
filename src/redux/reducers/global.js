@@ -2,14 +2,15 @@ import * as ActionType from "../actionType";
 
 const initState = {
   cards: null,
+  cardInfo: {},
   message: '',
   dateText: '',
 };
 
 const globalReducer = (state = initState, action) => {
-  
+
   switch (action.type) {
-    
+
     case ActionType.GET_CARD_OK:
       const { cards, dateText } = action.payload;
       return {
@@ -24,10 +25,13 @@ const globalReducer = (state = initState, action) => {
         message: message,
       };
     case ActionType.GET_BASIC_INFO_OK:
-        const { cardInfo } = action.payload;
+        const { raceId, cardInfo } = action.payload;
         return {
           ...state,
-          cardInfo: cardInfo,
+          cardInfo: {
+            ...state.cardInfo,
+            [raceId]: cardInfo,
+          },
         };
       case ActionType.GET_BASIC_INFO_NOK:
 

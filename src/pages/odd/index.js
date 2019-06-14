@@ -170,6 +170,7 @@ class OddsScreen extends React.Component {
 
   render() {
     const { openSuggestBar } = this.state;
+    const raceid = this.props.navigation.getParam('raceid', '');
     const racenum = this.props.navigation.getParam('racenum', '');
     const dateText = this.props.navigation.getParam('dateText', '');
 
@@ -258,20 +259,21 @@ class OddsScreen extends React.Component {
               </Button>
             </Right>
           </Header>
-          <ScrollView padder style={{flex: 1, padding: 10, marginBottom: 10}} behavior="padding" enabled 
+          <ScrollView padder style={{flex: 1, padding: 10, marginBottom: 10}} behavior="padding" enabled
           ref={(scroll) => {this.scroll = scroll;}}
           >
-          
+
             <Text style={styles.date}>{dateText}</Text>
-             
+
             <OddCard
+              raceid={raceid}
               racenum={racenum}
               navigation={this.props.navigation}
               showAllOddsHandler={this.showAllOdds}
             />
-            
-            
-           
+
+
+
           </ScrollView>
           {!openSuggestBar ? (
               <SuggestBar openSuggestBarHandler={this.openSuggestBar} />

@@ -13,8 +13,8 @@ export const first_card_api = async () => {
     let ret = false
       const config = {
         method: "GET",
-        url: API_URL + `oddspro_api/firstcard.php`,
-        
+        url: API_URL + `oddspro_api/firstcard_upcoming.php`,
+
       }
 
 
@@ -45,7 +45,7 @@ export const get_basic_info_api = async (race_num) => {
       const config = {
         method: "GET",
         url: API_URL + `oddspro_api/get_basicinfo.php?race_num=${race_num}`,
-        
+
       }
 
 
@@ -75,7 +75,7 @@ export const get_upcoming_raceinfo_horsedetail_api = async (race_num) => {
       const config = {
         method: "GET",
         url: API_URL + `oddspro_api/get_upcoming_raceinfo_horsedetail.php?r=${race_num}`,
-        
+
       }
 
 
@@ -106,7 +106,7 @@ export const get_raceodds_api = async (race_num, race_type) => {
       const config = {
         method: "GET",
         url: API_URL + `oddspro_api/get_raceodds.php?r=${race_num}&t=${race_type}`,
-        
+
       }
 
 
