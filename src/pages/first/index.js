@@ -33,6 +33,7 @@ class FirstScreen extends React.Component {
     super(props);
 
     this.state = {
+      horseId: '',
       openHorseInfo: false,
       openCard: 0,
       races: [
@@ -116,15 +117,15 @@ class FirstScreen extends React.Component {
 
   renderHorseInfo = () => {
     return (
-      
-      <HorseInfo />
-     
-    
+
+      <HorseInfo horseId={this.state.horseId}/>
+
+
     );
   };
 
-  openHorseInfoHandler = () => {
-    this.setState({ openHorseInfo: true });
+  openHorseInfoHandler = (horseId) => {
+    this.setState({ horseId: horseId, openHorseInfo: true });
   };
 
   componentDidMount(){
@@ -153,12 +154,12 @@ class FirstScreen extends React.Component {
                 style={styles.icon}
                 resizeMode="contain"
               />
-            
-              <Title style={{ color: "white" }}>AI 賠率王</Title>
-              
-              
 
-              
+              <Title style={{ color: "white" }}>AI 賠率王</Title>
+
+
+
+
             </Body>
             <Right>
               <React.Fragment />
@@ -189,14 +190,14 @@ class FirstScreen extends React.Component {
           </Overlay>
 
           <Content padder style={styles.container}>
-            
+
             {Array.isArray(cards) ? (
               <Text style={styles.date}>{dateText}</Text>
               ) : (
                <React.Fragment/>
               )}
-            { 
-              
+            {
+
                 cards != null  ? (
                   this.showCards(cards, dateText)
               ) : (
@@ -273,7 +274,7 @@ class FirstScreen extends React.Component {
                 )
               })
             ) : (
-              
+
               fake.map((item, i) => {
                 return (
                   <RaceCard2 key={i}
@@ -286,10 +287,10 @@ class FirstScreen extends React.Component {
               })
             )
 
-          } 
+          }
       </View>
-          
-                
+
+
     )
   }
 }

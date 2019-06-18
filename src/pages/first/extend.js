@@ -2,6 +2,7 @@ import React from "react";
 import { View, ImageBackground, Image, Alert } from "react-native";
 import { Container, Content, Text, Button, Grid, Col, Row } from "native-base";
 import styles from "./style";
+import * as API from '../../services/api';
 import * as Animatable from "react-native-animatable";
 
 class HorseInfo extends React.Component {
@@ -9,30 +10,33 @@ class HorseInfo extends React.Component {
     super(props);
 
     this.state = {
-      email: "",
-      password: ""
+      horse: {},
+      analysis: [],
     };
   }
 
   handleViewRef = ref => (this.view = ref);
 
-  componentDidMount() {
+  async componentDidMount() {
     this.view
         .slideInRight(1000)
-        
+    let res = await API.get_horse_analysis(this.props.horseId);
+    this.setState({
+      ...res.data
+    });
 
   }
 
   render() {
+    const { horse, analysis } = this.state
     return (
-      
-        
+
           <Animatable.View ref={this.handleViewRef} style={{flex: 1, backgroundColor:'#ffffff'}}>
           <View style={{ padding: 10, height: 125 }}>
             <Row style={{ height: 110 }}>
               <Col style={{ flex: 4 }}>
                 <Image
-                  source={require("../../assets/horse_avatar_full.png")}
+                  source={{url: horse.horse_img}}
                   style={{ width: 100, height: 100 }}
                 />
               </Col>
@@ -42,7 +46,7 @@ class HorseInfo extends React.Component {
                     <Text style={styles.textBlack48}>馬名: </Text>
                   </Col>
                   <Col>
-                    <Text style={styles.textBlack48}>樂滿家 </Text>
+                    <Text style={styles.textBlack48}>{horse.h_name}</Text>
                   </Col>
                 </Row>
                 <Row style={{ height: 25 }}>
@@ -50,7 +54,7 @@ class HorseInfo extends React.Component {
                     <Text style={styles.textBlack48}>出生地: </Text>
                   </Col>
                   <Col>
-                    <Text style={styles.textBlack48}>澳洲 </Text>
+                    <Text style={styles.textBlack48}>{horse.born}</Text>
                   </Col>
                 </Row>
                 <Row style={{ height: 25 }}>
@@ -58,7 +62,7 @@ class HorseInfo extends React.Component {
                     <Text style={styles.textBlack48}>年齡: </Text>
                   </Col>
                   <Col>
-                    <Text style={styles.textBlack48}>5</Text>
+                    <Text style={styles.textBlack48}>{horse.age}</Text>
                   </Col>
                 </Row>
                 <Row style={{ height: 25 }}>
@@ -66,7 +70,7 @@ class HorseInfo extends React.Component {
                     <Text style={styles.textBlack48}>出場次數: </Text>
                   </Col>
                   <Col>
-                    <Text style={styles.textBlack48}>20</Text>
+                    <Text style={styles.textBlack48}>{horse.racecount}</Text>
                   </Col>
                 </Row>
               </Col>
@@ -90,58 +94,21 @@ class HorseInfo extends React.Component {
               <Row style={styles.ext_row}>
                 <Text style={styles.textBlack48}>大數據統計及分析: </Text>
               </Row>
-              <Row>
-                <Col style={styles.col7}>
-                  <Text style={styles.textBlack30}>
-                    參加比賽20次, 3次冠軍, 2次亞軍, 1次季軍, 獲勝比率
-                  </Text>
-                </Col>
-                <Col style={styles.col3}>
-                  <Text style={styles.textYellow48}>30%</Text>
-                </Col>
-              </Row>
-              <Row style={styles.ext_row}>
-                <Col style={styles.col7}>
-                  <Text style={styles.textBlack30}>
-                    跑14次1000米, 6次1200米, 1次1400米 喜好屬於
-                  </Text>
-                </Col>
-                <Col style={styles.col3}>
-                  <Text style={styles.textYellow48}>短途馬</Text>
-                </Col>
-              </Row>
-              <Row style={styles.ext_row}>
-                <Col style={styles.col7}>
-                  <Text style={styles.textBlack30}>
-                    首次評分82, 最近評分90, 平均評分85, 評分屬於
-                  </Text>
-                </Col>
-                <Col style={styles.col3}>
-                  <Text style={styles.textYellow48}>進步馬</Text>
-                </Col>
-              </Row>
-
-              <Row style={styles.ext_row}>
-                <Col style={styles.col7}>
-                  <Text style={styles.textBlack30}>
-                    6次得獎比賽, 有4次是跑馬地, 2次沙田 場地喜好
-                  </Text>
-                </Col>
-                <Col style={styles.col3}>
-                  <Text style={styles.textYellow48}>跑馬地</Text>
-                </Col>
-              </Row>
-
-              <Row style={styles.ext_row}>
-                <Col style={styles.col7}>
-                  <Text style={styles.textBlack30}>
-                    首次評分82, 最近評分90, 平均評分85, 評分屬於
-                  </Text>
-                </Col>
-                <Col style={styles.col3}>
-                  <Text style={styles.textYellow48}>草地</Text>
-                </Col>
-              </Row>
+              {analysis.map((item, i) => {
+                return (
+                  <Row>
+                    <Col style={styles.col7}>
+                      <Text style={styles.textBlack30}>
+                        {item.message}
+                      </Text>
+                    </Col>
+                    <Col style={styles.col3}>
+                      <Text style={styles.textYellow48}>{item.value}</Text>
+                    </Col>
+                  </Row>
+                )
+              })
+              }
               <Row style={styles.ext_row}>
                 <Col style={styles.col7}>
                   <Text style={styles.textBlack30}>
@@ -226,8 +193,8 @@ class HorseInfo extends React.Component {
             </Row>
           </View>
           </Animatable.View>
-         
-        
+
+
 
     );
   }

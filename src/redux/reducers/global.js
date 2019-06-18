@@ -3,6 +3,7 @@ import * as ActionType from "../actionType";
 const initState = {
   cards: null,
   cardInfo: {},
+  odds: {},
   message: '',
   dateText: '',
 };
@@ -25,12 +26,12 @@ const globalReducer = (state = initState, action) => {
         message: message,
       };
     case ActionType.GET_BASIC_INFO_OK:
-        const { raceId, cardInfo } = action.payload;
+        const { raceNum, cardInfo } = action.payload;
         return {
           ...state,
           cardInfo: {
             ...state.cardInfo,
-            [raceId]: cardInfo,
+            [raceNum]: cardInfo,
           },
         };
       case ActionType.GET_BASIC_INFO_NOK:
@@ -40,10 +41,13 @@ const globalReducer = (state = initState, action) => {
           message: action.payload.message,
         };
     case ActionType.GET_RACE_ODDS_OK:
-
+      const { racenum, odds } = action.payload;
       return {
         ...state,
-
+        odds: {
+          ...state.odds,
+          [racenum]: odds,
+        }
       };
     case ActionType.GET_RACE_ODDS_NOK:
 

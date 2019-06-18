@@ -57,15 +57,14 @@ class OddCard extends React.Component {
 
     this.state = {
       racenum: 0,
-      selected: "key1",
+      selected: [],
+      amount: 1000,
       selectedType: 1,
-      OddsResult: [],
+      OddsResult: {},
       betType: {
         id: 1,
         name: "獨贏/位置",
-        w1: '獨贏',
-
-        w2: '位置',
+        w1: '獨贏/位置',
         oddsName: [
           '獨贏',
           '位置'
@@ -82,9 +81,7 @@ class OddCard extends React.Component {
         {
           id: 1,
           name: "獨贏/位置",
-          w1: '獨贏',
-
-          w2: '位置',
+          w1: '獨贏/位置',
           oddsName: [
             '獨贏',
             '位置'
@@ -105,13 +102,14 @@ class OddCard extends React.Component {
           w2: '腳',
 
           oddsName: [
-            '膽',
-            '腳'
+            '連贏',
+            '位置Q'
           ],
           odds: [
             'qin',
             'qpl'
           ],
+          list2limit: 1,
           list1: [],
           list2: [],
           list3: [],
@@ -119,26 +117,46 @@ class OddCard extends React.Component {
         {
           id: 3,
           name: "三重彩",
-          w1: '膽',
-          w2: '腳',
+          w1: '第一馬膽',
+          w2: '第二馬膽',
+          w3: '馬腳',
+          oddsName: [
+            '三重彩'
+          ],
+          odds: [
+            'tce'
+          ],
           list1: [],
           list2: [],
           list3: [],
+          list4: [],
         },
         {
           id: 4,
-          name: "单T",
+          name: "單T",
           w1: '膽',
           w2: '腳',
+          oddsName: [
+            '單T'
+          ],
+          odds: [
+            'tri'
+          ],
           list1: [],
           list2: [],
           list3: [],
         },
         {
           id: 5,
-          name: "四连环",
+          name: "四連環",
           w1: '膽',
           w2: '腳',
+          oddsName: [
+            '四連環'
+          ],
+          odds: [
+            'ff'
+          ],
           list1: [],
           list2: [],
           list3: [],
@@ -148,15 +166,27 @@ class OddCard extends React.Component {
           name: "四重彩",
           w1: '膽',
           w2: '腳',
+          oddsName: [
+            '四連環'
+          ],
+          odds: [
+            'qtt'
+          ],
           list1: [],
           list2: [],
           list3: [],
         },
         {
           id: 7,
-          name: "马宝",
+          name: "孖寶",
           w1: '膽',
           w2: '腳',
+          oddsName: [
+            '四連環'
+          ],
+          odds: [
+            'qtt'
+          ],
           list1: [],
           list2: [],
           list3: [],
@@ -218,16 +248,18 @@ class OddCard extends React.Component {
     };
   }
 
-  onValueChange(value: string) {
-
+  onValueChange(i, value: string) {
+    let selected = this.state.selected
+    selected[i] = value
     this.setState({
-      selected: value
+      ...this.state,
+      selected: selected
     });
   }
 
-  // showAllOdds = () => {
-  //   this.props.navigation.navigate("all");
-  // };
+  showAllOdds = () => {
+    this.props.navigation.navigate("all");
+  };
 
   dropToList1 = e => {
     const {id, type} = e
@@ -250,6 +282,8 @@ class OddCard extends React.Component {
     const {id, type} = e
     const s = this.state
     if(type == 'list2')
+      return
+    if (s.betType.list2limit && s.betType.list2.length >= s.betType.list2limit)
       return
 
     this.setState({
@@ -292,7 +326,7 @@ class OddCard extends React.Component {
 
     if(props.cardInfo && s.list1.length == 0){
       // console.error('hey')
-      const list = props.cardInfo[props.raceid].horseViewList
+      const list = props.cardInfo[props.racenum].horseViewList
 
       const list1 = list && list.map(item => {
         return {
@@ -329,16 +363,30 @@ class OddCard extends React.Component {
       const racenum = this.state.racenum
 
       const res1 = await API.get_raceodds_api(racenum, type1)
-      list.push(res1.data)
 
       const res2 = await API.get_raceodds_api(racenum, type2)
-      list.push(res2.data)
 
 
 
 
     this.setState({
-      OddsResult: list,
+      OddsResult: {
+        ...this.state.OddsResult,
+        [type1]: res1.data.data.map(odd => {
+          let val = odd.split('=')
+          return {
+            pattern: val[0],
+            odd: val[1]
+          }
+        }),
+        [type2]: res2.data.data.map(odd => {
+          let val = odd.split('=')
+          return {
+            pattern: val[0],
+            odd: val[1]
+          }
+        }),
+      },
     })
 
     // console.error(racenum, type, data)
@@ -350,6 +398,20 @@ class OddCard extends React.Component {
   onUpdRaceNum = async () => {
     await this.updateOdds()
     await this.props.getCardInfo(this.props.raceid, this.state.racenum)
+    this.setState({
+      ...this.state,
+      betType: {
+        ...this.state.betType,
+        list1: this.props.cardInfo[this.state.racenum].horseViewList.map(item => {
+          return {
+            id: item.runnerno,
+            name: item.horsenamechs,
+          }
+        }),
+        list2: [],
+        list3: [],
+      }
+    })
   }
 
   componentWillUnmount(){
@@ -395,19 +457,38 @@ class OddCard extends React.Component {
     // // const { racenum } = this.props
     // this.state.OddsResult.length > 0 ? console.error(
     //   this.state.OddsResult[0].data) : ''
-    const {id, list2, list3} = this.state.betType
+    const { OddsResult, amount } = this.state
+    const {id, odds, list2, list3} = this.state.betType
+    let type1 = odds[0]
+    let type2 = odds[1]
     let betList = []
     if (id == 1) {
       for (let i = 0; i < list2.length; i++) {
         betList.push([list2[i].id])
       }
     } else {
-      for (let i = 0; i < list2.length; i++) {
-        for (let j = 0; j < list3.length; j++) {
-          betList.push([list2[i].id, list3[j].id])
-        }
-      }
+      betList = list3.map(odd => {
+        return list2.concat([odd]).map(item => item.id)
+      });
     }
+
+    let oddList = betList.map((item, i) => {
+      const {betType, selected} = this.state
+      const text = item.map(i => ("00"+i).slice(-2)).join('-')
+      const type = selected[i]
+      let odd = OddsResult[type] && OddsResult[type].find(o => o.pattern == text)
+      return odd ? odd.odd : null;
+    });
+    let rec = [], recsum = 0;
+    for (let i = 0; i < oddList.length; i++) {
+      if (!oddList[i]) continue;
+      let oddproto = parseFloat(1 / oddList[i])
+      rec.push(oddproto)
+      recsum += oddproto
+    }
+    let amountList = oddList.map((odd, i) => {
+      return odd ? Math.round(rec[i] / recsum * amount / 10) * 10 : 0
+    });
 
     return (
       <Grid style={{paddingBottom: 90}}>
@@ -500,7 +581,7 @@ class OddCard extends React.Component {
 
           <Row style={styles.horsesBg}>
             <Col style={[styles.row2ColTitleBg, { flex: 2 }]}>
-              <Text style={styles.row2ColTitle}>{this.state.selectedType == 1 ? '獨贏/位置' : '膽'}</Text>
+              <Text style={styles.row2ColTitle}>{this.state.betType.w1}</Text>
             </Col>
 
             <Col style={{ flex: 8 }}>
@@ -518,10 +599,30 @@ class OddCard extends React.Component {
             </Col>
           </Row>
 
-          {this.state.selectedType != 1 &&
+          {this.state.betType.w2 &&
           <Row style={styles.horsesBg}>
             <Col style={[styles.row2ColTitleBg, { flex: 2 }]}>
-              <Text style={styles.row2ColTitle}>{'腳'}</Text>
+              <Text style={styles.row2ColTitle}>{this.state.betType.w2}</Text>
+            </Col>
+            <Col style={{ flex: 8 }}>
+              <DropZone onDrop={e => this.dropToList3(e)}>
+                <ScrollView
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}
+                  style={{ width: "100%", height: 95 }}
+                >
+                  {this.state.betType.list3.map((item, i) => (
+                    <Draggy key={i} id={item.id} name={item.name} type="list3" />
+                  ))}
+                </ScrollView>
+              </DropZone>
+            </Col>
+          </Row>}
+
+          {this.state.betType.w3 &&
+          <Row style={styles.horsesBg}>
+            <Col style={[styles.row2ColTitleBg, { flex: 2 }]}>
+              <Text style={styles.row2ColTitle}>{this.state.betType.w3}</Text>
             </Col>
             <Col style={{ flex: 8 }}>
               <DropZone onDrop={e => this.dropToList3(e)}>
@@ -593,17 +694,19 @@ class OddCard extends React.Component {
           <React.Fragment/>
         )*/}
         {betList.map((item, i) => {
-            const text = item.join('-')
+            const text = item.map(i => ("00"+i).slice(-2)).join('-')
+            const odd1 = OddsResult[type1] && OddsResult[type1].find(o => o.pattern == text)
+            const odd2 = OddsResult[type2] && OddsResult[type2].find(o => o.pattern == text)
             return(
               <Row style={styles.horsesBg} key={i}>
                 <Col style={styles.row6col1}>
                   <Text style={styles.row7Text}>{text}</Text>
                 </Col>
                 <Col style={styles.row7col2}>
-                  <Text style={styles.row7Text1}>-</Text>
+                  <Text style={styles.row7Text1}>{odd1 ? odd1.odd : '-' }</Text>
                 </Col>
                 <Col style={styles.row7col3}>
-                  <Text style={styles.row7Text1}>-</Text>
+                  <Text style={styles.row7Text1}>{odd2 ? odd2.odd : '-' }</Text>
                 </Col>
               </Row>
             )
@@ -627,7 +730,8 @@ class OddCard extends React.Component {
             <Text style={styles.row9Col1Text}>總金額</Text>
 
             <Item regular style={styles.input}>
-              <Input style={styles.row9Col1Text} />
+              <Input style={styles.row9Col1Text} defaultValue={this.state.amount.toString()}
+                onChangeText={(text) => this.setState({...this.state, amount: text})}/>
             </Item>
           </Col>
         </Row>
@@ -649,113 +753,52 @@ class OddCard extends React.Component {
             <Text style={styles.row10Text}>預計派彩</Text>
           </Col>
         </Row>
-        <Row style={styles.horsesBg}>
-          <Col>
-            <Text style={styles.row10Text}>3-6</Text>
-          </Col>
-          <Col>
-            <Picker
-              mode="dropdown"
-              iosHeader=""
-              iosIcon={<Icon name="arrow-down" />}
-              textStyle={[styles.row10Text, { paddingLeft: 0 }]}
-              style={{
-                height: 25,
-                width: 50,
-                paddingTop: 0,
-                paddingBottom: 0,
-                alignItems: "flex-start"
-              }}
-              selectedValue={this.state.selected}
-              onValueChange={this.onValueChange.bind(this)}
-            >
-              <Picker.Item label="位置Q" value="key0" />
-              <Picker.Item label="位置Q1" value="key1" />
-              <Picker.Item label="位置Q2" value="key2" />
-              <Picker.Item label="位置Q3" value="key3" />
-              <Picker.Item label="位置Q4" value="key4" />
-            </Picker>
-          </Col>
-          <Col>
-            <Text style={styles.row10Text}>22</Text>
-          </Col>
-          <Col>
-            <Text style={styles.row10Text}>280</Text>
-          </Col>
-          <Col>
-            <Text style={styles.row10Text}>6160</Text>
-          </Col>
-        </Row>
-        <Row style={styles.horsesBg}>
-          <Col>
-            <Text style={styles.row10Text}>3-9</Text>
-          </Col>
-          <Col>
-            <Picker
-              mode="dropdown"
-              iosHeader=""
-              iosIcon={<Icon name="arrow-down" />}
-              textStyle={[styles.row10Text, { paddingLeft: 0 }]}
-              style={{
-                height: 25,
-                width: 50,
-                paddingTop: 0,
-                paddingBottom: 0,
-                alignItems: "flex-start"
-              }}
-              selectedValue={this.state.selected}
-              onValueChange={this.onValueChange.bind(this)}
-            >
-              <Picker.Item label="連贏" value="key0" />
-              <Picker.Item label="連贏1" value="key1" />
-              <Picker.Item label="連贏2" value="key2" />
-            </Picker>
-          </Col>
-          <Col>
-            <Text style={styles.row10Text}>45</Text>
-          </Col>
-          <Col>
-            <Text style={styles.row10Text}>130</Text>
-          </Col>
-          <Col>
-            <Text style={styles.row10Text}>5850</Text>
-          </Col>
-        </Row>
-        <Row style={styles.horsesBg}>
-          <Col>
-            <Text style={styles.row10Text}>6-9 </Text>
-          </Col>
-          <Col>
-            <Picker
-              mode="dropdown"
-              iosHeader=""
-              iosIcon={<Icon name="arrow-down" />}
-              textStyle={[styles.row10Text, { paddingLeft: 0 }]}
-              style={{
-                height: 25,
-                width: 50,
-                paddingTop: 0,
-                paddingBottom: 0,
-                alignItems: "flex-start"
-              }}
-              selectedValue={this.state.selected}
-              onValueChange={this.onValueChange.bind(this)}
-            >
-              <Picker.Item label="連贏" value="key0" />
-              <Picker.Item label="連贏1" value="key1" />
-              <Picker.Item label="連贏2" value="key2" />
-            </Picker>
-          </Col>
-          <Col>
-            <Text style={styles.row10Text}>68</Text>
-          </Col>
-          <Col>
-            <Text style={styles.row10Text}>90</Text>
-          </Col>
-          <Col>
-            <Text style={styles.row10Text}>6120</Text>
-          </Col>
-        </Row>
+        {betList.map((item, i) => {
+            const {betType, selected} = this.state
+            const text = item.map(i => ("00"+i).slice(-2)).join('-')
+            const type = selected[i]
+            const odd = OddsResult[type] && OddsResult[type].find(o => o.pattern == text)
+            return(
+              <Row style={styles.horsesBg}>
+                <Col>
+                  <Text style={styles.row10Text}>{text}</Text>
+                </Col>
+                <Col>
+                  <Picker
+                    mode="dropdown"
+                    iosHeader=""
+                    iosIcon={<Icon name="arrow-down" />}
+                    textStyle={[styles.row10Text, { paddingLeft: 0 }]}
+                    style={{
+                      height: 25,
+                      width: 50,
+                      paddingTop: 0,
+                      paddingBottom: 0,
+                      alignItems: "flex-start"
+                    }}
+                    selectedValue={this.state.selected[i]}
+                    onValueChange={this.onValueChange.bind(this, i)}
+                  >
+                    {betType.odds.map((odd, i) => {
+                      return (
+                        <Picker.Item label={betType.oddsName[i]} value={odd} />
+                      )
+                    })}
+                  </Picker>
+                </Col>
+                <Col>
+                  <Text style={styles.row10Text}>{odd ? odd.odd : '-'}</Text>
+                </Col>
+                <Col>
+                  <Text style={styles.row10Text}>{amountList[i]}</Text>
+                </Col>
+                <Col>
+                  <Text style={styles.row10Text}>{odd ? (odd.odd * amountList[i]).toFixed(2) : '-'}</Text>
+                </Col>
+              </Row>
+            )
+          })
+        }
         <Row style={[styles.horsesBg, { with: "100%" }]}>
           <Text style={styles.row10Text}>
             對沖下注是因應不同的賠率, 自動制定不同的投注金額, 以平衡派彩的回報.{" "}

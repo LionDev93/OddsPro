@@ -129,3 +129,30 @@ export const get_raceodds_api = async (race_num, race_type) => {
     };
   }
 };
+
+export const get_horse_analysis = async (horse_id) => {
+  try {
+    const config = {
+      method: "GET",
+      url: API_URL + `oddspro_api/horse_analysis.php?id=${horse_id}`,
+
+    }
+
+    const res = await axios(config);
+
+    let ret = res.status == StatusCode.SUCCESS
+    return  {
+      status: ret,
+      data: res.data,
+      message: '',
+    };
+  } catch (error) {
+    console.log(error);
+    // throw error.message;
+    return {
+      status: false,
+      data: null,
+      message: error.message,
+    };
+  }
+};

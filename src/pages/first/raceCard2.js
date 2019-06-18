@@ -34,7 +34,7 @@ class RaceCard2 extends React.Component {
 
 
       await getCardInfo(card.raceid, card.racenum)
-      //await getRaceOdds(card.racenum, "win")
+      await getRaceOdds(card.racenum, "win")
 
 
 
@@ -184,8 +184,8 @@ class RaceCard2 extends React.Component {
     this.props.navigation.navigate("odd", {raceid, racenum, dateText});
   };
 
-  openHorseHandler = () => {
-    this.props.openHorseInfoHandler();
+  openHorseHandler = (horseId) => {
+    this.props.openHorseInfoHandler(horseId);
   };
 
   renderOpenOddsButton = (raceid, racenum, dateText) => {
@@ -204,7 +204,7 @@ class RaceCard2 extends React.Component {
   renderCardOpen = () => {
     const { raceid, racenum, stakeprize, ctime, classcode, distance, racename, trackcode, coursecode, runnernum,   } = this.props.card;
     const { dateText } = this.props
-    const list = this.props.cardInfo[raceid].horseViewList
+    const list = this.props.cardInfo[racenum].horseViewList
 
     return (
       <TouchableOpacity style={styles.oc_container} onPress={this.cardPress}>
@@ -272,10 +272,13 @@ class RaceCard2 extends React.Component {
   };
 
   renderHorseItem = (item) => {
-    const { runnerno, barrierdrawno, horsenamechs, handicapweight, jockynamechs, trainernamechs, currentrating,  gearinfoc, horseImg  } = item
+    const { runnerno, barrierdrawno, horsenamecht, handicapweight, jockynamecht, trainernamechs, currentrating,  gearinfoc, horseImg, horseId  } = item
+    const { racenum } = this.props.card
+    const odds = this.props.odds[racenum]
+    const odd = odds && odds.find(o => o.pattern == runnerno)
 
     return (
-      <TouchableOpacity onPress={this.openHorseHandler} key={runnerno}>
+      <TouchableOpacity onPress={() => this.openHorseHandler(horseId)} key={runnerno}>
       <Row
               style={{ height: 40, marginBottom: 10 }}
 
@@ -288,7 +291,7 @@ class RaceCard2 extends React.Component {
                   source={{uri: horseImg}}
                   style={styles.icon}
                 />
-                <Text style={styles.oc_text}>{horsenamechs}</Text>
+                <Text style={styles.oc_text}>{horsenamecht}</Text>
               </Col>
               <Col style={{ flex: 5 }}>
                 <Row style={{ height: 20 }}>
@@ -296,7 +299,7 @@ class RaceCard2 extends React.Component {
                     source={require("../../assets/rider_icon.png")}
                     style={styles.smallIcon}
                   />
-                  <Text style={styles.oc_text_sub}>{jockynamechs}</Text>
+                  <Text style={styles.oc_text_sub}>{jockynamecht}</Text>
                   <Image
                     source={require("../../assets/match_icon.png")}
                     style={styles.smallIcon}
@@ -327,7 +330,7 @@ class RaceCard2 extends React.Component {
                     }
                   ]}
                 >
-                  ???
+                  {odd ? odd.odd : '-'}
                 </Text>
               </Col>
               <Col style={{ flex: 1.8 }}>
@@ -364,6 +367,7 @@ class RaceCard2 extends React.Component {
 const mapState = state => {
   return {
     cardInfo: state.global.cardInfo,
+    odds: state.global.odds,
     message: state.global.message,
   };
 };

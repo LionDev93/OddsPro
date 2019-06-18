@@ -66,7 +66,7 @@ export const getCardInfo = async (raceId, raceNum) => {
     return {
       type: ActionType.GET_BASIC_INFO_OK,
       payload: {
-        raceId: raceId,
+        raceNum: raceNum,
         cardInfo: res.data
       }
     };
@@ -89,7 +89,14 @@ export const getRaceOdds = async (raceNum, raceType) => {
     return {
       type: ActionType.GET_RACE_ODDS_OK,
       payload: {
-        cardInfo: res.data
+        racenum: raceNum,
+        odds: res.data.data.map(odd => {
+          let val = odd.split('=')
+          return {
+            pattern: val[0],
+            odd: val[1]
+          }
+        }),
       }
     };
   else{
