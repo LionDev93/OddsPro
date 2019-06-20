@@ -129,10 +129,11 @@ class FirstScreen extends React.Component {
 
   componentDidMount() {
     this.props.getCards();
+    this.props.getPrevCards();
   }
 
   render() {
-    const { dateText, cards } = this.props;
+    const { dateText, cards, prevCards } = this.props;
     // cards != null ? console.error(JSON.stringify(cards)) : ''
     return (
       <ImageBackground
@@ -184,12 +185,14 @@ class FirstScreen extends React.Component {
           </Overlay>
 
           <Content padder style={styles.container}>
-            {Array.isArray(cards) ? (
+            {dateText && Array.isArray(cards) ? (
               <Text style={styles.date}>{dateText}</Text>
             ) : (
               <React.Fragment />
             )}
-            {cards != null ? this.showCards(cards, dateText) : <Spinner />}
+            {cards != null && this.showCards(cards, dateText)}
+            {prevCards != null && this.showPrevCards(prevCards)}
+            {(cards == null || prevCards == null) &&  <Spinner />}
           </Content>
         </Container>
       </ImageBackground>
@@ -263,6 +266,30 @@ class FirstScreen extends React.Component {
       </View>
     );
   };
+
+  showPrevCards = (prevCards) => {
+    return (
+      <View>
+        {prevCards && Object.keys(prevCards).map((key, i) => {
+          return (
+            <View>
+              <Text style={styles.date}>{key}</Text>
+              {prevCards[key].map((card, i) => {
+                return (
+                  <RaceCard3
+                    key={i}
+                    card={card}
+                    //openHorseInfoHandler={this.openHorseInfoHandler}
+                    navigation={this.props.navigation}
+                  />
+                );
+              })}
+            </View>
+          );
+        })}
+      </View>
+    );
+  };
 }
 
 /* <Title style={{ color: "white" }}>Waiting for upcoming race</Title> */
@@ -270,13 +297,15 @@ class FirstScreen extends React.Component {
 const mapState = state => {
   return {
     cards: state.global.cards,
+    prevCards: state.global.prevCards,
     message: state.global.message,
     dateText: state.global.dateText
   };
 };
 
 const actionCreator = {
-  getCards: Actions.getCards
+  getCards: Actions.getCards,
+  getPrevCards: Actions.getPrevCards,
 };
 
 export default connect(

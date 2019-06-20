@@ -69,7 +69,7 @@ export default StyleSheet.create({
     marginTop: 10,
     fontWeight: "700"
   },
-  
+
   //RIGHT
   total: {
     color: "#999999",
@@ -170,7 +170,7 @@ export default StyleSheet.create({
     fontSize: 20,
     fontWeight: "400"
   },
-  
+
   textBlack100: {
     color: "#707070",
     fontSize: 30,
@@ -248,7 +248,7 @@ export default StyleSheet.create({
   },
   col7: {
     flex:7
-  }, 
+  },
   col3: {
     flex: 3,
     alignItems: 'flex-end',

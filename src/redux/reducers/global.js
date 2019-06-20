@@ -2,6 +2,7 @@ import * as ActionType from "../actionType";
 
 const initState = {
   cards: null,
+  prevCards: null,
   cardInfo: {},
   odds: {},
   message: '',
@@ -24,6 +25,12 @@ const globalReducer = (state = initState, action) => {
       return {
         ...state,
         message: message,
+      };
+    case ActionType.GET_PREV_CARD_OK:
+      const { prevCards } = action.payload;
+      return {
+        ...state,
+        prevCards: prevCards,
       };
     case ActionType.GET_BASIC_INFO_OK:
         const { raceNum, cardInfo } = action.payload;

@@ -176,7 +176,7 @@ class OddCard extends React.Component {
           list2: [],
           list3: [],
         },
-        {
+        /*{
           id: 7,
           name: "孖寶",
           w1: '膽',
@@ -190,58 +190,9 @@ class OddCard extends React.Component {
           list1: [],
           list2: [],
           list3: [],
-        },
+        },*/
       ],
       list1: [
-        // {
-        //   id: 1,
-        //   name: "金剛仔"
-        // },
-        // {
-        //   id: 2,
-        //   name: "悅目星光"
-        // },
-        // {
-        //   id: 3,
-        //   name: "藍海策略"
-        // },
-        // {
-        //   id: 4,
-        //   name: "睡眠大學"
-        // },
-        // {
-        //   id: 5,
-        //   name: "一舖成名"
-        // },
-        // {
-        //   id: 6,
-        //   name: "二郎"
-        // },
-        // {
-        //   id: 7,
-        //   name: "萬事醒"
-        // },
-        // {
-        //   id: 8,
-        //   name: "得意"
-        // },
-        // {
-        //   id: 9,
-        //   name: "事必獲利"
-        // },
-        // {
-        //   id: 10,
-        //   name: "暴風俠"
-        // },
-        // {
-        //   id: 11,
-        //   name: "神馬飛揚"
-        // }
-        // ,
-        // {
-        //   id: 12,
-        //   name: "駿協精英"
-        // }
       ],
       list2: [],
       list3: [],

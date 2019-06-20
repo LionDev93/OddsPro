@@ -74,10 +74,7 @@ class RaceCard3 extends React.Component {
   };
 
   renderCardClosed = () => {
-    const { racenum, stakeprize, posttime, classcode, distance, racename, trackcode, coursecode, runnernum,   } = this.props.card;
-
-    const time = moment(posttime).format('HH:mm')
-
+    const { racenum, classcode, distance, racename, trackcode, horses, odds  } = this.props.card;
 
     return (
       <View style={styles.cardContainer} onPress={this.cardPress}>
@@ -86,13 +83,13 @@ class RaceCard3 extends React.Component {
             <Text style={styles.fieldLabel}>{`第 ${racenum} 場`}</Text>
             <Text style={styles.fieldText}>{trackcode}</Text>
 
-            <Icon
+            {/*<Icon
               name="bell-o"
               type="FontAwesome"
               style={trackcode != "草地" ? styles.bell1 : styles.bell}
-            />
+            />*/}
 
-            <Text style={styles.time}>{time} 開跑</Text>
+            <Text style={styles.time}>已跑完</Text>
           </Col>
           <Col style={styles.right}>
             <ImageBackground
@@ -149,32 +146,55 @@ class RaceCard3 extends React.Component {
                   </Col>
                 </Row>
 
-                <Row style={{ height: 20, marginTop: 10 }}>
-                  {/* <Col>
-                    <Text style={styles.bonus}>獎金: ${stakeprize}</Text>
-                  </Col> */}
+                <Row>
                   <Col>
-                      <Text style={styles.bonus}>01 - 華麗再現</Text>
-                    </Col>
+                    {horses.filter(horse => parseInt(horse.rank) <= 3).map((horse, i) => {
+                      const { runnernum, rank, horse_name } = horse;
+                      const intRank = parseInt(rank);
+                      const rankText = ['', '冠軍', '亞軍', '季軍'];
+                      return (
+                        <Row style={{ height: 20, marginTop: 10 }}>
+                          <Col>
+                            <Text style={styles.bonus}>{rankText[intRank] ? rankText[intRank] + ': ' : ''}{runnernum} - {horse_name}</Text>
+                          </Col>
+                        </Row>
+                      );
+                    })}
+                  </Col>
                   <Col>
-                    <Text style={styles.track}>1.7</Text>
+                    {odds.map((odd, i) => {
+                      const { type, data } = odd;
+                      const typeText = {
+                        win: '獨贏',
+                        pla: '位置',
+                        qin: '連贏',
+                        qpl: '位置Q',
+                      };
+                      return (
+                        <View>
+                          {data.map((item, i) => {
+                            const { horses, odd } = item;
+                            return (
+                              <Row>
+                                <Col>
+                                  <Text>{i == 0 ? typeText[type] : ''}</Text>
+                                </Col>
+                                <Col>
+                                  <Text>{horses.map(horse => parseInt(horse)).join(',')}</Text>
+                                </Col>
+                                <Col>
+                                  <Text>${odd*10}</Text>
+                                </Col>
+                              </Row>
+                            );
+                          })}
+                        </View>
+                      );
+                    })}
                   </Col>
                 </Row>
-                <Row style={{ height: 20, marginTop: 0 }}>
-                  {/* <Col>
-                    <Text style={styles.bonus}>獎金: ${stakeprize}</Text>
-                  </Col> */}
-                  <Col>
-                      <Text style={styles.bonus}>02 - 華再現</Text>
-                    </Col>
-                  <Col>
-                    <Text style={styles.track}>16</Text>
-                  </Col>
-                </Row>
-                <Text style={styles.total}>Win rate: 20.5</Text>
-               
 
-               
+
               </View>
             </ImageBackground>
           </Col>

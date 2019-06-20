@@ -32,6 +32,29 @@ export const getCards = async () => {
   }
 };
 
+export const getPrevCards = async () => {
+  const res = await API.previous_first_card_api();
+
+  const {data } = res
+
+  const cards = data
+  if(res.status)
+    return {
+      type: ActionType.GET_PREV_CARD_OK,
+      payload: {
+        prevCards: cards,
+      }
+    };
+  else{
+    return {
+      type: ActionType.GET_CARD_NOK,
+      payload: {
+        message: res.message,
+      }
+    };
+  }
+};
+
 export const getBasicInfo = async (raceNum) => {
   const res = await API.get_basic_info_api(raceNum);
 

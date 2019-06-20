@@ -40,6 +40,33 @@ export const first_card_api = async () => {
   }
 };
 
+export const previous_first_card_api = async () => {
+  try {
+    let ret = false
+    const config = {
+        method: "GET",
+        url: API_URL + `oddspro_api/firstcard_previous.php`,
+    }
+
+    const res = await axios(config);
+    ret = res.status == StatusCode.SUCCESS
+
+    return {
+      status: ret,
+      data: res.data,
+      message: '',
+    };
+  } catch (error) {
+    console.log(error);
+    // throw error.message;
+    return {
+      status: false,
+      data: null,
+      message: error.message,
+    };
+  }
+};
+
 export const get_basic_info_api = async (race_num) => {
   try {
       const config = {
