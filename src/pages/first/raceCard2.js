@@ -13,9 +13,10 @@ import {
 import styles from "./style";
 import * as Animatable from "react-native-animatable";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import moment from 'moment'
+import moment from "moment";
 import { connect } from "react-redux";
 import * as Actions from "../../redux/action";
+import timer from 'react-native-timer'
 
 class RaceCard2 extends React.Component {
   constructor(props) {
@@ -23,61 +24,74 @@ class RaceCard2 extends React.Component {
 
     this.state = {
       isOpen: false,
-      cardInfo: null,
+      cardInfo: null
     };
   }
 
   handleViewRef = ref => (this.view = ref);
 
+  componentDidMount(){
+    timer.setInterval(
+      this,
+      "timer",
+      () => {
+        this.bell && this.bell.shake(1000);
+      },
+      1000
+    );
+  }
+
   cardPress = async () => {
-    const {getCardInfo, getRaceOdds, card, cardInfo} = this.props
+    const { getCardInfo, getRaceOdds, card, cardInfo } = this.props;
+
+    await getCardInfo(card.raceid, card.racenum);
+    await getRaceOdds(card.racenum, "win");
+
+    this.view.flipOutX(500).then(endState => {
+      this.setState({
+        isOpen: !this.state.isOpen
+      });
+      this.view.fadeIn(500);
+    });
 
 
-      await getCardInfo(card.raceid, card.racenum)
-      await getRaceOdds(card.racenum, "win")
+    // this.view
+    //   .fadeOut(100)
+    //   .then(endState =>
+    //     {
+    //       this.setState({
+    //         isOpen: !this.state.isOpen
+    //       })
+    //       this.view.flipInX(1000)
+    //     }
+    //   );
 
-
-
-      this.view
-        .flipOutX(500)
-        .then(endState =>
-          {
-            this.setState({
-              isOpen: !this.state.isOpen
-            })
-            this.view.fadeIn(500)
-          }
-        );
-
-      // this.view
-      //   .fadeOut(100)
-      //   .then(endState =>
-      //     {
-      //       this.setState({
-      //         isOpen: !this.state.isOpen
-      //       })
-      //       this.view.flipInX(1000)
-      //     }
-      //   );
-
-      // this.view
-      //   .flipInX(1000)
-      //   .then(endState =>
-      //     {
-      //       this.setState({
-      //         isOpen: !this.state.isOpen
-      //       })
-      //       //this.view.fad(1000)
-      //     }
-      //   );
-
+    // this.view
+    //   .flipInX(1000)
+    //   .then(endState =>
+    //     {
+    //       this.setState({
+    //         isOpen: !this.state.isOpen
+    //       })
+    //       //this.view.fad(1000)
+    //     }
+    //   );
   };
 
   renderCardClosed = () => {
-    const { racenum, stakeprize, posttime, classcode, distance, racename, trackcode, coursecode, runnernum,   } = this.props.card;
+    const {
+      racenum,
+      stakeprize,
+      posttime,
+      classcode,
+      distance,
+      racename,
+      trackcode,
+      coursecode,
+      runnernum
+    } = this.props.card;
 
-    const time = moment(posttime).format('HH:mm')
-
+    const time = moment(posttime).format("HH:mm");
 
     return (
       <TouchableOpacity style={styles.cardContainer} onPress={this.cardPress}>
@@ -86,11 +100,13 @@ class RaceCard2 extends React.Component {
             <Text style={styles.fieldLabel}>{`第 ${racenum} 場`}</Text>
             <Text style={styles.fieldText}>{trackcode}</Text>
 
-            <Icon
-              name="bell-o"
-              type="FontAwesome"
-              style={trackcode != "草地" ? styles.bell1 : styles.bell}
-            />
+            <Animatable.View ref={ref => (this.bell = ref)}>
+              <Icon
+                name="bell-o"
+                type="FontAwesome"
+                style={trackcode != "草地" ? styles.bell1 : styles.bell}
+              />
+            </Animatable.View>
 
             <Text style={styles.time}>{time} 開跑</Text>
           </Col>
@@ -120,7 +136,9 @@ class RaceCard2 extends React.Component {
               >
                 <Row style={{ height: 30, marginTop: 5 }}>
                   <Col style={{ flex: 8, flexDirection: "row", height: 30 }}>
-                    <Text style={styles.name}>{racename.substring(0,5)}- </Text>
+                    <Text style={styles.name}>
+                      {racename.substring(0, 5)}-{" "}
+                    </Text>
                     <Text style={styles.sub}>{distance}米</Text>
                   </Col>
                   <Col style={{ flex: 4, height: 30, paddingBottom: 5 }}>
@@ -154,14 +172,14 @@ class RaceCard2 extends React.Component {
                     <Text style={styles.bonus}>獎金: ${stakeprize}</Text>
                   </Col> */}
                   <Col>
-                      <Text style={styles.bonus}>參加馬匹: {runnernum}</Text>
-                    </Col>
+                    <Text style={styles.bonus}>參加馬匹: {runnernum}</Text>
+                  </Col>
                   <Col>
                     <Text style={styles.track}>{coursecode}</Text>
                   </Col>
                 </Row>
 
-                  {/* <Row style={{ height: 20 }}>
+                {/* <Row style={{ height: 20 }}>
                     <Col>
                       <Text style={styles.bonus}>參加馬匹: {runnernum}</Text>
                     </Col>
@@ -181,34 +199,50 @@ class RaceCard2 extends React.Component {
   };
 
   oddsPageHandler = (raceid, racenum, dateText) => {
-    this.props.navigation.navigate("odd", {raceid, racenum, dateText});
+    this.props.navigation.navigate("odd", { raceid, racenum, dateText });
   };
 
-  openHorseHandler = (horseId) => {
+  openHorseHandler = horseId => {
     this.props.openHorseInfoHandler(horseId);
   };
 
   renderOpenOddsButton = (raceid, racenum, dateText) => {
-    return(
- <TouchableOpacity onPress={this.oddsPageHandler.bind(this, raceid, racenum, dateText)}>
-    <Image
-                source={require("../../assets/percentage.png")}
-                style={styles.oc_icon}
-                resizeMode="contain"
-              />
-    </TouchableOpacity>
-    )
-
-  }
+    return (
+      <TouchableOpacity
+        onPress={this.oddsPageHandler.bind(this, raceid, racenum, dateText)}
+      >
+        <Image
+          source={require("../../assets/percentage.png")}
+          style={styles.oc_icon}
+          resizeMode="contain"
+        />
+      </TouchableOpacity>
+    );
+  };
 
   renderCardOpen = () => {
-    const { raceid, racenum, stakeprize, ctime, classcode, distance, racename, trackcode, coursecode, runnernum,   } = this.props.card;
-    const { dateText } = this.props
-    const list = this.props.cardInfo[racenum].horseViewList
+    const {
+      raceid,
+      racenum,
+      stakeprize,
+      ctime,
+      classcode,
+      distance,
+      racename,
+      trackcode,
+      coursecode,
+      runnernum
+    } = this.props.card;
+    const { dateText } = this.props;
+    const list = this.props.cardInfo[racenum].horseViewList;
 
     return (
       <TouchableOpacity style={styles.oc_container} onPress={this.cardPress}>
-        <Row style={this.props.card.trackcode != "草地" ? styles.header1 : styles.header}>
+        <Row
+          style={
+            this.props.card.trackcode != "草地" ? styles.header1 : styles.header
+          }
+        >
           <Col style={styles.h_middle}>
             {/* <Button transparent onPress={this.oddsPageHandler}>
               <Image
@@ -220,7 +254,9 @@ class RaceCard2 extends React.Component {
             {this.renderOpenOddsButton(raceid, racenum, dateText)}
           </Col>
           <Col style={styles.h_middle}>
-            <Text style={styles.headerText}>{`第 ${this.props.card.racenum} 場`}</Text>
+            <Text style={styles.headerText}>{`第 ${
+              this.props.card.racenum
+            } 場`}</Text>
           </Col>
           <Col style={{ alignItems: "flex-end" }}>
             <Image
@@ -233,7 +269,7 @@ class RaceCard2 extends React.Component {
 
         <Row
           style={{
-            height: 300,
+            //height: 300,
             backgroundColor: "#ffffff",
             borderBottomLeftRadius: 10,
             borderBottomRightRadius: 10
@@ -257,101 +293,103 @@ class RaceCard2 extends React.Component {
                 <Text style={styles.subHeaderText}>AI評分</Text>
               </Col>
             </Row>
-            <ScrollView>
-            {
-                list.map(i => this.renderHorseItem(i))
-              }
-            </ScrollView>
-
-
-
-            </Grid>
+            <View>{list.map(i => this.renderHorseItem(i))}</View>
+          </Grid>
         </Row>
       </TouchableOpacity>
     );
   };
 
-  renderHorseItem = (item) => {
-    const { runnerno, barrierdrawno, horsenamecht, handicapweight, jockynamecht, trainernamechs, currentrating,  gearinfoc, horseImg, horseId  } = item
-    const { racenum } = this.props.card
-    const odds = this.props.odds[racenum]
-    const odd = odds && odds.find(o => o.pattern == runnerno)
+  renderHorseItem = item => {
+    const {
+      runnerno,
+      barrierdrawno,
+      horsenamecht,
+      handicapweight,
+      jockynamecht,
+      trainernamechs,
+      currentrating,
+      gearinfoc,
+      horseImg,
+      horseId
+    } = item;
+    const { racenum } = this.props.card;
+    const odds = this.props.odds[racenum];
+    const odd = odds && odds.find(o => o.pattern == runnerno);
 
     return (
-      <TouchableOpacity onPress={() => this.openHorseHandler(horseId)} key={runnerno}>
-      <Row
-              style={{ height: 40, marginBottom: 10 }}
-
-            >
-              <Col style={{ flex: 1.8 }}>
-                <Text style={styles.oc_text}>{runnerno} / {barrierdrawno}</Text>
-              </Col>
-              <Col style={{ flex: 5, flexDirection: "row" }}>
-                <Image
-                  source={{uri: horseImg}}
-                  style={styles.icon}
-                />
-                <Text style={styles.oc_text}>{horsenamecht}</Text>
-              </Col>
-              <Col style={{ flex: 5 }}>
-                <Row style={{ height: 20 }}>
-                  <Image
-                    source={require("../../assets/rider_icon.png")}
-                    style={styles.smallIcon}
-                  />
-                  <Text style={styles.oc_text_sub}>{jockynamecht}</Text>
-                  <Image
-                    source={require("../../assets/match_icon.png")}
-                    style={styles.smallIcon}
-                  />
-                  <Text style={styles.oc_text_sub}>{gearinfoc}</Text>
-                </Row>
-                <Row>
-                  <Image
-                    source={require("../../assets/train_icon.png")}
-                    style={styles.smallIcon}
-                  />
-                  <Text style={styles.oc_text_sub}>{trainernamechs}</Text>
-                  <Image
-                    source={require("../../assets/weight_icon.png")}
-                    style={styles.smallIcon}
-                  />
-                  <Text style={styles.oc_text_sub}>{handicapweight}</Text>
-                </Row>
-              </Col>
-              <Col style={{ flex: 1.5 }}>
-                <Text
-                  style={[
-                    styles.oc_text,
-                    {
-                      backgroundColor: "#ff8585",
-                      color: "#fcfcfc",
-                      textAlign: "center"
-                    }
-                  ]}
-                >
-                  {odd ? odd.odd : '-'}
-                </Text>
-              </Col>
-              <Col style={{ flex: 1.8 }}>
-                <Text
-                  style={[
-                    styles.oc_text,
-                    {
-                      backgroundColor: "#ebebeb",
-                      color: "#dc9908",
-                      textAlign: "center"
-                    }
-                  ]}
-                >
-                  ??
-                </Text>
-              </Col>
+      <TouchableOpacity
+        onPress={() => this.openHorseHandler(horseId)}
+        key={runnerno}
+      >
+        <Row style={{ height: 40, marginBottom: 10 }}>
+          <Col style={{ flex: 1.8 }}>
+            <Text style={styles.oc_text}>
+              {runnerno} / {barrierdrawno}
+            </Text>
+          </Col>
+          <Col style={{ flex: 5, flexDirection: "row" }}>
+            <Image source={{ uri: horseImg }} style={styles.icon} />
+            <Text style={styles.oc_text}>{horsenamecht}</Text>
+          </Col>
+          <Col style={{ flex: 5 }}>
+            <Row style={{ height: 20 }}>
+              <Image
+                source={require("../../assets/rider_icon.png")}
+                style={styles.smallIcon}
+              />
+              <Text style={styles.oc_text_sub}>{jockynamecht}</Text>
+              <Image
+                source={require("../../assets/match_icon.png")}
+                style={styles.smallIcon}
+              />
+              <Text style={styles.oc_text_sub}>{gearinfoc}</Text>
             </Row>
+            <Row>
+              <Image
+                source={require("../../assets/train_icon.png")}
+                style={styles.smallIcon}
+              />
+              <Text style={styles.oc_text_sub}>{trainernamechs}</Text>
+              <Image
+                source={require("../../assets/weight_icon.png")}
+                style={styles.smallIcon}
+              />
+              <Text style={styles.oc_text_sub}>{handicapweight}</Text>
+            </Row>
+          </Col>
+          <Col style={{ flex: 1.5 }}>
+            <Text
+              style={[
+                styles.oc_text,
+                {
+                  backgroundColor: "#ff8585",
+                  color: "#fcfcfc",
+                  textAlign: "center"
+                }
+              ]}
+            >
+              {odd ? odd.odd : "-"}
+            </Text>
+          </Col>
+          <Col style={{ flex: 1.8 }}>
+            <Text
+              style={[
+                styles.oc_text,
+                {
+                  backgroundColor: "#ebebeb",
+                  color: "#dc9908",
+                  textAlign: "center"
+                }
+              ]}
+            >
+              ??
+            </Text>
+          </Col>
+        </Row>
       </TouchableOpacity>
-
-    )
-  }
+    );
+  };
 
   render() {
     return (
@@ -362,19 +400,17 @@ class RaceCard2 extends React.Component {
   }
 }
 
-
-
 const mapState = state => {
   return {
     cardInfo: state.global.cardInfo,
     odds: state.global.odds,
-    message: state.global.message,
+    message: state.global.message
   };
 };
 
 const actionCreator = {
   getCardInfo: Actions.getCardInfo,
-  getRaceOdds: Actions.getRaceOdds,
+  getRaceOdds: Actions.getRaceOdds
 };
 
 export default connect(

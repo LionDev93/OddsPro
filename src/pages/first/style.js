@@ -7,6 +7,7 @@ const dm = Dimensions.get("screen");
 export default StyleSheet.create({
   container: {
     // marginTop: 67
+    paddingLeft: 20,
   },
   date: {
     color: "#ffffff",
@@ -23,6 +24,7 @@ export default StyleSheet.create({
   // CARD
   cardContainer: {
     borderRadius: 10,
+    borderTopRightRadius: 0,
     marginTop: 10,
     backgroundColor: "#ffffff"
   },
@@ -48,7 +50,7 @@ export default StyleSheet.create({
     flex: 7.8,
     //padding: 10,
     borderBottomRightRadius: 10,
-    borderTopRightRadius: 10
+    // borderTopRightRadius: 10
   },
   //LEFT
   fieldLabel: {
@@ -113,13 +115,13 @@ export default StyleSheet.create({
     backgroundColor: "#48ff00",
     padding: 15,
     borderTopLeftRadius: 10,
-    borderTopRightRadius: 10
+    // borderTopRightRadius: 10
   },
   header1: {
     backgroundColor: "#ffc000",
     padding: 15,
     borderTopLeftRadius: 10,
-    borderTopRightRadius: 10
+    // borderTopRightRadius: 10
   },
   oc_container: {
     marginTop: 10,

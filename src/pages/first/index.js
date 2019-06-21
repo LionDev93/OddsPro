@@ -120,7 +120,14 @@ class FirstScreen extends React.Component {
   handleViewRef = ref => (this.view = ref);
 
   renderHorseInfo = () => {
-    return <HorseInfo horseId={this.state.horseId} />;
+    return (
+      <Animatable.View
+        style={{ flex: 1}}
+        ref={this.handleViewRef}
+      >
+        <HorseInfo horseId={this.state.horseId} />
+      </Animatable.View>
+    );
   };
 
   openHorseInfoHandler = horseId => {
@@ -169,7 +176,12 @@ class FirstScreen extends React.Component {
             overlayBackgroundColor="transparent"
             width="80%"
             height={height - 65} //"90%" //DDT
-            onBackdropPress={() => this.setState({ openHorseInfo: false })}
+            onBackdropPress={() => {
+              this.view && this.view.slideOutRight(1000).then( () =>
+                this.setState({ openHorseInfo: false })
+              );
+              {/* this.setState({ openHorseInfo: false }); */}
+            }}
             overlayStyle={{
               padding: 0,
               position: "absolute",
@@ -180,11 +192,13 @@ class FirstScreen extends React.Component {
               justifyContent: "flex-end",
               alignItems: "flex-end"
             }}
+            
           >
             {this.renderHorseInfo()}
+            
           </Overlay>
 
-          <Content padder style={styles.container}>
+          <Content style={styles.container}>
             {dateText && Array.isArray(cards) ? (
               <Text style={styles.date}>{dateText}</Text>
             ) : (
@@ -192,7 +206,7 @@ class FirstScreen extends React.Component {
             )}
             {cards != null && this.showCards(cards, dateText)}
             {prevCards != null && this.showPrevCards(prevCards)}
-            {(cards == null || prevCards == null) &&  <Spinner />}
+            {(cards == null || prevCards == null) && <Spinner />}
           </Content>
         </Container>
       </ImageBackground>
@@ -267,26 +281,27 @@ class FirstScreen extends React.Component {
     );
   };
 
-  showPrevCards = (prevCards) => {
+  showPrevCards = prevCards => {
     return (
       <View>
-        {prevCards && Object.keys(prevCards).map((key, i) => {
-          return (
-            <View>
-              <Text style={styles.date}>{key}</Text>
-              {prevCards[key].map((card, i) => {
-                return (
-                  <RaceCard3
-                    key={i}
-                    card={card}
-                    //openHorseInfoHandler={this.openHorseInfoHandler}
-                    navigation={this.props.navigation}
-                  />
-                );
-              })}
-            </View>
-          );
-        })}
+        {prevCards &&
+          Object.keys(prevCards).map((key, i) => {
+            return (
+              <View>
+                <Text style={styles.date}>{key}</Text>
+                {prevCards[key].map((card, i) => {
+                  return (
+                    <RaceCard3
+                      key={i}
+                      card={card}
+                      //openHorseInfoHandler={this.openHorseInfoHandler}
+                      navigation={this.props.navigation}
+                    />
+                  );
+                })}
+              </View>
+            );
+          })}
       </View>
     );
   };
@@ -305,7 +320,7 @@ const mapState = state => {
 
 const actionCreator = {
   getCards: Actions.getCards,
-  getPrevCards: Actions.getPrevCards,
+  getPrevCards: Actions.getPrevCards
 };
 
 export default connect(
