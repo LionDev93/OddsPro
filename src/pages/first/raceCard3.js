@@ -8,7 +8,8 @@ import {
   Grid,
   Col,
   Row,
-  Icon
+  Icon, 
+  Spinner,
 } from "native-base";
 import styles from "./style";
 import * as Animatable from "react-native-animatable";
@@ -16,6 +17,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import moment from 'moment'
 import { connect } from "react-redux";
 import * as Actions from "../../redux/action";
+import timer from "react-native-timer";
 
 class RaceCard3 extends React.Component {
   constructor(props) {
@@ -30,48 +32,18 @@ class RaceCard3 extends React.Component {
   handleViewRef = ref => (this.view = ref);
 
   cardPress = async () => {
-    const {getCardInfo, getRaceOdds, card, cardInfo} = this.props
+    const { getCardInfo, getRaceOdds, card, cardInfo } = this.props;
 
+    this.setState({
+      isOpen: !this.state.isOpen
+    });
+    //this.view.fadeIn(500);
+    await getCardInfo(card.raceid, card.racenum);
+    await getRaceOdds(card.racenum, "win");
 
-      await getCardInfo(card.raceid, card.racenum)
-      await getRaceOdds(card.racenum, "win")
-
-
-
-      this.view
-        .flipOutX(500)
-        .then(endState =>
-          {
-            this.setState({
-              isOpen: !this.state.isOpen
-            })
-            this.view.fadeIn(500)
-          }
-        );
-
-      // this.view
-      //   .fadeOut(100)
-      //   .then(endState =>
-      //     {
-      //       this.setState({
-      //         isOpen: !this.state.isOpen
-      //       })
-      //       this.view.flipInX(1000)
-      //     }
-      //   );
-
-      // this.view
-      //   .flipInX(1000)
-      //   .then(endState =>
-      //     {
-      //       this.setState({
-      //         isOpen: !this.state.isOpen
-      //       })
-      //       //this.view.fad(1000)
-      //     }
-      //   );
-
+    
   };
+
 
   renderCardClosed = () => {
     const { racenum, classcode, distance, racename, trackcode, horses, odds  } = this.props.card;

@@ -8,7 +8,8 @@ import {
   Grid,
   Col,
   Row,
-  Icon
+  Icon,
+  Spinner
 } from "native-base";
 import styles from "./style";
 import * as Animatable from "react-native-animatable";
@@ -16,7 +17,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import moment from "moment";
 import { connect } from "react-redux";
 import * as Actions from "../../redux/action";
-import timer from 'react-native-timer'
+import timer from "react-native-timer";
 
 class RaceCard2 extends React.Component {
   constructor(props) {
@@ -30,7 +31,7 @@ class RaceCard2 extends React.Component {
 
   handleViewRef = ref => (this.view = ref);
 
-  componentDidMount(){
+  componentDidMount() {
     timer.setInterval(
       this,
       "timer",
@@ -44,16 +45,21 @@ class RaceCard2 extends React.Component {
   cardPress = async () => {
     const { getCardInfo, getRaceOdds, card, cardInfo } = this.props;
 
+    // this.view.zoomIn(500).then(async endState => {
+    //   this.setState({
+    //     isOpen: !this.state.isOpen
+    //   });
+    //   //this.view.fadeIn(500);
+    //    getCardInfo(card.raceid, card.racenum);
+    //    getRaceOdds(card.racenum, "win");
+    // });
+
+    this.setState({
+      isOpen: !this.state.isOpen
+    });
+    //this.view.fadeIn(500);
     await getCardInfo(card.raceid, card.racenum);
     await getRaceOdds(card.racenum, "win");
-
-    this.view.flipOutX(500).then(endState => {
-      this.setState({
-        isOpen: !this.state.isOpen
-      });
-      this.view.fadeIn(500);
-    });
-
 
     // this.view
     //   .fadeOut(100)
@@ -221,6 +227,8 @@ class RaceCard2 extends React.Component {
   };
 
   renderCardOpen = () => {
+    this.props.cardInfo;
+
     const {
       raceid,
       racenum,
@@ -234,7 +242,7 @@ class RaceCard2 extends React.Component {
       runnernum
     } = this.props.card;
     const { dateText } = this.props;
-    const list = this.props.cardInfo[racenum].horseViewList;
+    //const list = this.props.cardInfo[racenum].horseViewList;
 
     return (
       <TouchableOpacity style={styles.oc_container} onPress={this.cardPress}>
@@ -272,7 +280,7 @@ class RaceCard2 extends React.Component {
             //height: 300,
             backgroundColor: "#ffffff",
             borderBottomLeftRadius: 10,
-            borderBottomRightRadius: 10
+            borderBottomRightRadius: 0
           }}
         >
           <Grid>
@@ -293,7 +301,15 @@ class RaceCard2 extends React.Component {
                 <Text style={styles.subHeaderText}>AI評分</Text>
               </Col>
             </Row>
-            <View>{list.map(i => this.renderHorseItem(i))}</View>
+            <View>
+              {Array.isArray(this.props.cardInfo) ? (
+                this.props.cardInfo[racenum].horseViewList.map(i =>
+                  this.renderHorseItem(i)
+                )
+              ) : (
+                <Spinner />
+              )}
+            </View>
           </Grid>
         </Row>
       </TouchableOpacity>

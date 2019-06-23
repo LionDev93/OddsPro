@@ -289,7 +289,7 @@ class FirstScreen extends React.Component {
             return (
               <View>
                 <Text style={styles.date}>{key}</Text>
-                {prevCards[key].map((card, i) => {
+                {Array.isArray(prevCards[key]) && prevCards[key].map((card, i) => {
                   return (
                     <RaceCard3
                       key={i}

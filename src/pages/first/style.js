@@ -125,7 +125,8 @@ export default StyleSheet.create({
   },
   oc_container: {
     marginTop: 10,
-    borderRadius: 10
+    borderRadius: 10,
+    borderBottomRightRadius: 0,
   },
   headerText: {
     color: "#ffffff",
