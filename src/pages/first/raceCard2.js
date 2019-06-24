@@ -302,7 +302,7 @@ class RaceCard2 extends React.Component {
               </Col>
             </Row>
             <View>
-              {Array.isArray(this.props.cardInfo) ? (
+              {this.props.cardInfo[racenum] && Array.isArray(this.props.cardInfo[racenum].horseViewList) ? (
                 this.props.cardInfo[racenum].horseViewList.map(i =>
                   this.renderHorseItem(i)
                 )
