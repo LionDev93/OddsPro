@@ -43,7 +43,7 @@ class RaceCard2 extends React.Component {
   }
 
   cardPress = async () => {
-    const { getCardInfo, getRaceOdds, card, cardInfo, racenum } = this.props;
+    const { getCardInfo, getRaceOdds, card, cardInfo, racenum, openedCardID } = this.props;
 
     // this.view.zoomIn(500).then(async endState => {
     //   this.setState({
@@ -243,7 +243,7 @@ class RaceCard2 extends React.Component {
     //const list = this.props.cardInfo[racenum].horseViewList;
 
     return (
-      <TouchableOpacity style={styles.oc_container} onPress={this.cardPress}>
+      <TouchableOpacity style={styles.oc_container} onPress={() => this.props.openCard(0)}>
         <Row
           style={
             this.props.card.trackcode != "草地" ? styles.header1 : styles.header
