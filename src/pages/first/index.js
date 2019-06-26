@@ -20,6 +20,7 @@ import {
   Spinner
 } from "native-base";
 import Modal from "react-native-modal";
+import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper'
 import { Overlay } from "react-native-elements";
 import styles from "./style";
 import RaceCard from "./raceCard";
@@ -121,10 +122,7 @@ class FirstScreen extends React.Component {
 
   renderHorseInfo = () => {
     return (
-      <Animatable.View
-        style={{ flex: 1}}
-        ref={this.handleViewRef}
-      >
+      <Animatable.View style={{ flex: 1 }} ref={this.handleViewRef}>
         <HorseInfo horseId={this.state.horseId} />
       </Animatable.View>
     );
@@ -175,27 +173,35 @@ class FirstScreen extends React.Component {
             windowBackgroundColor="rgba(255, 255, 255, 0)"
             overlayBackgroundColor="transparent"
             width="80%"
-            height={height - 65} //"90%" //DDT
+            height={isIphoneX() ? height - 85 : height - 65} //"90%" //DDT
             onBackdropPress={() => {
-              this.view && this.view.slideOutRight(1000).then( () =>
-                this.setState({ openHorseInfo: false })
-              );
-              {/* this.setState({ openHorseInfo: false }); */}
+              this.view &&
+                this.view
+                  .slideOutRight(1000)
+                  .then(() => this.setState({ openHorseInfo: false }));
+              {
+                /* this.setState({ openHorseInfo: false }); */
+              }
             }}
             overlayStyle={{
               padding: 0,
               position: "absolute",
               right: 0,
-              top: 65
+              ...ifIphoneX(
+                {
+                  top: 85
+                },
+                {
+                  top: 65
+                }
+              )
             }}
             containerStyle={{
               justifyContent: "flex-end",
               alignItems: "flex-end"
             }}
-            
           >
             {this.renderHorseInfo()}
-            
           </Overlay>
 
           <Content style={styles.container}>
@@ -289,16 +295,17 @@ class FirstScreen extends React.Component {
             return (
               <View>
                 <Text style={styles.date}>{key}</Text>
-                {Array.isArray(prevCards[key]) && prevCards[key].map((card, i) => {
-                  return (
-                    <RaceCard3
-                      key={i}
-                      card={card}
-                      //openHorseInfoHandler={this.openHorseInfoHandler}
-                      navigation={this.props.navigation}
-                    />
-                  );
-                })}
+                {Array.isArray(prevCards[key]) &&
+                  prevCards[key].map((card, i) => {
+                    return (
+                      <RaceCard3
+                        key={i}
+                        card={card}
+                        //openHorseInfoHandler={this.openHorseInfoHandler}
+                        navigation={this.props.navigation}
+                      />
+                    );
+                  })}
               </View>
             );
           })}
