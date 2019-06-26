@@ -4,29 +4,29 @@ import * as ActionType from "./actionType";
 export const getCards = async () => {
   const res = await API.first_card_api();
 
-  console.log(res)
-  const {data } = res
+  console.log(res);
+  const { data } = res;
 
-  const keys = Object.keys(data)
+  const keys = Object.keys(data);
 
-  const dateText = keys[0]
-  console.log(dateText)
+  const dateText = keys[0];
+  console.log(dateText);
 
-  const cards = data[dateText]
-  console.log(cards)
-  if(res.status)
+  const cards = data[dateText];
+  console.log(cards);
+  if (res.status)
     return {
       type: ActionType.GET_CARD_OK,
       payload: {
         cards: cards,
-        dateText: dateText,
+        dateText: dateText
       }
     };
-  else{
+  else {
     return {
       type: ActionType.GET_CARD_NOK,
       payload: {
-        message: res.message,
+        message: res.message
       }
     };
   }
@@ -35,43 +35,43 @@ export const getCards = async () => {
 export const getPrevCards = async () => {
   const res = await API.previous_first_card_api();
 
-  const {data } = res
+  const { data } = res;
 
-  const cards = data
-  if(res.status)
+  const cards = data;
+  if (res.status)
     return {
       type: ActionType.GET_PREV_CARD_OK,
       payload: {
-        prevCards: cards,
+        prevCards: cards
       }
     };
-  else{
+  else {
     return {
       type: ActionType.GET_CARD_NOK,
       payload: {
-        message: res.message,
+        message: res.message
       }
     };
   }
 };
 
-export const getBasicInfo = async (raceNum) => {
+export const getBasicInfo = async raceNum => {
   const res = await API.get_basic_info_api(raceNum);
 
-  console.log(res)
+  console.log(res);
 
-  if(res.status)
+  if (res.status)
     return {
       type: ActionType.GET_BASIC_INFO_OK,
       payload: {
         cards: res.data
       }
     };
-  else{
+  else {
     return {
       type: ActionType.GET_BASIC_INFO_NOK,
       payload: {
-        message: res.message,
+        message: res.message
       }
     };
   }
@@ -80,10 +80,10 @@ export const getBasicInfo = async (raceNum) => {
 export const getCardInfo = async (raceId, raceNum) => {
   const res = await API.get_upcoming_raceinfo_horsedetail_api(raceNum);
 
-  console.log(res)
+  console.log(res);
 
-  if(res.status) {
-    res.data.horseViewList.sort( (a, b) => {
+  if (res.status) {
+    res.data.horseViewList.sort((a, b) => {
       return a.runnerno - b.runnerno;
     });
     return {
@@ -93,11 +93,11 @@ export const getCardInfo = async (raceId, raceNum) => {
         cardInfo: res.data
       }
     };
-  } else{
+  } else {
     return {
       type: ActionType.GET_BASIC_INFO_NOK,
       payload: {
-        message: res.message,
+        message: res.message
       }
     };
   }
@@ -106,28 +106,38 @@ export const getCardInfo = async (raceId, raceNum) => {
 export const getRaceOdds = async (raceNum, raceType) => {
   const res = await API.get_raceodds_api(raceNum, raceType);
 
-  console.log(res)
+  console.log(res);
 
-  if(res.status)
+  if (res.status)
     return {
       type: ActionType.GET_RACE_ODDS_OK,
       payload: {
         racenum: raceNum,
         odds: res.data.data.map(odd => {
-          let val = odd.split('=')
+          let val = odd.split("=");
           return {
             pattern: val[0],
             odd: val[1]
-          }
-        }),
+          };
+        })
       }
     };
-  else{
+  else {
     return {
       type: ActionType.GET_RACE_ODDS_NOK,
       payload: {
-        message: res.message,
+        message: res.message
       }
     };
   }
+};
+
+export const openCard = async raceId => {
+  return {
+    type: ActionType.OPEN_CARD_OK,
+    payload: {
+      raceId: raceId,
+   
+    }
+  };
 };

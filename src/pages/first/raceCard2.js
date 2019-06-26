@@ -43,7 +43,7 @@ class RaceCard2 extends React.Component {
   }
 
   cardPress = async () => {
-    const { getCardInfo, getRaceOdds, card, cardInfo } = this.props;
+    const { getCardInfo, getRaceOdds, card, cardInfo, racenum } = this.props;
 
     // this.view.zoomIn(500).then(async endState => {
     //   this.setState({
@@ -54,9 +54,7 @@ class RaceCard2 extends React.Component {
     //    getRaceOdds(card.racenum, "win");
     // });
 
-    this.setState({
-      isOpen: !this.state.isOpen
-    });
+    this.props.openCard(card.raceid)
     //this.view.fadeIn(500);
     await getCardInfo(card.raceid, card.racenum);
     await getRaceOdds(card.racenum, "win");
@@ -408,9 +406,10 @@ class RaceCard2 extends React.Component {
   };
 
   render() {
+    const { openedCardID, card } = this.props
     return (
       <Animatable.View ref={this.handleViewRef}>
-        {!this.state.isOpen ? this.renderCardClosed() : this.renderCardOpen()}
+        {openedCardID !== card.raceid ? this.renderCardClosed() : this.renderCardOpen()}
       </Animatable.View>
     );
   }
@@ -420,13 +419,15 @@ const mapState = state => {
   return {
     cardInfo: state.global.cardInfo,
     odds: state.global.odds,
-    message: state.global.message
+    message: state.global.message,
+    openedCardID: state.global.openedCardID,
   };
 };
 
 const actionCreator = {
   getCardInfo: Actions.getCardInfo,
-  getRaceOdds: Actions.getRaceOdds
+  getRaceOdds: Actions.getRaceOdds,
+  openCard: Actions.openCard,
 };
 
 export default connect(

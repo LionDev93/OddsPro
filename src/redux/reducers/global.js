@@ -7,6 +7,7 @@ const initState = {
   odds: {},
   message: '',
   dateText: '',
+  openedCardID: 0,
 };
 
 const globalReducer = (state = initState, action) => {
@@ -62,6 +63,12 @@ const globalReducer = (state = initState, action) => {
         ...state,
         message: action.payload.message,
       };
+      case ActionType.OPEN_CARD_OK:
+
+        return {
+          ...state,
+          openedCardID: action.payload.raceId,
+        };
     default:
       return state;
   }
