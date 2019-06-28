@@ -8,7 +8,7 @@ import {
   Grid,
   Col,
   Row,
-  Icon, 
+  Icon,
   Spinner,
 } from "native-base";
 import styles from "./style";
@@ -41,7 +41,7 @@ class RaceCard3 extends React.Component {
     await getCardInfo(card.raceid, card.racenum);
     await getRaceOdds(card.racenum, "win");
 
-    
+
   };
 
 
@@ -125,7 +125,7 @@ class RaceCard3 extends React.Component {
                       const intRank = parseInt(rank);
                       const rankText = ['', '冠軍', '亞軍', '季軍'];
                       return (
-                        <Row style={{ height: 20, marginTop: 10 }}>
+                        <Row style={{ height: 20, marginTop: 10 }} key={i}>
                           <Col>
                             <Text style={styles.bonus}>{rankText[intRank] ? rankText[intRank] + ': ' : ''}{runnernum} - {horse_name}</Text>
                           </Col>
@@ -143,11 +143,11 @@ class RaceCard3 extends React.Component {
                         qpl: '位置Q',
                       };
                       return (
-                        <View>
+                        <View key={i}>
                           {data.map((item, i) => {
                             const { horses, odd } = item;
                             return (
-                              <Row>
+                              <Row key={i}>
                                 <Col>
                                   <Text>{i == 0 ? typeText[type] : ''}</Text>
                                 </Col>
