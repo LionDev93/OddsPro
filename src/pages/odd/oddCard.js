@@ -282,7 +282,7 @@ class OddCard extends React.Component {
       const list1 = list && list.map(item => {
         return {
           id: item.runnerno,
-          name: item.horsenamechs,
+          name: item.horsenamecht,
         }
       })
 
@@ -356,7 +356,7 @@ class OddCard extends React.Component {
         list1: this.props.cardInfo[this.state.racenum].horseViewList.map(item => {
           return {
             id: item.runnerno,
-            name: item.horsenamechs,
+            name: item.horsenamecht,
           }
         }),
         list2: [],
@@ -698,7 +698,7 @@ class OddCard extends React.Component {
             <Text style={styles.row10Text}>賠率</Text>
           </Col>
           <Col>
-            <Text style={styles.row10Text}>額</Text>
+            <Text style={styles.row10Text}>金額</Text>
           </Col>
           <Col>
             <Text style={styles.row10Text}>預計派彩</Text>

@@ -18,7 +18,7 @@ class RaceCard extends React.Component {
     return (
       <Grid style={styles.cardContainer} >
         <Col style={styles.left} >
-          <Text style={styles.fieldLabel}>{`第 ${number} 場`}</Text>
+          <Text style={styles.fieldLabel}>{'第 ${number} 場'}</Text>
           <Text style={styles.fieldText}>草地</Text>
           {/* <Image
             source={require("../../assets/bell.png")}
@@ -26,7 +26,7 @@ class RaceCard extends React.Component {
             resizeMode="contain"
           /> */}
           <Icon name='bell-o' type='FontAwesome' style={{width: 30, marginTop: 5, color:'red'}}></Icon>
-          {/* <BellIcon width='40' active={true} animate={true} /> */}
+          {/* <BellIcon width='40' active={false} animate={true} /> */}
 
           <Text style={styles.time}>12:30 開跑</Text>
         </Col>

@@ -21,6 +21,18 @@ export default StyleSheet.create({
     width: 40,
     height: 40
   },
+
+  horseimg:{
+    width: 40,
+    height: 40,
+    borderRadius:5
+  },
+  name:{
+    width: 40,
+    height: 40,
+  
+  },
+
   // CARD
   cardContainer: {
     borderRadius: 10,
@@ -30,7 +42,7 @@ export default StyleSheet.create({
   },
   left: {
     flex: 2.2,
-    backgroundColor: "#48ff00",
+    backgroundColor: "#32b100",
     color: "#ffffff",
     borderBottomLeftRadius: 10,
     borderTopLeftRadius: 10,
@@ -95,11 +107,11 @@ export default StyleSheet.create({
   name: {
     color: "#828282",
     fontWeight: "400",
-    fontSize: 20
+    fontSize: 16
   },
   sub: {
     color: "#9d9d9d",
-    paddingTop: 2.5,
+    // paddingTop: 2.5,
     fontSize: 16,
     fontWeight: "400"
   },
@@ -112,7 +124,7 @@ export default StyleSheet.create({
   },
   //Open card
   header: {
-    backgroundColor: "#48ff00",
+    backgroundColor: "#32b100",
     padding: 15,
     borderTopLeftRadius: 10,
     // borderTopRightRadius: 10
@@ -173,6 +185,13 @@ export default StyleSheet.create({
     fontSize: 20,
     fontWeight: "400"
   },
+  textCardinnertitle: {
+    color: "#707070",
+    fontSize: 18,
+    fontWeight: "400",
+    paddingBottom: 10,
+    textDecorationLine: "underline"
+  },
 
   textBlack100: {
     color: "#707070",
@@ -209,6 +228,27 @@ export default StyleSheet.create({
     fontSize: 8,
     fontWeight: "400"
   },
+  textlist: {
+    color: "#494949",
+    fontSize: 12,
+    lineHeight: 18,
+    paddingBottom:8,
+    borderBottomWidth: 0.5,
+    borderColor: '#b6d7da',
+    fontWeight: "400"
+  },
+
+  textlistresult:{
+    color: '#fbb907',
+    fontSize: 12,
+    lineHeight: 18,
+    paddingBottom:8,
+    borderBottomWidth: 0.5,
+    borderColor: '#b6d7da',
+    fontWeight: "400"
+  },
+
+
   textBlack30: {
     color: '#646464',
     fontSize: 10,

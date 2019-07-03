@@ -38,11 +38,11 @@ class HorseInfo extends React.Component {
             <Col style={{ flex: 4 }}>
               <Image
                 source={{ url: horse.horse_img }}
-                style={{ width: 100, height: 100 }}
+                style={{ width: 100, height: 100, borderRadius: 10, }}
               />
             </Col>
-            <Col style={{ flex: 6 }}>
-              <Row style={{ height: 25 }}>
+            <Col style={{ flex: 6, top: 6 }}>
+              <Row style={{ height: 22 }}>
                 <Col>
                   <Text style={styles.textBlack48}>馬名: </Text>
                 </Col>
@@ -50,7 +50,7 @@ class HorseInfo extends React.Component {
                   <Text style={styles.textBlack48}>{horse.h_name}</Text>
                 </Col>
               </Row>
-              <Row style={{ height: 25 }}>
+              <Row style={{ height: 22 }}>
                 <Col>
                   <Text style={styles.textBlack48}>出生地: </Text>
                 </Col>
@@ -58,7 +58,7 @@ class HorseInfo extends React.Component {
                   <Text style={styles.textBlack48}>{horse.born}</Text>
                 </Col>
               </Row>
-              <Row style={{ height: 25 }}>
+              <Row style={{ height: 22 }}>
                 <Col>
                   <Text style={styles.textBlack48}>年齡: </Text>
                 </Col>
@@ -66,7 +66,7 @@ class HorseInfo extends React.Component {
                   <Text style={styles.textBlack48}>{horse.age}</Text>
                 </Col>
               </Row>
-              <Row style={{ height: 25 }}>
+              <Row style={{ height: 22 }}>
                 <Col>
                   <Text style={styles.textBlack48}>出場次數: </Text>
                 </Col>
@@ -86,7 +86,7 @@ class HorseInfo extends React.Component {
             />
             <Text style={styles.textWhite60}>AI 綜合評分為</Text>
             <View style={styles.ext_circle}>
-              <Text style={styles.textWhite72}>64</Text>
+              <Text style={styles.textWhite72}>{horse.AI_marks}</Text>
             </View>
           </Col>
         </Row>
@@ -96,53 +96,21 @@ class HorseInfo extends React.Component {
             contentContainerStyle={{ padding: 10 }}
           >
             <Row style={styles.ext_row}>
-              <Text style={styles.textBlack48}>大數據統計及分析: </Text>
+              <Text style={styles.textCardinnertitle}>大數據統計及分析: </Text>
             </Row>
             {analysis.map((item, i) => {
               return (
                 <Row>
                   <Col style={styles.col7}>
-                    <Text style={styles.textBlack30}>{item.message}</Text>
+                    <Text style={styles.textlist}>{item.message}</Text>
                   </Col>
                   <Col style={styles.col3}>
-                    <Text style={styles.textYellow48}>{item.value}</Text>
+                    <Text style={styles.textlistresult}>{item.value}</Text>
                   </Col>
                 </Row>
               );
             })}
-            <Row style={styles.ext_row}>
-              <Col style={styles.col7}>
-                <Text style={styles.textBlack30}>
-                  走位數據: 分析所有得獎比賽, 馬匹開閘 *********, 走位類型屬於
-                </Text>
-              </Col>
-              <Col style={styles.col3}>
-                <Text style={styles.textVIP48}> VIP</Text>
-              </Col>
-            </Row>
 
-            <Row style={styles.ext_row}>
-              <Col style={styles.col7}>
-                <Text style={styles.textBlack30}>
-                  配備數據: 分析所有得獎比賽, 配帶**** 有***%勝出機率, 配備喜好
-                </Text>
-              </Col>
-              <Col style={styles.col3}>
-                <Text style={styles.textVIP48}> VIP</Text>
-              </Col>
-            </Row>
-
-            <Row style={styles.ext_row}>
-              <Col style={styles.col7}>
-                <Text style={styles.textBlack30}>
-                  負磅分析: 根據所有比賽及負磅分析, 負磅介乎于 *** - ***
-                  比較有利{" "}
-                </Text>
-              </Col>
-              <Col style={styles.col3}>
-                <Text style={styles.textVIP48}> VIP</Text>
-              </Col>
-            </Row>
           </ScrollView>
         </View>
         <View

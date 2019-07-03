@@ -134,7 +134,7 @@ class FirstScreen extends React.Component {
 
   componentDidMount() {
     this.props.getCards();
-    this.props.getPrevCards();
+  //  this.props.getPrevCards();
   }
 
   render() {

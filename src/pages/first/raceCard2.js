@@ -4,7 +4,7 @@ import {
   Container,
   Content,
   Text,
-  Button,
+  Button, 
   Grid,
   Col,
   Row,
@@ -36,7 +36,7 @@ class RaceCard2 extends React.Component {
       this,
       "timer",
       () => {
-        this.bell && this.bell.shake(1000);
+        this.bell && this.bell.swing(1000);
       },
       1000
     );
@@ -176,7 +176,7 @@ class RaceCard2 extends React.Component {
                     <Text style={styles.bonus}>獎金: ${stakeprize}</Text>
                   </Col> */}
                   <Col>
-                    <Text style={styles.bonus}>參加馬匹: {runnernum}</Text>
+                    <Text style={styles.bonus}>參加馬匹: {runnernum}匹</Text>
                   </Col>
                   <Col>
                     <Text style={styles.track}>{coursecode}</Text>
@@ -265,11 +265,28 @@ class RaceCard2 extends React.Component {
             } 場`}</Text>
           </Col>
           <Col style={{ alignItems: "flex-end" }}>
-            <Image
-              source={require("../../assets/horse_1.png")}
-              style={styles.oc_horse_icon}
-              resizeMode="contain"
-            />
+                    <ImageBackground
+                      source={require("../../assets/horselabel.png")}
+                      style={{
+                        width: "80%",
+                        height: "80%",
+                        position: "absolute",
+                        right: -33,
+                        top: 0
+                      }}
+                      resizeMode="cover"
+                    >
+                      <Text
+                        style={{
+                          color: "white",
+                          fontSize: 13,
+                          paddingTop: 8,
+                          paddingLeft: 30
+                        }}
+                      >
+                        {classcode}
+                      </Text>
+                    </ImageBackground>
           </Col>
         </Row>
 
@@ -283,20 +300,20 @@ class RaceCard2 extends React.Component {
         >
           <Grid>
             <Row style={{ height: 40, marginBottom: 10 }}>
-              <Col style={{ flex: 1.5 }}>
+              <Col style={{ flex: 1.8 }}>
                 <Text style={styles.subHeaderText}>馬號/檔位</Text>
               </Col>
-              <Col style={{ flex: 4 }}>
+              <Col style={{ flex: 3.7 }}>
                 <Text style={styles.subHeaderText}>馬匹資料</Text>
               </Col>
-              <Col style={{ flex: 4 }}>
+              <Col style={{ flex: 5.5 }}>
                 <Text style={styles.subHeaderText}>臨場資料</Text>
               </Col>
               <Col style={{ flex: 1.5 }}>
                 <Text style={styles.subHeaderText}>獨贏</Text>
               </Col>
-              <Col style={{ flex: 1.8 }}>
-                <Text style={styles.subHeaderText}>AI評分</Text>
+              <Col style={{ flex: 1.5 }}>
+                <Text style={styles.subHeaderText}>AI 評分</Text>
               </Col>
             </Row>
             <View>
@@ -321,10 +338,11 @@ class RaceCard2 extends React.Component {
       horsenamecht,
       handicapweight,
       jockynamecht,
-      trainernamechs,
+      trainernamecht,
       currentrating,
       gearinfoc,
       horseImg,
+      AImarks,
       horseId
     } = item;
     const { racenum } = this.props.card;
@@ -337,17 +355,19 @@ class RaceCard2 extends React.Component {
         key={runnerno}
       >
         <Row style={{ height: 40, marginBottom: 10 }}>
-          <Col style={{ flex: 1.8 }}>
+          <Col style={{ flex: 1.5 }}>
             <Text style={styles.oc_text}>
-              {runnerno} / {barrierdrawno}
+              {runnerno}/{barrierdrawno}
             </Text>
           </Col>
-          <Col style={{ flex: 5, flexDirection: "row" }}>
-            <Image source={{ uri: horseImg }} style={styles.icon} />
+          
+          <Col style={{ flex: 4.2, flexDirection: "row" }}>
+           <Image source={{ uri: horseImg }} style={styles.horseimg} />
             <Text style={styles.oc_text}>{horsenamecht}</Text>
           </Col>
-          <Col style={{ flex: 5 }}>
-            <Row style={{ height: 20 }}>
+          
+          <Col style={{ flex: 5.8 }}>
+            <Row style={{ height: 20}}>
               <Image
                 source={require("../../assets/rider_icon.png")}
                 style={styles.smallIcon}
@@ -364,7 +384,7 @@ class RaceCard2 extends React.Component {
                 source={require("../../assets/train_icon.png")}
                 style={styles.smallIcon}
               />
-              <Text style={styles.oc_text_sub}>{trainernamechs}</Text>
+              <Text style={styles.oc_text_sub}>{trainernamecht}</Text>
               <Image
                 source={require("../../assets/weight_icon.png")}
                 style={styles.smallIcon}
@@ -386,7 +406,7 @@ class RaceCard2 extends React.Component {
               {odd ? odd.odd : "-"}
             </Text>
           </Col>
-          <Col style={{ flex: 1.8 }}>
+          <Col style={{ flex: 1.5 }}>
             <Text
               style={[
                 styles.oc_text,
@@ -397,7 +417,7 @@ class RaceCard2 extends React.Component {
                 }
               ]}
             >
-              ??
+              {AImarks}
             </Text>
           </Col>
         </Row>
