@@ -38,20 +38,20 @@ class RaceCard3 extends React.Component {
       isOpen: !this.state.isOpen
     });
     //this.view.fadeIn(500);
-    await getCardInfo(card.raceid, card.racenum);
-    await getRaceOdds(card.racenum, "win");
+    //await getCardInfo(card.raceid, card.racenum);
+    //await getRaceOdds(card.racenum, "win");
 
 
   };
 
 
   renderCardClosed = () => {
-    const { racenum, classcode, distance, racename, trackcode, horses, odds  } = this.props.card;
+    const { racenum, classcode, distance, racename, trackcodehk, horses, odds  } = this.props.card;
 
     return (
       <View style={styles.cardContainer} onPress={this.cardPress}>
         <Row>
-          <Col style={trackcode != "草地" ? styles.left1 : styles.left}>
+          <Col style={trackcodehk != "草地" ? styles.left1 : styles.left}>
             <Text style={styles.fieldLabel}>{`第 ${racenum} 場`}</Text>
             <Text style={styles.fieldText}>{trackcode}</Text>
 
@@ -133,6 +133,8 @@ class RaceCard3 extends React.Component {
                       );
                     })}
                   </Col>
+                  
+                  {/*
                   <Col>
                     {odds.map((odd, i) => {
                       const { type, data } = odd;
@@ -164,6 +166,8 @@ class RaceCard3 extends React.Component {
                       );
                     })}
                   </Col>
+                  */}
+
                 </Row>
 
 
