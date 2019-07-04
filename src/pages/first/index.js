@@ -143,6 +143,7 @@ class FirstScreen extends React.Component {
     this.setState({isRefreshing: true})
     this.props.getCards();
     this.props.getPrevCards();
+    this.setState({isRefreshing: false})
   }
 
   render() {
