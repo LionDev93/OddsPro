@@ -134,7 +134,7 @@ class FirstScreen extends React.Component {
 
   componentDidMount() {
     this.props.getCards();
-  //  this.props.getPrevCards();
+    this.props.getPrevCards();
   }
 
   render() {
@@ -327,7 +327,7 @@ const mapState = state => {
 
 const actionCreator = {
   getCards: Actions.getCards,
-  getPrevCards: Actions.getPrevCards
+  getPrevCards: Actions.getLivePrevCards
 };
 
 export default connect(
