@@ -4,7 +4,8 @@ import {
   ImageBackground,
   Image,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
+  RefreshControl
 } from "react-native";
 import {
   Container,
@@ -20,7 +21,7 @@ import {
   Spinner
 } from "native-base";
 import Modal from "react-native-modal";
-import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper'
+import { ifIphoneX, isIphoneX } from "react-native-iphone-x-helper";
 import { Overlay } from "react-native-elements";
 import styles from "./style";
 import RaceCard from "./raceCard";
@@ -43,6 +44,7 @@ class FirstScreen extends React.Component {
       horseId: "",
       openHorseInfo: false,
       openCard: 0,
+      isRefreshing: false,
       races: [
         {
           id: 1,
@@ -133,6 +135,12 @@ class FirstScreen extends React.Component {
   };
 
   componentDidMount() {
+    this.onRefresh()
+  }
+
+  onRefresh = () => {
+
+    this.setState({isRefreshing: true})
     this.props.getCards();
     this.props.getPrevCards();
   }
@@ -204,7 +212,15 @@ class FirstScreen extends React.Component {
             {this.renderHorseInfo()}
           </Overlay>
 
-          <Content style={styles.container}>
+          <Content
+            style={styles.container}
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.isRefreshing}
+                onRefresh={this.onRefresh}
+              />
+            }
+          >
             {dateText && Array.isArray(cards) ? (
               <Text style={styles.date}>{dateText}</Text>
             ) : (

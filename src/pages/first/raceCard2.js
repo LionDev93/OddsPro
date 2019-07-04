@@ -4,7 +4,7 @@ import {
   Container,
   Content,
   Text,
-  Button, 
+  Button,
   Grid,
   Col,
   Row,
@@ -25,25 +25,40 @@ class RaceCard2 extends React.Component {
 
     this.state = {
       isOpen: false,
-      cardInfo: null
+      cardInfo: null,
+      
     };
   }
 
   handleViewRef = ref => (this.view = ref);
 
   componentDidMount() {
+
     timer.setInterval(
       this,
       "timer",
       () => {
-        this.bell && this.bell.swing(1000);
+        const { posttime } = this.props.card;
+        const startRing = moment(posttime).subtract(30, "minutes");
+        const endRing = moment(posttime);
+       
+        let ring = moment().isBetween(startRing, endRing);
+
+        if (ring) this.bell && this.bell.swing(1000);
       },
       1000
     );
   }
 
   cardPress = async () => {
-    const { getCardInfo, getRaceOdds, card, cardInfo, racenum, openedCardID } = this.props;
+    const {
+      getCardInfo,
+      getRaceOdds,
+      card,
+      cardInfo,
+      racenum,
+      openedCardID
+    } = this.props;
 
     // this.view.zoomIn(500).then(async endState => {
     //   this.setState({
@@ -54,7 +69,7 @@ class RaceCard2 extends React.Component {
     //    getRaceOdds(card.racenum, "win");
     // });
 
-    this.props.openCard(card.raceid)
+    this.props.openCard(card.raceid);
     //this.view.fadeIn(500);
     await getCardInfo(card.raceid, card.racenum);
     await getRaceOdds(card.racenum, "win");
@@ -243,7 +258,10 @@ class RaceCard2 extends React.Component {
     //const list = this.props.cardInfo[racenum].horseViewList;
 
     return (
-      <TouchableOpacity style={styles.oc_container} onPress={() => this.props.openCard(0)}>
+      <TouchableOpacity
+        style={styles.oc_container}
+        onPress={() => this.props.openCard(0)}
+      >
         <Row
           style={
             this.props.card.trackcode != "草地" ? styles.header1 : styles.header
@@ -265,28 +283,28 @@ class RaceCard2 extends React.Component {
             } 場`}</Text>
           </Col>
           <Col style={{ alignItems: "flex-end" }}>
-                    <ImageBackground
-                      source={require("../../assets/horselabel.png")}
-                      style={{
-                        width: "80%",
-                        height: "80%",
-                        position: "absolute",
-                        right: -33,
-                        top: 0
-                      }}
-                      resizeMode="cover"
-                    >
-                      <Text
-                        style={{
-                          color: "white",
-                          fontSize: 13,
-                          paddingTop: 8,
-                          paddingLeft: 30
-                        }}
-                      >
-                        {classcode}
-                      </Text>
-                    </ImageBackground>
+            <ImageBackground
+              source={require("../../assets/horselabel.png")}
+              style={{
+                width: "80%",
+                height: "80%",
+                position: "absolute",
+                right: -33,
+                top: 0
+              }}
+              resizeMode="cover"
+            >
+              <Text
+                style={{
+                  color: "white",
+                  fontSize: 13,
+                  paddingTop: 8,
+                  paddingLeft: 30
+                }}
+              >
+                {classcode}
+              </Text>
+            </ImageBackground>
           </Col>
         </Row>
 
@@ -317,7 +335,8 @@ class RaceCard2 extends React.Component {
               </Col>
             </Row>
             <View>
-              {this.props.cardInfo[racenum] && Array.isArray(this.props.cardInfo[racenum].horseViewList) ? (
+              {this.props.cardInfo[racenum] &&
+              Array.isArray(this.props.cardInfo[racenum].horseViewList) ? (
                 this.props.cardInfo[racenum].horseViewList.map(i =>
                   this.renderHorseItem(i)
                 )
@@ -360,14 +379,14 @@ class RaceCard2 extends React.Component {
               {runnerno}/{barrierdrawno}
             </Text>
           </Col>
-          
+
           <Col style={{ flex: 4.2, flexDirection: "row" }}>
-           <Image source={{ uri: horseImg }} style={styles.horseimg} />
+            <Image source={{ uri: horseImg }} style={styles.horseimg} />
             <Text style={styles.oc_text}>{horsenamecht}</Text>
           </Col>
-          
+
           <Col style={{ flex: 5.8 }}>
-            <Row style={{ height: 20}}>
+            <Row style={{ height: 20 }}>
               <Image
                 source={require("../../assets/rider_icon.png")}
                 style={styles.smallIcon}
@@ -426,10 +445,12 @@ class RaceCard2 extends React.Component {
   };
 
   render() {
-    const { openedCardID, card } = this.props
+    const { openedCardID, card } = this.props;
     return (
       <Animatable.View ref={this.handleViewRef}>
-        {openedCardID !== card.raceid ? this.renderCardClosed() : this.renderCardOpen()}
+        {openedCardID !== card.raceid
+          ? this.renderCardClosed()
+          : this.renderCardOpen()}
       </Animatable.View>
     );
   }
@@ -440,14 +461,14 @@ const mapState = state => {
     cardInfo: state.global.cardInfo,
     odds: state.global.odds,
     message: state.global.message,
-    openedCardID: state.global.openedCardID,
+    openedCardID: state.global.openedCardID
   };
 };
 
 const actionCreator = {
   getCardInfo: Actions.getCardInfo,
   getRaceOdds: Actions.getRaceOdds,
-  openCard: Actions.openCard,
+  openCard: Actions.openCard
 };
 
 export default connect(
