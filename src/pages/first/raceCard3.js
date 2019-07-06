@@ -160,7 +160,7 @@ class RaceCard3 extends React.Component {
                     <Row style={{ height: 20, marginTop: 50 }} >
                       <Col>
                         <Text style={styles.bonus}>
-                        命中率: {Math.round((count / 4) * 100)}% 
+                        命中率: {Math.round((count / 3) * 100)}% 
                         </Text>
                       </Col>
                     </Row>
