@@ -34,7 +34,7 @@ import * as Animatable from "react-native-animatable";
 import { connect } from "react-redux";
 import * as Actions from "../../redux/action";
 import timer from "react-native-timer";
-import moment from 'moment'
+import moment from "moment";
 
 const { height } = Dimensions.get("window");
 
@@ -137,30 +137,33 @@ class FirstScreen extends React.Component {
   };
 
   componentDidMount() {
-    this.setState({isRefreshing: true})
+    this.setState({ isRefreshing: true });
     this.props.getCards();
-    this.setState({isRefreshing: false})
+    this.setState({ isRefreshing: false });
 
     timer.setInterval(
       this,
       "timer",
       () => {
         const { posttime } = this.props.cards && this.props.cards[0];
-       
 
-        if (moment().utc().isAfter(moment(posttime))) this.onRefresh();
+        if (
+          moment()
+            .utc()
+            .isAfter(moment(posttime))
+        )
+          this.onRefresh();
       },
       60 * 1000
     );
   }
 
   onRefresh = () => {
-
-    this.setState({isRefreshing: true})
+    this.setState({ isRefreshing: true });
     this.props.getCards();
     this.props.getPrevCards();
-    this.setState({isRefreshing: false})
-  }
+    this.setState({ isRefreshing: false });
+  };
 
   render() {
     const { dateText, cards, prevCards } = this.props;
@@ -324,25 +327,16 @@ class FirstScreen extends React.Component {
   showPrevCards = prevCards => {
     return (
       <View>
-        {prevCards &&
-          Object.keys(prevCards).map((key, i) => {
-            return (
-              <View key={i}>
-                <Text style={styles.date}>{key}</Text>
-                {Array.isArray(prevCards[key]) &&
-                  prevCards[key].map((card, i) => {
-                    return (
-                      <RaceCard3
-                        key={i}
-                        card={card}
-                        //openHorseInfoHandler={this.openHorseInfoHandler}
-                        navigation={this.props.navigation}
-                      />
-                    );
-                  })}
-              </View>
-            );
-          })}
+        {prevCards.map((card, i) => {
+          return (
+            <RaceCard3
+              key={i}
+              card={card}
+              //openHorseInfoHandler={this.openHorseInfoHandler}
+              navigation={this.props.navigation}
+            />
+          );
+        })}
       </View>
     );
   };

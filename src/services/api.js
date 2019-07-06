@@ -76,8 +76,10 @@ export const previous_live_record_api = async () => {
         url: API_URL + `oddspro_api/firstcard_prev_live.php`,
     }
 
+    console.log(config)
     const res = await axios(config);
     ret = res.status == StatusCode.SUCCESS
+    console.log('previous_live_record_api', res.data)
 
     return {
       status: ret,

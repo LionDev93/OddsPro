@@ -50,24 +50,25 @@ class RaceCard3 extends React.Component {
       racename,
       trackcodehk,
       horses,
-      odds,
+      //odds,
       aitips
     } = this.props.card;
 
-    const count = 0;
-    const ranks = horses.filter(horse => parseInt(horse.rank) <= 3);
-    ranks &&
-      ranks.forEach(item => {
+    let count = 0;
+
+    
+      horses.forEach(item => {
         if (aitips.includes(item.runnerno)) {
           count++;
         }
       });
+
     return (
       <View style={styles.cardContainer} onPress={this.cardPress}>
         <Row>
           <Col style={trackcodehk != "草地" ? styles.left1 : styles.left}>
             <Text style={styles.fieldLabel}>{`第 ${racenum} 場`}</Text>
-            <Text style={styles.fieldText}>{trackcode}</Text>
+            <Text style={styles.fieldText}>{trackcodehk}</Text>
 
             {/*<Icon
               name="bell-o"
@@ -80,7 +81,7 @@ class RaceCard3 extends React.Component {
           <Col style={styles.right}>
             <ImageBackground
               source={
-                trackcode != "草地"
+                trackcodehk != "草地"
                   ? require("../../assets/sand_bg.png")
                   : require("../../assets/grass_bg.png")
               }
@@ -137,19 +138,19 @@ class RaceCard3 extends React.Component {
                 <Row>
                   <Col>
                     {horses
-                      .filter(horse => parseInt(horse.rank) <= 3)
+
                       .map((horse, i) => {
-                        const { runnernum, rank, horse_name } = horse;
-                        const intRank = parseInt(rank);
+                        const { runnerno, finishPosition, name } = horse;
+                        const intRank = parseInt(finishPosition);
                         const rankText = ["", "冠軍", "亞軍", "季軍"];
                         return (
-                          <Row style={{ height: 20, marginTop: 10 }} key={i}>
+                          <Row style={{ height: 20 }} key={i}>
                             <Col>
                               <Text style={styles.bonus}>
                                 {rankText[intRank]
                                   ? rankText[intRank] + ": "
                                   : ""}
-                                {runnernum} - {horse_name}
+                                {runnerno} - {name}
                               </Text>
                             </Col>
                           </Row>
@@ -157,37 +158,19 @@ class RaceCard3 extends React.Component {
                       })}
                   </Col>
                   <Col>
-                    <Row style={{ height: 20, marginTop: 10 }} key={i}>
+                    <Row style={{ height: 20, marginTop: 50 }} >
                       <Col>
                         <Text style={styles.bonus}>
-                        命中率: {Math.round((count / 4) * 100)}
+                        命中率: {Math.round((count / 4) * 100)}% 
                         </Text>
                       </Col>
                     </Row>
-                    <Row style={{ height: 20, marginTop: 10 }} key={i}>
+                    <Row style={{ height: 20, marginTop: 10 }} >
                       <Col>
                         <Text style={styles.bonus}>AI 預測結果 {aitips}</Text>
                       </Col>
                     </Row>
-                    {horses
-                      .filter(horse => parseInt(horse.rank) <= 3)
-                      .map((horse, i) => {
-                        const { runnernum, rank, horse_name } = horse;
-                        const intRank = parseInt(rank);
-                        const rankText = ["", "冠軍", "亞軍", "季軍"];
-                        return (
-                          <Row style={{ height: 20, marginTop: 10 }} key={i}>
-                            <Col>
-                              <Text style={styles.bonus}>
-                                {rankText[intRank]
-                                  ? rankText[intRank] + ": "
-                                  : ""}
-                                {runnernum} - {horse_name}
-                              </Text>
-                            </Col>
-                          </Row>
-                        );
-                      })}
+                    
                   </Col>
                   {/*
                   <Col>

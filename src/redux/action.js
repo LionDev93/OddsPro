@@ -62,6 +62,7 @@ export const getLivePrevCards = async () => {
   const { data } = res;
 
   const cards = data;
+  console.log('const cards = res;', cards)
   if (res.status)
     return {
       type: ActionType.GET_PREV_CARD_OK,
@@ -71,7 +72,7 @@ export const getLivePrevCards = async () => {
     };
   else {
     return {
-      type: ActionType.GET_CARD_NOK,
+      type: ActionType.GET_PREV_CARD_NOK,
       payload: {
         message: res.message
       }
