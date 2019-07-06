@@ -115,7 +115,8 @@ export const getCardInfo = async (raceId, raceNum) => {
       type: ActionType.GET_BASIC_INFO_OK,
       payload: {
         raceNum: raceNum,
-        cardInfo: res.data
+        cardInfo: res.data,
+        //currentRaceID: res.data.raceid,
       }
     };
   } else {
@@ -165,4 +166,50 @@ export const openCard = async raceId => {
    
     }
   };
+};
+
+export const getRaceAnalysis = async (raceId) => {
+  console.log('getRaceAnalysis', 'HERE');
+  const res = await API.race_analysis(raceId);
+
+  console.log('getRaceAnalysis', res);
+
+  if (res.status) {
+    if(res.message != null)
+    return {
+      type: ActionType.GET_RACE_ANALYSIS_NO_RESULT,
+      payload: {
+        
+        message: res.data.message
+      }
+    };
+
+    return {
+      type: ActionType.GET_RACE_ANALYSIS_OK,
+      payload: {
+        
+        raceAnalysis: res.data
+      }
+    };
+  } else {
+    return {
+      type: ActionType.GET_RACE_ANALYSIS_NOK,
+      payload: {
+        message: res.message
+      }
+    };
+  }
+};
+
+export const setCurrentRaceID = async (raceID) => {
+  
+
+    return {
+      type: ActionType.SET_CURRENT_RACE_ID,
+      payload: {
+        currentRaceID: raceID,
+
+      }
+    };
+ 
 };

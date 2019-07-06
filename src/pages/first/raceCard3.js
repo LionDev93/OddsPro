@@ -9,12 +9,12 @@ import {
   Col,
   Row,
   Icon,
-  Spinner,
+  Spinner
 } from "native-base";
 import styles from "./style";
 import * as Animatable from "react-native-animatable";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import moment from 'moment'
+import moment from "moment";
 import { connect } from "react-redux";
 import * as Actions from "../../redux/action";
 import timer from "react-native-timer";
@@ -25,7 +25,7 @@ class RaceCard3 extends React.Component {
 
     this.state = {
       isOpen: false,
-      cardInfo: null,
+      cardInfo: null
     };
   }
 
@@ -40,14 +40,28 @@ class RaceCard3 extends React.Component {
     //this.view.fadeIn(500);
     //await getCardInfo(card.raceid, card.racenum);
     //await getRaceOdds(card.racenum, "win");
-
-
   };
 
-
   renderCardClosed = () => {
-    const { racenum, classcode, distance, racename, trackcodehk, horses, odds  } = this.props.card;
+    const {
+      racenum,
+      classcode,
+      distance,
+      racename,
+      trackcodehk,
+      horses,
+      odds,
+      aitips
+    } = this.props.card;
 
+    const count = 0;
+    const ranks = horses.filter(horse => parseInt(horse.rank) <= 3);
+    ranks &&
+      ranks.forEach(item => {
+        if (aitips.includes(item.runnerno)) {
+          count++;
+        }
+      });
     return (
       <View style={styles.cardContainer} onPress={this.cardPress}>
         <Row>
@@ -89,7 +103,9 @@ class RaceCard3 extends React.Component {
               >
                 <Row style={{ height: 30, marginTop: 5 }}>
                   <Col style={{ flex: 8, flexDirection: "row", height: 30 }}>
-                    <Text style={styles.name}>{racename.substring(0,5)}- </Text>
+                    <Text style={styles.name}>
+                      {racename.substring(0, 5)}-{" "}
+                    </Text>
                     <Text style={styles.sub}>{distance}米</Text>
                   </Col>
                   <Col style={{ flex: 4, height: 30, paddingBottom: 5 }}>
@@ -120,20 +136,59 @@ class RaceCard3 extends React.Component {
 
                 <Row>
                   <Col>
-                    {horses.filter(horse => parseInt(horse.rank) <= 3).map((horse, i) => {
-                      const { runnernum, rank, horse_name } = horse;
-                      const intRank = parseInt(rank);
-                      const rankText = ['', '冠軍', '亞軍', '季軍'];
-                      return (
-                        <Row style={{ height: 20, marginTop: 10 }} key={i}>
-                          <Col>
-                            <Text style={styles.bonus}>{rankText[intRank] ? rankText[intRank] + ': ' : ''}{runnernum} - {horse_name}</Text>
-                          </Col>
-                        </Row>
-                      );
-                    })}
+                    {horses
+                      .filter(horse => parseInt(horse.rank) <= 3)
+                      .map((horse, i) => {
+                        const { runnernum, rank, horse_name } = horse;
+                        const intRank = parseInt(rank);
+                        const rankText = ["", "冠軍", "亞軍", "季軍"];
+                        return (
+                          <Row style={{ height: 20, marginTop: 10 }} key={i}>
+                            <Col>
+                              <Text style={styles.bonus}>
+                                {rankText[intRank]
+                                  ? rankText[intRank] + ": "
+                                  : ""}
+                                {runnernum} - {horse_name}
+                              </Text>
+                            </Col>
+                          </Row>
+                        );
+                      })}
                   </Col>
-                  
+                  <Col>
+                    <Row style={{ height: 20, marginTop: 10 }} key={i}>
+                      <Col>
+                        <Text style={styles.bonus}>
+                        命中率: {Math.round((count / 4) * 100)}
+                        </Text>
+                      </Col>
+                    </Row>
+                    <Row style={{ height: 20, marginTop: 10 }} key={i}>
+                      <Col>
+                        <Text style={styles.bonus}>AI 預測結果 {aitips}</Text>
+                      </Col>
+                    </Row>
+                    {horses
+                      .filter(horse => parseInt(horse.rank) <= 3)
+                      .map((horse, i) => {
+                        const { runnernum, rank, horse_name } = horse;
+                        const intRank = parseInt(rank);
+                        const rankText = ["", "冠軍", "亞軍", "季軍"];
+                        return (
+                          <Row style={{ height: 20, marginTop: 10 }} key={i}>
+                            <Col>
+                              <Text style={styles.bonus}>
+                                {rankText[intRank]
+                                  ? rankText[intRank] + ": "
+                                  : ""}
+                                {runnernum} - {horse_name}
+                              </Text>
+                            </Col>
+                          </Row>
+                        );
+                      })}
+                  </Col>
                   {/*
                   <Col>
                     {odds.map((odd, i) => {
@@ -167,10 +222,7 @@ class RaceCard3 extends React.Component {
                     })}
                   </Col>
                   */}
-
                 </Row>
-
-
               </View>
             </ImageBackground>
           </Col>
@@ -178,8 +230,6 @@ class RaceCard3 extends React.Component {
       </View>
     );
   };
-
-
 
   render() {
     return (
@@ -190,19 +240,17 @@ class RaceCard3 extends React.Component {
   }
 }
 
-
-
 const mapState = state => {
   return {
     cardInfo: state.global.cardInfo,
     odds: state.global.odds,
-    message: state.global.message,
+    message: state.global.message
   };
 };
 
 const actionCreator = {
   getCardInfo: Actions.getCardInfo,
-  getRaceOdds: Actions.getRaceOdds,
+  getRaceOdds: Actions.getRaceOdds
 };
 
 export default connect(

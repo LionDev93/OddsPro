@@ -167,9 +167,9 @@ export const get_raceodds_api = async (race_num, race_type) => {
       }
 
 
-    console.log(config)
+    //console.log(config)
     const res = await axios(config);
-    console.log(res)
+    //console.log(res)
     let ret = res.status == StatusCode.SUCCESS
     return  {
       status: ret,
@@ -202,6 +202,37 @@ export const get_horse_analysis = async (horse_id) => {
       status: ret,
       data: res.data,
       message: '',
+    };
+  } catch (error) {
+    console.log(error);
+    // throw error.message;
+    return {
+      status: false,
+      data: null,
+      message: error.message,
+    };
+  }
+};
+
+//https://anth1.myqnapcloud.com:8081/oddspro_api/race_analysis.php
+export const race_analysis = async (raceid) => {
+  try {
+    const config = {
+      method: "GET",
+      url: API_URL + `oddspro_api/race_analysis.php?raceid=${raceid}`,
+
+    }
+    console.log(config)
+    const res = await axios(config);
+    console.log(res)
+    let ret = res.status == StatusCode.SUCCESS
+
+
+
+    return  {
+      status: ret,
+      data: res.data,
+      message: res.data.message,
     };
   } catch (error) {
     console.log(error);

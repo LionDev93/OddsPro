@@ -2,6 +2,7 @@ import React from "react";
 import { View, ImageBackground, Image } from "react-native";
 import { Container, Content, Text, Button, Grid, Col, Row } from "native-base";
 import styles from "./style";
+import moment from 'moment'
 
 class SuggestBar extends React.Component {
   constructor(props) {
@@ -22,16 +23,16 @@ class SuggestBar extends React.Component {
       <Grid style={{position: 'absolute', bottom: 0,  width: '100%', paddingHorizontal: 10}}> 
         <Row style={styles.suggestBg}>
           <Col style={{ flex: 2 }}>
-            <Text style={styles.suggestDate}>13:32:55</Text>
+            <Text style={styles.suggestDate}>{this.props.time != '' ? moment(this.props.time, 'X').format('YYYY-MM-DD hh:mm') : ''}</Text>
           </Col>
           <Col style={{ flex: 8 }}>
             <Text style={styles.suggestText}>
-              XX 有大手下注, 賠率下跌 XX%
+              {this.props.text}
             </Text>
           </Col>
 
           <Col style={{ flex: 1 }}>
-            <Button transparent onPress={this.openSuggestBar}>
+            <Button transparent onPress={this.openSuggestBar} disabled={this.props.time == ''}>
               <Image
                 source={require("../../assets/footericon.png")}
                 style={{ height: 50, width: 50, marginTop: -40 }}

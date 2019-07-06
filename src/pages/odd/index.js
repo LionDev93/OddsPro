@@ -30,19 +30,25 @@ import {
 } from "native-base";
 import { Overlay } from "react-native-elements";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-
+import { connect } from "react-redux";
+import * as Actions from "../../redux/action";
 import styles from "./style";
 import OddCard from "./oddCard";
 import SuggestBar from "./suggestBar";
+import timer from "react-native-timer";
+import moment from "moment";
+
 const dm = Dimensions.get("screen");
 
 class OddsScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.scroll = null
+    this.scroll = null;
     this.state = {
       allOddsVisible: false,
-      openSuggestBar: false
+      openSuggestBar: false,
+
+      messages: []
     };
   }
 
@@ -54,8 +60,44 @@ class OddsScreen extends React.Component {
     this.props.navigation.navigate("profile");
   };
 
-  openSuggestBar = () => {
-    this.setState({ openSuggestBar: true });
+  openSuggestBar = async () => {
+    if (this.props.raceAnalysis == null)
+      await this.props.getRaceAnalysis(this.props.currentRaceID);
+
+    if (this.props.raceAnalysis && this.props.raceAnalysis.data) {
+      const { data, starttime } =
+        this.props.raceAnalysis && this.props.raceAnalysis;
+      console.log("raceAnalysis data", data);
+      if (data && moment().utc().isAfter(moment(starttime).utc())) {
+        timer.setInterval(
+          this,
+          "timer",
+          () => {
+            //console.log('raceAnalysis timer', data)
+            let item = data.filter(
+              item => Number(item.time) == moment().utc().format("X")
+            )[0];
+
+            // item = {
+            //   content: "洪荒駿駒在2019-07-03跑過第5班的比赛，排名第02",
+            //   horsename: "洪荒駿駒",
+            //   rank: "02",
+            //   time: moment().format("X")
+            // };
+
+            console.log("raceAnalysis timer item", item, moment().format("X"));
+            if (item) {
+              this.setState({
+                messages: [item, ...this.state.messages.slice(0, 10)]
+              });
+            }
+          },
+          1000
+        );
+      }
+
+      this.setState({ openSuggestBar: true });
+    }
   };
 
   renderSuggestBar = () => {
@@ -78,34 +120,24 @@ class OddsScreen extends React.Component {
             </Button>
           </Col>
         </Row>
-        <Row style={styles.suggestBg1}>
-          <Col style={{ flex: 2 }}>
-            <Text style={styles.suggestDate}>13:32:55</Text>
-          </Col>
-          <Col style={{ flex: 8 }}>
-            <Text style={styles.suggestText}>AI 比賽20分鐘預測 2-4-5-7</Text>
-          </Col>
-        </Row>
-        <Row style={styles.suggestBg1}>
-          <Col style={{ flex: 2 }}>
-            <Text style={styles.suggestDate}>13:32:55</Text>
-          </Col>
-          <Col style={{ flex: 8 }}>
-            <Text style={styles.suggestText}>
-              xxxx 有大手下注, 賠率下跌 xx %
-            </Text>
-          </Col>
-        </Row>
-        <Row style={styles.suggestBg1}>
-          <Col style={{ flex: 2 }}>
-            <Text style={styles.suggestDate}>13:32:55</Text>
-          </Col>
-          <Col style={{ flex: 8 }}>
-            <Text style={styles.suggestText}>
-              根據過往賽績 XXXX 參加過 X 次草地賽道, X 次入三甲, 勝率為 XX %
-            </Text>
-          </Col>
-        </Row>
+
+        {this.state.messages.length > 0 ? (
+          this.state.messages.map(item => {
+            return (
+              <Row style={styles.suggestBg1}>
+                <Col style={{ flex: 2 }}>
+                  <Text style={styles.suggestDate}>{moment(item.time, 'X').format('YYYY-MM-DD hh:mm:ss')}</Text>
+                </Col>
+                <Col style={{ flex: 8 }}>
+                  <Text style={styles.suggestText}>{item.content}</Text>
+                </Col>
+              </Row>
+            );
+          })
+        ) : (
+          <React.Fragment />
+        )}
+
         <Row
           style={{
             position: "absolute",
@@ -147,8 +179,13 @@ class OddsScreen extends React.Component {
     );
   };
 
-  componentDidMount(){
+  async componentDidMount() {
     //this.scroll.scrollToEnd();
+    const raceid = this.props.navigation.getParam("raceid", "");
+    this.props.setCurrentRaceID(raceid);
+    await this.props.getRaceAnalysis(raceid);
+
+    console.log("raceAnalysis", this.props.raceAnalysis);
   }
 
   showAllOdds = () => {
@@ -170,9 +207,9 @@ class OddsScreen extends React.Component {
 
   render() {
     const { openSuggestBar } = this.state;
-    const raceid = this.props.navigation.getParam('raceid', '');
-    const racenum = this.props.navigation.getParam('racenum', '');
-    const dateText = this.props.navigation.getParam('dateText', '');
+    const raceid = this.props.navigation.getParam("raceid", "");
+    const racenum = this.props.navigation.getParam("racenum", "");
+    const dateText = this.props.navigation.getParam("dateText", "");
 
     //console.error(racenum)
     return (
@@ -259,10 +296,15 @@ class OddsScreen extends React.Component {
               </Button>
             </Right>
           </Header>
-          <ScrollView padder style={{flex: 1, padding: 10, marginBottom: 10}} behavior="padding" enabled
-          ref={(scroll) => {this.scroll = scroll;}}
+          <ScrollView
+            padder
+            style={{ flex: 1, padding: 10, marginBottom: 10 }}
+            behavior="padding"
+            enabled
+            ref={scroll => {
+              this.scroll = scroll;
+            }}
           >
-
             <Text style={styles.date}>{dateText}</Text>
 
             <OddCard
@@ -271,19 +313,44 @@ class OddsScreen extends React.Component {
               navigation={this.props.navigation}
               showAllOddsHandler={this.showAllOdds}
             />
-
-
-
           </ScrollView>
           {!openSuggestBar ? (
-              <SuggestBar openSuggestBarHandler={this.openSuggestBar} />
-            ) : (
-              <React.Fragment />
-            )}
+            <SuggestBar
+              openSuggestBarHandler={this.openSuggestBar}
+              text={
+                !this.props.raceAnalysis
+                  ? this.props.raceAnalysisMessage
+                  : this.props.raceAnalysis.data[0].content
+              }
+              time={
+                !this.props.raceAnalysis
+                  ? ""
+                  : this.props.raceAnalysis.data[0].time
+              }
+            />
+          ) : (
+            <React.Fragment />
+          )}
         </Container>
       </ImageBackground>
     );
   }
 }
 
-export default OddsScreen;
+const mapState = state => {
+  return {
+    currentRaceID: state.global.currentRaceID,
+    raceAnalysisMessage: state.global.raceAnalysisMessage,
+    raceAnalysis: state.global.raceAnalysis
+  };
+};
+
+const actionCreator = {
+  setCurrentRaceID: Actions.setCurrentRaceID,
+  getRaceAnalysis: Actions.getRaceAnalysis
+};
+
+export default connect(
+  mapState,
+  actionCreator
+)(OddsScreen);

@@ -33,6 +33,8 @@ import RaceCard3 from "./raceCard3";
 import * as Animatable from "react-native-animatable";
 import { connect } from "react-redux";
 import * as Actions from "../../redux/action";
+import timer from "react-native-timer";
+import moment from 'moment'
 
 const { height } = Dimensions.get("window");
 
@@ -135,7 +137,21 @@ class FirstScreen extends React.Component {
   };
 
   componentDidMount() {
-    this.onRefresh()
+    this.setState({isRefreshing: true})
+    this.props.getCards();
+    this.setState({isRefreshing: false})
+
+    timer.setInterval(
+      this,
+      "timer",
+      () => {
+        const { posttime } = this.props.cards && this.props.cards[0];
+       
+
+        if (moment().utc().isAfter(moment(posttime))) this.onRefresh();
+      },
+      60 * 1000
+    );
   }
 
   onRefresh = () => {
@@ -227,8 +243,9 @@ class FirstScreen extends React.Component {
             ) : (
               <React.Fragment />
             )}
-            {cards != null && this.showCards(cards, dateText)}
             {prevCards != null && this.showPrevCards(prevCards)}
+            {cards != null && this.showCards(cards, dateText)}
+
             {(cards == null || prevCards == null) && <Spinner />}
           </Content>
         </Container>
