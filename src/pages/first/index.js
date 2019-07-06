@@ -241,12 +241,14 @@ class FirstScreen extends React.Component {
               />
             }
           >
+
+            {prevCards != null && this.showPrevCards(prevCards)}
             {dateText && Array.isArray(cards) ? (
               <Text style={styles.date}>{dateText}</Text>
             ) : (
               <React.Fragment />
             )}
-            {prevCards != null && this.showPrevCards(prevCards)}
+            
             {cards != null && this.showCards(cards, dateText)}
 
             {(cards == null || prevCards == null) && <Spinner />}
@@ -327,6 +329,7 @@ class FirstScreen extends React.Component {
   showPrevCards = prevCards => {
     return (
       <View>
+      <Text style={styles.date}>{prevCards[0].title}</Text>
         {prevCards.map((card, i) => {
           return (
             <RaceCard3

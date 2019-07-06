@@ -348,7 +348,9 @@ class OddCard extends React.Component {
 
   onUpdRaceNum = async () => {
     await this.updateOdds()
-    await this.props.getCardInfo(this.props.raceid, this.state.racenum)
+    await this.props.getCardInfo(0, this.state.racenum)
+    await this.props.onRefreshRaceAnalysis()
+
     this.setState({
       ...this.state,
       betType: {

@@ -138,7 +138,6 @@ class RaceCard3 extends React.Component {
                 <Row>
                   <Col>
                     {horses
-
                       .map((horse, i) => {
                         const { runnerno, finishPosition, name } = horse;
                         const intRank = parseInt(finishPosition);

@@ -42,7 +42,7 @@ class RaceCard2 extends React.Component {
         const startRing = moment(posttime).subtract(30, "minutes");
         const endRing = moment(posttime);
        
-        let ring = moment().isBetween(startRing, endRing);
+        let ring = moment().utc().isBetween(startRing, endRing);
 
         if (ring) this.bell && this.bell.swing(1000);
       },

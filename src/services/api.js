@@ -79,7 +79,7 @@ export const previous_live_record_api = async () => {
     console.log(config)
     const res = await axios(config);
     ret = res.status == StatusCode.SUCCESS
-    console.log('previous_live_record_api', res.data)
+    console.log('previous_live_record_api', res)
 
     return {
       status: ret,

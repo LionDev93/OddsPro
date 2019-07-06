@@ -117,7 +117,7 @@ export const getCardInfo = async (raceId, raceNum) => {
       payload: {
         raceNum: raceNum,
         cardInfo: res.data,
-        //currentRaceID: res.data.raceid,
+        currentRaceID: res.data.raceid,
       }
     };
   } else {

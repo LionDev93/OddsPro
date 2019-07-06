@@ -188,6 +188,10 @@ class OddsScreen extends React.Component {
     console.log("raceAnalysis", this.props.raceAnalysis);
   }
 
+  onRefreshRaceAnalysis = async () => {
+    await this.props.getRaceAnalysis(this.props.currentRaceID);
+  }
+
   showAllOdds = () => {
     this.setState({ allOddsVisible: true });
   };
@@ -312,6 +316,7 @@ class OddsScreen extends React.Component {
               racenum={racenum}
               navigation={this.props.navigation}
               showAllOddsHandler={this.showAllOdds}
+              onRefreshRaceAnalysis={this.onRefreshRaceAnalysis}
             />
           </ScrollView>
           {!openSuggestBar ? (
