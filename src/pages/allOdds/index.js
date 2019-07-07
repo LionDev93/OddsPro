@@ -20,10 +20,15 @@ import {
   Right,
   Title,
   Thumbnail,
-  Grid
+  Grid,
+  Form,
+  Picker,
 } from "native-base";
 import { Overlay } from "react-native-elements";
 import Orientation from "react-native-orientation";
+import { connect } from "react-redux";
+import * as Actions from "../../redux/action";
+import * as API from "../../services/api";
 
 import { Table, TableWrapper, Row, Col } from "react-native-table-component";
 
@@ -34,23 +39,10 @@ class AllOddsScreen extends React.Component {
     super(props);
 
     this.state = {
-      tableHead: [
-        "1st/2nd",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "10",
-        "11",
-        "12",
-        "13",
-        "14"
-      ],
-      widthArr: [60, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50]
+      tableHead: [],
+      widthArr: [],
+      tableData: [],
+      selected: "win"
     };
   }
 
@@ -62,19 +54,66 @@ class AllOddsScreen extends React.Component {
   componentDidMount() {
     // this locks the view to Landscape Mode
     Orientation.lockToLandscape();
-    
+    this.onRefresh()
   }
+
+  onValueChange(value: string) {
+    this.setState({
+      selected: value
+    }, this.onRefresh);
+  }
+
+  onRefresh = async () => {
+    console.log('state', this.state)
+    const racenum = this.props.navigation.getParam("racenum", 0);
+    //const racenum = 1;
+    if (
+      this.props.cardInfo[racenum] &&
+      Array.isArray(this.props.cardInfo[racenum].horseViewList)
+    ) {
+      const horses = this.props.cardInfo[racenum].horseViewList;
+
+      if(this.state.selected == 'win' || this.state.selected == 'pla'){
+        this.setState({
+          tableHead: ["No", 'Name', 'Odd'],
+          widthArr: [100, 300, 300],
+        })
+      }
+      const res1 = await API.get_raceodds_api(racenum, this.state.selected);
+      
+      let tabledata = [];
+
+      console.log('horses', horses)
+
+      res1.data.data.forEach((odd, i) => {
+        let val = odd.split("=");
+        let rowdata = [];
+        rowdata.push(val[0]);
+        rowdata.push(horses[i].horsenameen);
+        rowdata.push(val[1]);
+
+        tabledata.push(rowdata);
+      });
+
+      this.setState({
+        tableData: tabledata
+      });
+
+      console.log('state', this.state)
+    }
+  };
 
   render() {
     const state = this.state;
-    const tableData = [];
-    for (let i = 0; i < 30; i += 1) {
-      const rowData = [];
-      for (let j = 0; j < 20; j += 1) {
-        rowData.push(`${i}${j}`);
-      }
-      tableData.push(rowData);
-    }
+    // const tableData = [];
+    // for (let i = 0; i < 30; i += 1) {
+    //   const rowData = [];
+    //   for (let j = 0; j < 20; j += 1) {
+    //     rowData.push(`${i}${j}`);
+    //   }
+    //   tableData.push(rowData);
+    // }
+
     return (
       <ImageBackground
         source={require("../../assets/firstpage_background.jpg")}
@@ -85,7 +124,19 @@ class AllOddsScreen extends React.Component {
           <Content padder>
             <View style={styles.bar}>
               <Text style={styles.date}>2019年3月10日,星期日, 沙田</Text>
-
+              <Form>
+                <Picker
+                  mode="dropdown"
+                  iosHeader="Select odd type"
+                  iosIcon={<Icon name="arrow-down" />}
+                  style={{ width: undefined }}
+                  selectedValue={this.state.selected}
+                  onValueChange={this.onValueChange.bind(this)}
+                >
+                  <Picker.Item label="WIN" value="win" />
+                  <Picker.Item label="PLA" value="pla" />
+                </Picker>
+              </Form>
               <TouchableOpacity onPress={this.close} style={styles.closeBtn}>
                 <Icon name="closecircle" type="AntDesign" />
               </TouchableOpacity>
@@ -105,7 +156,7 @@ class AllOddsScreen extends React.Component {
                     </Table>
 
                     <Table borderStyle={{ borderColor: "#C1C0B9" }}>
-                      {tableData.map((rowData, index) => (
+                      {this.state.tableData.map((rowData, index) => (
                         <Row
                           key={index}
                           data={rowData}
@@ -129,4 +180,20 @@ class AllOddsScreen extends React.Component {
   }
 }
 
-export default AllOddsScreen;
+const mapState = state => {
+  return {
+    cardInfo: state.global.cardInfo,
+    odds: state.global.odds
+  };
+};
+
+const actionCreator = {
+  getCardInfo: Actions.getCardInfo,
+  getRaceOdds: Actions.getRaceOdds,
+  openCard: Actions.openCard
+};
+
+export default connect(
+  mapState,
+  actionCreator
+)(AllOddsScreen);

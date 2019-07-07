@@ -75,7 +75,7 @@ class OddsScreen extends React.Component {
           () => {
             //console.log('raceAnalysis timer', data)
             let item = data.filter(
-              item => Number(item.time) == moment().utc().format("X")
+              item => item.time == moment().utc().format("X")
             )[0];
 
             // item = {
@@ -189,7 +189,9 @@ class OddsScreen extends React.Component {
   }
 
   onRefreshRaceAnalysis = async () => {
+    console.log('this.props.currentRaceID', this.props.currentRaceID)
     await this.props.getRaceAnalysis(this.props.currentRaceID);
+    //this.render()
   }
 
   showAllOdds = () => {

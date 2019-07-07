@@ -180,7 +180,7 @@ export const getRaceAnalysis = async (raceId) => {
     return {
       type: ActionType.GET_RACE_ANALYSIS_NO_RESULT,
       payload: {
-        
+        raceAnalysis: null,
         message: res.data.message
       }
     };

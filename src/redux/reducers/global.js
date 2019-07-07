@@ -41,7 +41,8 @@ const globalReducer = (state = initState, action) => {
         cardInfo: {
           ...state.cardInfo,
           [raceNum]: cardInfo
-        }
+        },
+        currentRaceID: action.payload.currentRaceID,
       };
     case ActionType.GET_BASIC_INFO_NOK:
       return {
@@ -75,7 +76,8 @@ const globalReducer = (state = initState, action) => {
     case ActionType.GET_RACE_ANALYSIS_NO_RESULT:
       return {
         ...state,
-        raceAnalysisMessage: action.payload.message
+        raceAnalysisMessage: action.payload.message,
+        raceAnalysis: action.payload.raceAnalysis,
       };
     case ActionType.GET_RACE_ANALYSIS_NOK:
       return {

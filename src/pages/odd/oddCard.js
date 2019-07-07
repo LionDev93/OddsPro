@@ -209,7 +209,7 @@ class OddCard extends React.Component {
   }
 
   showAllOdds = () => {
-    this.props.navigation.navigate("all");
+    this.props.navigation.navigate("all", {racenum: this.props.racenum});
   };
 
   dropToList1 = e => {
