@@ -68,14 +68,40 @@ class OddsScreen extends React.Component {
       const { data, starttime } =
         this.props.raceAnalysis && this.props.raceAnalysis;
       console.log("raceAnalysis data", data);
-      if (data && moment().utc().isAfter(moment(starttime).utc())) {
+      let currentTime = 1562755803//moment().utc().format("X") //Test:  currentTime = 1562754255
+      let items = data.filter(
+        item =>
+          item.time <= currentTime
+          
+      );
+
+      if (items) {
+        this.setState({
+          messages: [...items, ...this.state.messages.slice(0, 10)]
+        });
+      }
+
+      console.log("raceAnalysis items items ", items);
+
+      if (
+        data &&
+        moment()
+          .utc()
+          .isAfter(moment(starttime).utc())
+      ) {
         timer.setInterval(
           this,
           "timer",
           () => {
             //console.log('raceAnalysis timer', data)
+            
+            currentTime++// = moment().utc().format("X") //Test:  currentTime++
             let item = data.filter(
-              item => item.time == moment().utc().format("X")
+              item =>
+                item.time == currentTime
+                // moment()
+                //   .utc()
+                //   .format("X")
             )[0];
 
             // item = {
@@ -85,7 +111,7 @@ class OddsScreen extends React.Component {
             //   time: moment().format("X")
             // };
 
-            console.log("raceAnalysis timer item", item, moment().format("X"));
+            //console.log("raceAnalysis timer item", item, moment().format("X"));
             if (item) {
               this.setState({
                 messages: [item, ...this.state.messages.slice(0, 10)]
@@ -120,23 +146,26 @@ class OddsScreen extends React.Component {
             </Button>
           </Col>
         </Row>
-
-        {this.state.messages.length > 0 ? (
-          this.state.messages.map(item => {
-            return (
-              <Row style={styles.suggestBg1}>
-                <Col style={{ flex: 2 }}>
-                  <Text style={styles.suggestDate}>{moment(item.time, 'X').format('YYYY-MM-DD hh:mm:ss')}</Text>
-                </Col>
-                <Col style={{ flex: 8 }}>
-                  <Text style={styles.suggestText}>{item.content}</Text>
-                </Col>
-              </Row>
-            );
-          })
-        ) : (
-          <React.Fragment />
-        )}
+        <ScrollView style={{ flex: 1 }}>
+          {this.state.messages.length > 0 ? (
+            this.state.messages.map(item => {
+              return (
+                <Row style={styles.suggestBg1}>
+                  <Col style={{ flex: 2 }}>
+                    <Text style={styles.suggestDate}>
+                      {moment(item.time, "X").format("YYYY-MM-DD hh:mm:ss")}
+                    </Text>
+                  </Col>
+                  <Col style={{ flex: 8 }}>
+                    <Text style={styles.suggestText}>{item.content}</Text>
+                  </Col>
+                </Row>
+              );
+            })
+          ) : (
+            <React.Fragment />
+          )}
+        </ScrollView>
 
         <Row
           style={{
@@ -189,10 +218,10 @@ class OddsScreen extends React.Component {
   }
 
   onRefreshRaceAnalysis = async () => {
-    console.log('this.props.currentRaceID', this.props.currentRaceID)
+    console.log("this.props.currentRaceID", this.props.currentRaceID);
     await this.props.getRaceAnalysis(this.props.currentRaceID);
     //this.render()
-  }
+  };
 
   showAllOdds = () => {
     this.setState({ allOddsVisible: true });

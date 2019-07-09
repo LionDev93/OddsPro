@@ -241,17 +241,16 @@ class FirstScreen extends React.Component {
               />
             }
           >
-
-            {prevCards != null && this.showPrevCards(prevCards)}
+            {prevCards != null && this.showPrevCards(prevCards, false)}
             {dateText && Array.isArray(cards) ? (
               <Text style={styles.date}>{dateText}</Text>
             ) : (
               <React.Fragment />
             )}
-            
+            {prevCards != null && this.showPrevCards(prevCards, true)}
             {cards != null && this.showCards(cards, dateText)}
 
-            {(cards == null || prevCards == null) && <Spinner />}
+            {(cards == null ) && <Spinner />}
           </Content>
         </Container>
       </ImageBackground>
@@ -326,18 +325,49 @@ class FirstScreen extends React.Component {
     );
   };
 
-  showPrevCards = prevCards => {
+  showPrevCards = (prevCards, raceDate) => {
     return (
       <View>
-      <Text style={styles.date}>{prevCards[0].title}</Text>
-        {prevCards.map((card, i) => {
+        {Object.keys(prevCards).map((group, i) => {
+          const time =  '20190710' //moment().format('YYYYMMDD') //'20190710'
+          console.log('prevCards', prevCards[group][0].raceid, time, prevCards[group][0].raceid.includes(time) && !raceDate )
+          let show = true
+          if(raceDate){
+            if(prevCards[group][0].raceid.includes(time)  ) show = true 
+            else
+              show = false
+          }else{
+            if(prevCards[group][0].raceid.includes(time)   ) show = false
+            else
+              show = true
+
+          }
+          //if race date
+          if(!show  ) return <React.Fragment/>
+
+          //if not race date
           return (
-            <RaceCard3
-              key={i}
-              card={card}
-              //openHorseInfoHandler={this.openHorseInfoHandler}
-              navigation={this.props.navigation}
-            />
+            <React.Fragment>
+              {
+                raceDate ? <React.Fragment/> :  <Text style={styles.date}>{group}</Text>
+
+              }
+             
+              {prevCards[group].map((card, i) => {
+                const time = moment().format('YYYYMMDD')
+
+               
+
+                return (
+                  <RaceCard3
+                    key={i}
+                    card={card}
+                    //openHorseInfoHandler={this.openHorseInfoHandler}
+                    navigation={this.props.navigation}
+                  />
+                );
+              })}
+            </React.Fragment>
           );
         })}
       </View>

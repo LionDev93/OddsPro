@@ -79,10 +79,10 @@ export default StyleSheet.create({
   },
   row1ColBgActive: {
     borderRadius: 5,
-    borderColor: '#ff0042',
+    borderColor: "#ff0042",
     borderStyle: "solid",
     borderWidth: 1,
-    backgroundColor: '#ff0042',
+    backgroundColor: "#ff0042",
     marginHorizontal: 2
   },
   row1ColText: {
@@ -108,11 +108,11 @@ export default StyleSheet.create({
     borderWidth: 1,
     marginHorizontal: 2,
     borderColor: "#ea983e",
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingVertical: 5,
     width: 80,
-    height: 80,
+    height: 80
   },
   row3ColBg: {
     borderRadius: 5,
@@ -121,11 +121,11 @@ export default StyleSheet.create({
     borderWidth: 1,
     marginHorizontal: 2,
     borderColor: "#f20f5f",
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingVertical: 5,
     width: 80,
-    height: 80,
+    height: 80
   },
   row4ColBg: {
     borderRadius: 5,
@@ -134,11 +134,11 @@ export default StyleSheet.create({
     borderWidth: 1,
     marginHorizontal: 2,
     borderColor: "#bf0ff2",
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingVertical: 5,
     width: 80,
-    height: 80,
+    height: 80
   },
   row2ColTitleBg: {
     padding: 10,
@@ -161,7 +161,7 @@ export default StyleSheet.create({
     borderRadius: 36 / 2,
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 5,
+    marginBottom: 5
   },
   row5Bg: {
     width: "100%",
@@ -231,7 +231,7 @@ export default StyleSheet.create({
 
     borderRadius: 5,
     backgroundColor: "#ea983e",
-    paddingVertical: 5,
+    paddingVertical: 5
   },
   row8Col1: {
     width: "100%",
@@ -264,43 +264,41 @@ export default StyleSheet.create({
     fontWeight: "400",
     marginRight: 10
   },
-  input:{
-    width: '30%',
-    height: 25,
-
+  input: {
+    width: "30%",
+    height: 25
   },
 
-  row10Text:{
-    color: '#727272',
-
+  row10Text: {
+    color: "#727272",
+    marginLeft: 2,
     fontSize: 13,
-    fontWeight: '400',
-   
+    fontWeight: "400"
   },
   // SUGGEST BAR
-  suggestBg:{
+  suggestBg: {
     //marginVertical: 20,
     borderRadius: 5,
-    backgroundColor: '#111111',
+    backgroundColor: "#111111",
     padding: 10,
     height: 80
   },
-  suggestDate:{
-    color: '#ffffff',
+  suggestDate: {
+    color: "#ffffff",
 
     fontSize: 13,
-    fontWeight: '400',
+    fontWeight: "400"
   },
-  suggestText:{
-    color: '#ffffff',
+  suggestText: {
+    color: "#ffffff",
     fontSize: 16,
-    fontWeight: '400',
+    fontWeight: "400"
   },
-  modalContainer:{
-    width: '90%',
-    height: '70%',
-    backgroundColor: 'black',
-    position:'absolute',
+  modalContainer: {
+    width: "90%",
+    height: "70%",
+    backgroundColor: "black",
+    position: "absolute",
     bottom: 0,
     left: 0
   },
@@ -309,7 +307,7 @@ export default StyleSheet.create({
     fontSize: 20,
     fontWeight: "400"
   },
-  
+
   textBlack100: {
     color: "#707070",
     fontSize: 30,
@@ -335,8 +333,8 @@ export default StyleSheet.create({
     fontSize: 13,
     fontWeight: "400"
   },
-  suggestBg1:{
+  suggestBg1: {
     padding: 10,
-    height: 60,
+    height: 60
   }
 });

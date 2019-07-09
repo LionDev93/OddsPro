@@ -23,6 +23,7 @@ import {
   Grid,
   Form,
   Picker,
+  Item
 } from "native-base";
 import { Overlay } from "react-native-elements";
 import Orientation from "react-native-orientation";
@@ -54,17 +55,20 @@ class AllOddsScreen extends React.Component {
   componentDidMount() {
     // this locks the view to Landscape Mode
     Orientation.lockToLandscape();
-    this.onRefresh()
+    this.onRefresh();
   }
 
   onValueChange(value: string) {
-    this.setState({
-      selected: value
-    }, this.onRefresh);
+    this.setState(
+      {
+        selected: value
+      },
+      this.onRefresh
+    );
   }
 
   onRefresh = async () => {
-    console.log('state', this.state)
+    console.log("state", this.state);
     const racenum = this.props.navigation.getParam("racenum", 0);
     //const racenum = 1;
     if (
@@ -73,17 +77,17 @@ class AllOddsScreen extends React.Component {
     ) {
       const horses = this.props.cardInfo[racenum].horseViewList;
 
-      if(this.state.selected == 'win' || this.state.selected == 'pla'){
+      if (this.state.selected == "win" || this.state.selected == "pla") {
         this.setState({
-          tableHead: ["No", 'Name', 'Odd'],
-          widthArr: [100, 300, 300],
-        })
+          tableHead: ["No", "Name", "Odd"],
+          widthArr: [100, 300, 300]
+        });
       }
       const res1 = await API.get_raceodds_api(racenum, this.state.selected);
-      
+
       let tabledata = [];
 
-      console.log('horses', horses)
+      console.log("horses", horses);
 
       res1.data.data.forEach((odd, i) => {
         let val = odd.split("=");
@@ -99,7 +103,7 @@ class AllOddsScreen extends React.Component {
         tableData: tabledata
       });
 
-      console.log('state', this.state)
+      console.log("state", this.state);
     }
   };
 
@@ -122,20 +126,22 @@ class AllOddsScreen extends React.Component {
       >
         <Container style={{ backgroundColor: "transparent" }}>
           <Content padder>
-            <View style={styles.bar}>
+            <View style={[styles.bar, { marginBottom: 10,  }]}>
               <Text style={styles.date}>2019年3月10日,星期日, 沙田</Text>
               <Form>
-                <Picker
-                  mode="dropdown"
-                  iosHeader="Select odd type"
-                  iosIcon={<Icon name="arrow-down" />}
-                  style={{ width: undefined }}
-                  selectedValue={this.state.selected}
-                  onValueChange={this.onValueChange.bind(this)}
-                >
-                  <Picker.Item label="WIN" value="win" />
-                  <Picker.Item label="PLA" value="pla" />
-                </Picker>
+                <Item regular style={{ width: 100, borderColor: 'black' }}> 
+                  <Picker
+                    mode="dropdown"
+                    iosHeader="Select odd type"
+                    iosIcon={<Icon name="arrow-down" />}
+                    style={{ width: 100,  }}
+                    selectedValue={this.state.selected}
+                    onValueChange={this.onValueChange.bind(this)}
+                  >
+                    <Picker.Item label="WIN" value="win" />
+                    <Picker.Item label="PLA" value="pla" />
+                  </Picker>
+                </Item>
               </Form>
               <TouchableOpacity onPress={this.close} style={styles.closeBtn}>
                 <Icon name="closecircle" type="AntDesign" />
