@@ -43,7 +43,7 @@ class SuggestBar extends React.Component {
       //console.log("raceAnalysis items items ", items);
     }
 
-    let currentTime = 1562755803; //moment().utc().format("X") //Test:  currentTime = 1562755803
+    let currentTime = moment().utc().format("X") //Test:  currentTime = 1562755803 CHANGTIME
 
     timer.setInterval(
       this,
@@ -58,7 +58,7 @@ class SuggestBar extends React.Component {
 
           //console.log('raceAnalysis timer', data)
 
-          currentTime++; // = moment().utc().format("X") //Test:  currentTime++
+          currentTime = moment().utc().format("X") //Test:  currentTime++ CHANGETIME
           let item = data.filter(
             item => item.time == currentTime
             // moment()

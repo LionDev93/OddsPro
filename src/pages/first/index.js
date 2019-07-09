@@ -329,7 +329,7 @@ class FirstScreen extends React.Component {
     return (
       <View>
         {Object.keys(prevCards).map((group, i) => {
-          const time =  '20190710' //moment().format('YYYYMMDD') //'20190710'
+          const time =  moment().format('YYYYMMDD') //'20190710' CHANGETIME
           console.log('prevCards', prevCards[group][0].raceid, time, prevCards[group][0].raceid.includes(time) && !raceDate )
           let show = true
           if(raceDate){

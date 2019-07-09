@@ -68,7 +68,7 @@ class OddsScreen extends React.Component {
       const { data, starttime } =
         this.props.raceAnalysis && this.props.raceAnalysis;
       console.log("raceAnalysis data", data);
-      let currentTime = 1562755803//moment().utc().format("X") //Test:  currentTime = 1562754255
+      let currentTime = moment().utc().format("X") //Test:  currentTime = 1562754255 CHANGETIME
       let items = data.filter(
         item =>
           item.time <= currentTime
@@ -95,7 +95,7 @@ class OddsScreen extends React.Component {
           () => {
             //console.log('raceAnalysis timer', data)
             
-            currentTime++// = moment().utc().format("X") //Test:  currentTime++
+            currentTime = moment().utc().format("X") //Test:  currentTime++ CHANGETIME
             let item = data.filter(
               item =>
                 item.time == currentTime
