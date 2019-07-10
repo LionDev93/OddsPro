@@ -56,17 +56,17 @@ class RaceCard3 extends React.Component {
 
     let count = 0;
 
-    
       horses.forEach(item => {
-        if (aitips.includes(item.runnerno)) {
+        let ha = item.runnerno
+        if (aitips.includes(ha)) {
           count++;
         }
       });
 
     return (
-      <View style={styles.cardContainer} onPress={this.cardPress}>
+      <View style={styles.cardContainerDone} onPress={this.cardPress}>
         <Row>
-          <Col style={trackcodehk != "草地" ? styles.left1 : styles.left}>
+          <Col style={trackcodehk != "草地" ? styles.left1done : styles.leftdone}>
             <Text style={styles.fieldLabel}>{`第 ${racenum} 場`}</Text>
             <Text style={styles.fieldText}>{trackcodehk}</Text>
 
@@ -76,7 +76,7 @@ class RaceCard3 extends React.Component {
               style={trackcode != "草地" ? styles.bell1 : styles.bell}
             />*/}
 
-            <Text style={styles.time}>已跑完</Text>
+            <Text style={styles.finishrace}>已跑完</Text>
           </Col>
           <Col style={styles.right}>
             <ImageBackground
@@ -145,7 +145,7 @@ class RaceCard3 extends React.Component {
                         return (
                           <Row style={{ height: 20 }} key={i}>
                             <Col>
-                              <Text style={styles.bonus}>
+                              <Text style={styles.winner2}>
                                 {rankText[intRank]
                                   ? rankText[intRank] + ": "
                                   : ""}
@@ -157,16 +157,20 @@ class RaceCard3 extends React.Component {
                       })}
                   </Col>
                   <Col>
-                    <Row style={{ height: 20, marginTop: 50 }} >
+                    <Row style={{ height: 30, marginTop: 20, marginLeft:15 }} >
                       <Col>
-                        <Text style={styles.bonus}>
+                        <Text style={styles.winner3}>
                         命中率: {Math.round((count / 3) * 100)}% 
                         </Text>
                       </Col>
                     </Row>
-                    <Row style={{ height: 20, marginTop: 10 }} >
-                      <Col>
-                        <Text style={styles.bonus}>AI 預測結果 {aitips}</Text>
+                    <Row style={{ height: 30, marginTop: 0}}>
+                      <Col style={{flex: 1, flexDirection: 'row'}}>
+                      <Image
+                      source={require("../../assets/logo_icon.png")}
+                      style={styles.oldcard_icon}
+                      />
+                      <Text style={styles.winner1}>AI 預測結果{"\n"}{aitips}</Text>
                       </Col>
                     </Row>
                     

@@ -79,7 +79,7 @@ class AllOddsScreen extends React.Component {
 
       if (this.state.selected == "win" || this.state.selected == "pla") {
         this.setState({
-          tableHead: ["No", "Name", "Odd"],
+          tableHead: ["馬號", "名字", "倍率"],
           widthArr: [100, 300, 300]
         });
       }
@@ -93,7 +93,7 @@ class AllOddsScreen extends React.Component {
         let val = odd.split("=");
         let rowdata = [];
         rowdata.push(val[0]);
-        rowdata.push(horses[i].horsenameen);
+        rowdata.push(horses[i].horsenamecht);
         rowdata.push(val[1]);
 
         tabledata.push(rowdata);
@@ -127,19 +127,19 @@ class AllOddsScreen extends React.Component {
         <Container style={{ backgroundColor: "transparent" }}>
           <Content padder>
             <View style={[styles.bar, { marginBottom: 10,  }]}>
-              <Text style={styles.date}>2019年3月10日,星期日, 沙田</Text>
+              <Text style={styles.date}>2019年7月10日,星期日, 跑馬地</Text>
               <Form>
                 <Item regular style={{ width: 100, borderColor: 'black' }}> 
                   <Picker
                     mode="dropdown"
                     iosHeader="Select odd type"
                     iosIcon={<Icon name="arrow-down" />}
-                    style={{ width: 100,  }}
+                    style={{ width: 100, }}
                     selectedValue={this.state.selected}
                     onValueChange={this.onValueChange.bind(this)}
                   >
-                    <Picker.Item label="WIN" value="win" />
-                    <Picker.Item label="PLA" value="pla" />
+                    <Picker.Item label="獨贏" value="win" />
+                    <Picker.Item label="位置" value="pla" />
                   </Picker>
                 </Item>
               </Form>

@@ -40,6 +40,14 @@ export default StyleSheet.create({
     marginTop: 10,
     backgroundColor: "#ffffff"
   },
+
+  cardContainerDone: {
+    borderRadius: 10,
+    borderTopRightRadius: 0,
+    marginTop: 10,
+    backgroundColor: "#dddddd"
+  },
+
   left: {
     flex: 2.2,
     backgroundColor: "#32b100",
@@ -58,6 +66,25 @@ export default StyleSheet.create({
     //alignItems: 'center',
     padding: 10
   },
+  leftdone: {
+    flex: 2.2,
+    backgroundColor: "#316c1a",
+    color: "#ffffff",
+    borderBottomLeftRadius: 10,
+    borderTopLeftRadius: 10,
+    //alignItems: 'center',
+    padding: 10
+  },
+  left1done: {
+    flex: 2.2,
+    backgroundColor: "#655116",
+    color: "#ffffff",
+    borderBottomLeftRadius: 10,
+    borderTopLeftRadius: 10,
+    //alignItems: 'center',
+    padding: 10
+  },
+
   right: {
     flex: 7.8,
     //padding: 10,
@@ -83,7 +110,13 @@ export default StyleSheet.create({
     marginTop: 10,
     fontWeight: "700"
   },
-
+  finishrace:{
+    color: "#ffffff",
+    fontSize: 16,
+    marginTop: 25,
+    marginLeft: 10,
+    fontWeight: "900"
+  },
   //RIGHT
   total: {
     color: "#999999",
@@ -96,6 +129,24 @@ export default StyleSheet.create({
   },
   bonus: {
     color: "#c0b376",
+    fontSize: 13,
+    fontWeight: "700"
+  },
+  winner3: {
+    color: "#00cc60",
+    fontSize: 16,
+    fontWeight: "800",
+    textAlign: 'right'
+  },
+  winner1: {
+    color: "#cc003e",
+    fontSize: 13,
+    lineHeight:15,
+    fontWeight: "700",
+    textAlign: 'right'
+  },
+  winner2: {
+    color: "#cc8600",
     fontSize: 13,
     fontWeight: "700"
   },
@@ -169,6 +220,11 @@ export default StyleSheet.create({
     width: 40,
     height: 40
   },
+  oldcard_icon: {
+    width: 50,
+    height: 50,
+    marginTop:-5
+  },
   oc_horse_icon: {
     width: 80,
     height: 40,
@@ -230,7 +286,7 @@ export default StyleSheet.create({
   },
   textlist: {
     color: "#494949",
-    fontSize: 12,
+    fontSize: 13,
     lineHeight: 18,
     paddingBottom:8,
     borderBottomWidth: 0.5,
@@ -240,10 +296,11 @@ export default StyleSheet.create({
 
   textlistresult:{
     color: '#fbb907',
-    fontSize: 12,
+    fontSize: 14,
     lineHeight: 18,
     paddingBottom:8,
     borderBottomWidth: 0.5,
+    textAlign:'right',
     borderColor: '#b6d7da',
     fontWeight: "400"
   },

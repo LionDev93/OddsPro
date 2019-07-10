@@ -166,6 +166,7 @@ class FirstScreen extends React.Component {
   };
 
   render() {
+    console.disableYellowBox = true;
     const { dateText, cards, prevCards } = this.props;
     // cards != null ? console.error(JSON.stringify(cards)) : ''
     return (

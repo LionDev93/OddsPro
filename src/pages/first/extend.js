@@ -90,7 +90,7 @@ class HorseInfo extends React.Component {
             </View>
           </Col>
         </Row>
-        <View style={{ height: 430 }}>
+        <View style={{ height: 480 }}>
           <ScrollView
             
             contentContainerStyle={{ padding: 10 }}
