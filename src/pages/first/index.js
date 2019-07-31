@@ -18,7 +18,9 @@ import {
   Body,
   Title,
   Icon,
-  Spinner
+  Spinner,
+  Grid,
+  Col
 } from "native-base";
 import Modal from "react-native-modal";
 import { ifIphoneX, isIphoneX } from "react-native-iphone-x-helper";
@@ -41,7 +43,7 @@ const { height } = Dimensions.get("window");
 class FirstScreen extends React.Component {
   constructor(props) {
     super(props);
-
+    console.log("firstscreen props:", props);
     this.state = {
       horseId: "",
       openHorseInfo: false,
@@ -118,7 +120,9 @@ class FirstScreen extends React.Component {
           winAmount: 17000,
           total: 36000
         }
-      ]
+      ],
+
+      elementPositionArray: []
     };
   }
 
@@ -140,11 +144,11 @@ class FirstScreen extends React.Component {
     this.setState({ isRefreshing: true });
     this.props.getCards();
     this.setState({ isRefreshing: false });
-
     timer.setInterval(
       this,
       "timer",
       () => {
+        if (!this.props.cards) return;
         const { posttime } = this.props.cards && this.props.cards[0];
 
         if (
@@ -159,16 +163,89 @@ class FirstScreen extends React.Component {
   }
 
   onRefresh = () => {
+    console.log("refresh called");
     this.setState({ isRefreshing: true });
     this.props.getCards();
     this.props.getPrevCards();
     this.setState({ isRefreshing: false });
   };
 
+  handleScroll = e => {
+    let scrollHeight =
+      e.nativeEvent.contentOffset.y + e.nativeEvent.layoutMeasurement.height;
+    if (scrollHeight == e.nativeEvent.contentSize.height) {
+    }
+    // console.log("nativeEvent:", e.nativeEvent)
+  };
+
+  calcElementPosition = () => {
+    var array = [];
+    array.push(0);
+    const { dateText, cards, prevCards } = this.props;
+    if (prevCards) {
+      Object.keys(prevCards).map((group, i) => {
+        array.push(array[array.length - 1] + 48);
+        prevCards[group].map((group1, index) => {
+          array.push(array[array.length - 1] + 180 + 10);
+        });
+      });
+    }
+    if (cards) {
+      array.push(array[array.length - 1] + 48);
+
+      cards.map((group, index) => {
+        array.push(array[array.length - 1] + 180);
+      });
+    }
+    this.setState({ elementPositionArray: array }, function() {});
+  };
+  handleScrollEndDrag = e => {
+    console.log(
+      "Scroll End Drag: ",
+      e.nativeEvent.contentOffset.y,
+      this.state.elementPositionArray
+    );
+    if (this.scrollView) {
+      scrollPosY = e.nativeEvent.contentOffset.y;
+      const array = this.state.elementPositionArray;
+      for (var i = 0; i < array.length; i++) {
+        const dist1 = scrollPosY - array[i];
+        if (dist1 <= 0) {
+          if (i == 0) this.scrollView._root.scrollToPosition(0, array[i], true);
+          else {
+            const distPrev = scrollPosY - array[i - 1];
+            const distNext = scrollPosY - array[i];
+            if (Math.abs(distPrev) > Math.abs(distNext)) {
+              this.scrollView._root.scrollToPosition(0, array[i], true);
+            } else {
+              this.scrollView._root.scrollToPosition(0, array[i - 1], true);
+            }
+          }
+          break;
+        }
+      }
+    }
+  };
+
+  handleCreating = event => {
+    console.log("added element: ", event.nativeEvent);
+  };
+
+  handleLayout = event => {
+    console.log("layoutCalled: ", event.nativeEvent);
+  };
+
+  onContentSizeChange = (contentWidth, contentHeight) => {
+    console.log("contentSizeChange: ", contentHeight);
+    this.calcElementPosition();
+  };
+
   render() {
     console.disableYellowBox = true;
     const { dateText, cards, prevCards } = this.props;
     // cards != null ? console.error(JSON.stringify(cards)) : ''
+    console.log("precards: ", prevCards);
+    console.log("cards: ", cards);
     return (
       <ImageBackground
         source={require("../../assets/firstpage_background.jpg")}
@@ -179,21 +256,27 @@ class FirstScreen extends React.Component {
           <Header
             style={{ backgroundColor: "transparent", borderBottomWidth: 0 }}
           >
-            <Left>
-              <React.Fragment />
-            </Left>
-            <Body style={{ flexDirection: "row" }}>
-              <Image
-                source={require("../../assets/logo.png")}
-                style={styles.icon}
-                resizeMode="contain"
-              />
-
-              <Title style={{ color: "white" }}>AI 賠率王</Title>
-            </Body>
-            <Right>
-              <React.Fragment />
-            </Right>
+            <Grid>
+              <Col size={1} />
+              <Col
+                size={5}
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
+              >
+                <Image
+                  source={require("../../assets/logo.png")}
+                  style={styles.icon}
+                  resizeMode="contain"
+                />
+                <Title style={{ color: "white", marginLeft: 10 }}>
+                  AI 賠率王
+                </Title>
+              </Col>
+              <Col size={1} />
+            </Grid>
           </Header>
 
           <Overlay
@@ -235,23 +318,36 @@ class FirstScreen extends React.Component {
 
           <Content
             style={styles.container}
+            scrollEnabled
+            onScroll={this.handleScroll}
+            // onScrollEndDrag={this.handleScrollEndDrag}
+            onMomentumScrollEnd={this.handleScrollEndDrag}
+            onLayout={this.handleLayout}
+            onContentSizeChange={this.onContentSizeChange}
+            // snapToAlignment="start"
+            // snapToStart
             refreshControl={
               <RefreshControl
                 refreshing={this.state.isRefreshing}
                 onRefresh={this.onRefresh}
               />
             }
+            ref={ref => {
+              this.scrollView = ref;
+            }}
           >
             {prevCards != null && this.showPrevCards(prevCards, false)}
             {dateText && Array.isArray(cards) ? (
-              <Text style={styles.date}>{dateText}</Text>
+              <Text style={styles.date} onLayout={this.handleCreating}>
+                {dateText}
+              </Text>
             ) : (
               <React.Fragment />
             )}
             {prevCards != null && this.showPrevCards(prevCards, true)}
             {cards != null && this.showCards(cards, dateText)}
 
-            {(cards == null ) && <Spinner />}
+            {cards == null && <Spinner />}
           </Content>
         </Container>
       </ImageBackground>
@@ -308,6 +404,7 @@ class FirstScreen extends React.Component {
                   dateText={dateText}
                   openHorseInfoHandler={this.openHorseInfoHandler}
                   navigation={this.props.navigation}
+                  onLayout={this.handleCreating}
                 />
               );
             })
@@ -319,6 +416,7 @@ class FirstScreen extends React.Component {
                   dateText={dateText}
                   //openHorseInfoHandler={this.openHorseInfoHandler}
                   navigation={this.props.navigation}
+                  onLayout={this.handleCreating}
                 />
               );
             })}
@@ -330,34 +428,35 @@ class FirstScreen extends React.Component {
     return (
       <View>
         {Object.keys(prevCards).map((group, i) => {
-          const time =  moment().format('YYYYMMDD') //'20190710' CHANGETIME
-          console.log('prevCards', prevCards[group][0].raceid, time, prevCards[group][0].raceid.includes(time) && !raceDate )
-          let show = true
-          if(raceDate){
-            if(prevCards[group][0].raceid.includes(time)  ) show = true 
-            else
-              show = false
-          }else{
-            if(prevCards[group][0].raceid.includes(time)   ) show = false
-            else
-              show = true
-
+          const time = moment().format("YYYYMMDD"); //'20190710' CHANGETIME
+          console.log(
+            "prevCards",
+            prevCards[group][0].raceid,
+            time,
+            prevCards[group][0].raceid.includes(time) && !raceDate
+          );
+          let show = true;
+          if (raceDate) {
+            if (prevCards[group][0].raceid.includes(time)) show = true;
+            else show = false;
+          } else {
+            if (prevCards[group][0].raceid.includes(time)) show = false;
+            else show = true;
           }
           //if race date
-          if(!show  ) return <React.Fragment/>
+          if (!show) return <React.Fragment />;
 
           //if not race date
           return (
             <React.Fragment>
-              {
-                raceDate ? <React.Fragment/> :  <Text style={styles.date}>{group}</Text>
+              {raceDate ? (
+                <React.Fragment />
+              ) : (
+                <Text style={styles.date}>{group}</Text>
+              )}
 
-              }
-             
               {prevCards[group].map((card, i) => {
-                const time = moment().format('YYYYMMDD')
-
-               
+                const time = moment().format("YYYYMMDD");
 
                 return (
                   <RaceCard3
@@ -365,6 +464,7 @@ class FirstScreen extends React.Component {
                     card={card}
                     //openHorseInfoHandler={this.openHorseInfoHandler}
                     navigation={this.props.navigation}
+                    onLayout={this.handleCreating}
                   />
                 );
               })}

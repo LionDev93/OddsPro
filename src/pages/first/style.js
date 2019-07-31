@@ -38,14 +38,17 @@ export default StyleSheet.create({
     borderRadius: 10,
     borderTopRightRadius: 0,
     marginTop: 10,
-    backgroundColor: "#ffffff"
+    backgroundColor: "#ffffff",
+    height: 180
   },
 
   cardContainerDone: {
     borderRadius: 10,
     borderTopRightRadius: 0,
     marginTop: 10,
-    backgroundColor: "#dddddd"
+    backgroundColor: "#dddddd",
+
+    height: 180
   },
 
   left: {
