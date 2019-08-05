@@ -26,6 +26,7 @@ import Modal from "react-native-modal";
 import { ifIphoneX, isIphoneX } from "react-native-iphone-x-helper";
 import { Overlay } from "react-native-elements";
 import styles from "./style";
+// import WS from "./ws";
 import RaceCard from "./raceCard";
 import RaceCard1 from "./raceCard1";
 import OpenRaceCard from "./openRaceCard";
@@ -44,6 +45,13 @@ class FirstScreen extends React.Component {
   constructor(props) {
     super(props);
     console.log("firstscreen props:", props);
+
+     global.Odds_win = 10;
+
+    //'{"10":"67.0","11":"32.5","12":"73.0","01":"303.0","02":"243.5","03":"140.5","04":"202.5","05":"129.5","06":"50.5","07":"263.5","08":"104.0","09":"855.0"}';
+
+
+
     this.state = {
       horseId: "",
       openHorseInfo: false,
@@ -139,6 +147,8 @@ class FirstScreen extends React.Component {
   openHorseInfoHandler = horseId => {
     this.setState({ horseId: horseId, openHorseInfo: true });
   };
+
+  // WS.init();
 
   componentDidMount() {
     this.setState({ isRefreshing: true });
@@ -357,7 +367,7 @@ class FirstScreen extends React.Component {
   showCards = (cards, dateText) => {
     const fake = [
       {
-        raceid: "RACE_20190529_0005",
+        raceid: "RACE_20190703_0002",
         racenum: 1,
         stakeprize: 920000,
         ctime: 1559006457446,
@@ -369,7 +379,7 @@ class FirstScreen extends React.Component {
         coursecode: '"C" 賽道 - 向後移欄'
       },
       {
-        raceid: "RACE_20190529_0005",
+        raceid: "RACE_20190703_0002",
         racenum: 2,
         stakeprize: 920000,
         ctime: 1559006457446,
@@ -381,7 +391,7 @@ class FirstScreen extends React.Component {
         coursecode: '"C" 賽道 - 向後移欄'
       },
       {
-        raceid: "RACE_20190529_0005",
+        raceid: "RACE_20190703_0002",
         racenum: 3,
         stakeprize: 920000,
         ctime: 1559006457446,

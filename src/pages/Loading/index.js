@@ -7,7 +7,6 @@ import styles from './style';
 class LoadingScreen extends Component {
   constructor(props) {
     super(props);
-
   }
 
   async componentDidMount() {

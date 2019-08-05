@@ -365,8 +365,11 @@ class RaceCard2 extends React.Component {
       horseId
     } = item;
     const { racenum } = this.props.card;
+
+    
     const odds = this.props.odds[racenum];
     const odd = odds && odds.find(o => o.pattern == runnerno);
+   
 
     return (
       <TouchableOpacity
